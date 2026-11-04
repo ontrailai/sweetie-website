@@ -1,0 +1,92 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Batches.dc.html": {
+      "expand": "fill",
+      "h": 4150,
+      "is_interactive": true,
+      "title": "Batches page — desktop",
+      "w": 1440,
+      "x": 0,
+      "y": 13820
+    },
+    "BatchesPhone.dc.html": {
+      "h": 6600,
+      "is_interactive": true,
+      "title": "Batches page — phone (390)",
+      "w": 390,
+      "x": 1520,
+      "y": 13820
+    },
+    "Jar.dc.html": {
+      "h": 620,
+      "title": "Jar (No. 01–06)",
+      "w": 200,
+      "x": 1990,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "expand": "fill",
+      "h": 8000,
+      "is_interactive": true,
+      "title": "Homepage — desktop",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Mobile.dc.html": {
+      "h": 8000,
+      "is_interactive": true,
+      "title": "Homepage — phone (390)",
+      "w": 390,
+      "x": 1520,
+      "y": 0
+    },
+    "Product.dc.html": {
+      "expand": "fill",
+      "h": 4950,
+      "is_interactive": true,
+      "title": "Product page — desktop",
+      "w": 1440,
+      "x": 0,
+      "y": 20540
+    },
+    "ProductPhone.dc.html": {
+      "h": 7500,
+      "is_interactive": true,
+      "title": "Product page — phone (390)",
+      "w": 390,
+      "x": 1520,
+      "y": 20540
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-11-02T21:05:00Z",
+    "v": 1
+  },
+  "designSystems": [
+    {
+      "artifact": "https://claude.ai/artifact/Ha1G31RGGFgGHCLeGu6Rww",
+      "copiedAt": "2026-11-02T21:05:00Z",
+      "namespace": "sweetbee",
+      "title": "Sweet Bee",
+      "version": "1793647450-97e5"
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {},
+  "order": [
+    "Main.dc.html",
+    "Mobile.dc.html",
+    "Jar.dc.html",
+    "Batches.dc.html",
+    "BatchesPhone.dc.html",
+    "Product.dc.html",
+    "ProductPhone.dc.html"
+  ],
+  "pages": [],
+  "title": "Sweet Bee Homepage Mockup"
+}

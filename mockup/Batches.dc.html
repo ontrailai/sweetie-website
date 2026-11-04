@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sweet Bee batches</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0;background:#F6EDDD}
+a{color:#262626}a:hover{color:#FF007C}
+.sb-btn{transition:transform .2s ease, filter .2s ease}
+.sb-btn:hover{transform:translateY(-2px);filter:brightness(0.95)}
+.sb-input:focus{outline:3px solid #004832;outline-offset:3px}
+.sb-jar{transition:transform .35s cubic-bezier(.2,.9,.3,1.3)}
+.sb-jar:hover{transform:translateY(-18px) rotate(0deg) scale(1.04)!important}
+.sb-cardjar{transition:transform .35s cubic-bezier(.2,.9,.3,1.3)}
+.sb-panel:hover .sb-cardjar{transform:translateY(-12px)}
+.sb-track{animation:sb-scroll 32s linear infinite}
+@keyframes sb-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.sb-track-rev{animation:sb-scroll-rev 26s linear infinite}
+@keyframes sb-scroll-rev{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.sb-hum{display:inline-block;transform-origin:40% 85%;animation:sb-hum 2.6s ease-in-out infinite}
+@keyframes sb-hum{0%,64%,100%{transform:none}66%{transform:translate(-3px,1px) rotate(-2deg)}68%{transform:translate(3px,-1px) rotate(2deg)}70%{transform:translate(-3px,0) rotate(-1.5deg)}72%{transform:translate(3px,1px) rotate(1.5deg)}74%{transform:translate(-1px,0) rotate(-.5deg)}76%{transform:none}}
+.sb-float{animation:sb-float 4.2s ease-in-out infinite}
+@keyframes sb-float{0%,100%{translate:0 0}50%{translate:0 -14px}}
+.sb-spin{animation:sb-spin 3.2s ease-in-out infinite}
+@keyframes sb-spin{0%,100%{rotate:-7deg}50%{rotate:7deg}}
+.sb-drift{animation:sb-drift 16s linear infinite}
+@keyframes sb-drift{0%{transform:translateX(-160px) rotate(-4deg)}50%{transform:translateX(50vw) translateY(-18px) rotate(4deg)}100%{transform:translateX(calc(100vw + 160px)) rotate(-4deg)}}
+.sb-block{transition:transform .3s cubic-bezier(.2,.9,.3,1.3)}
+.sb-block:hover{transform:translateY(-6px)}
+.sb-twinkle{animation:sb-twinkle 2.4s ease-in-out infinite}
+@keyframes sb-twinkle{0%,100%{opacity:.25;transform:scale(.6) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(45deg)}}
+.sb-row{transition:background .2s ease, padding .2s ease}
+.sb-row:hover{background:#FF007C;padding-left:20px;padding-right:20px}
+.sb-menu{display:none}
+.sb-sticky{display:none}
+.sb-paused *,.sb-paused *::before,.sb-paused *::after{animation-play-state:paused!important}
+@media (max-width: 760px){.sb-menu{display:inline-flex;align-items:center}.sb-links{display:none!important}.sb-links.sb-open{display:flex!important;flex-direction:column;align-items:flex-start;width:100%;gap:0!important}.sb-sticky{display:flex!important}.sb-pad{padding-bottom:88px}.sb-bcard dd{text-align:left!important}.sb-bcard dl>div{flex-direction:column;gap:2px!important}.sb-bcard .sb-panel{flex-basis:76px!important}}
+@media (prefers-reduced-motion: reduce){.sb-track,.sb-track-rev,.sb-hum,.sb-float,.sb-spin,.sb-drift,.sb-twinkle{animation:none}.sb-jar,.sb-cardjar,.sb-btn,.sb-block,.sb-row{transition:none}}
+</style>
+</helmet>
+<div class="{{motionClass}}" style="width: 100%; background: #F6EDDD; color: #262626; font-family: 'Courier Prime', 'Courier Std', monospace; letter-spacing: 0.075em;">
+
+<header style="padding: 18px clamp(20px, 5vw, 72px); background: #F6EDDD;">
+<nav aria-label="Main" style="max-width: 1320px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 40px;">
+<a href="Main.dc.html" aria-label="Sweet Bee home" style="display: flex; align-items: center;"><img src="/_blob/9cdda06d00c7ef1339d4d87264f6e2d9" alt="Sweet Bee" style="height: 36px; width: auto; display: block;"></a>
+<button class="sb-menu" type="button" aria-expanded="{{menuExp}}" aria-controls="sb-links" onClick="{{toggleMenu}}" style="min-height: 44px; padding: 0 18px; border: 2px solid #262626; background: transparent; color: #262626; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;">{{menuLabel}}</button>
+<div id="sb-links" class="sb-links {{menuClass}}" style="display: flex; flex-wrap: wrap; align-items: center; gap: 0 32px; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase;">
+<a href="Main.dc.html#shop" style="text-decoration: none; padding: 12px 0;">Shop</a>
+<a href="Main.dc.html#box" style="text-decoration: none; padding: 12px 0;">Subscribe</a>
+<a href="#top" style="text-decoration: none; padding: 12px 0;">Batches</a>
+<a href="Main.dc.html#find" style="text-decoration: none; padding: 12px 0;">Find Us</a>
+<a href="Main.dc.html#about" style="text-decoration: none; padding: 12px 0;">About</a>
+<a class="sb-btn" href="#cart" style="text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; background: #262626; color: #F6EDDD;">Cart (0)</a>
+</div>
+</nav>
+</header>
+
+<section id="top" style="position: relative; overflow: hidden; background: #FF007C; color: #F6EDDD; padding: clamp(40px, 6vw, 96px) clamp(20px, 5vw, 72px) clamp(56px, 7vw, 104px);">
+<div style="max-width: 1320px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 40px 72px;">
+<div style="flex: 1 1 600px; min-width: 0; display: flex; flex-direction: column; gap: 28px;">
+<span style="align-self: flex-start; display: inline-flex; align-items: center; min-height: 36px; padding: 0 16px; background: #F6EDDD; color: #004832; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase;">Batches · Thanks for scanning</span>
+<h1 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(72px, 10vw, 160px); line-height: 0.86; letter-spacing: 0.01em;">Every jar hums back <em class="sb-hum">to its hive.</em></h1>
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: clamp(24px, 2.2vw, 30px); line-height: 1.25; letter-spacing: 0.025em; max-width: 560px;">Find the batch number on your jar [placement on jar], then match it below.</p>
+</div>
+<form role="search" style="flex: 1 1 380px; min-width: 0; max-width: 480px; background: #F6EDDD; color: #262626; padding: 28px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px;">
+<img src="/_blob/4777f52e9119161dcff0b63cbf0f9eaa" alt="" aria-hidden="true" style="align-self: flex-end; height: clamp(70px, 7vw, 96px); width: auto; margin: -12px 0 -4px;">
+<label for="sb-batch" style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832;">Batch number</label>
+<div style="display: flex; flex-wrap: wrap; gap: 12px;">
+<input id="sb-batch" class="sb-input" type="text" inputmode="numeric" placeholder="e.g. [No.]" style="flex: 1 1 180px; min-width: 0; min-height: 52px; padding: 0 14px; border: 2px solid #262626; background: #FFFFFF; font-family: 'Courier Prime', monospace; font-size: 16px; color: #262626;">
+<button class="sb-btn" type="button" style="min-height: 52px; padding: 0 22px; border: 0; background: #FF007C; color: #F6EDDD; font-family: 'Instrument Serif', serif; font-size: 24px; letter-spacing: 0.025em; cursor: pointer;">Find it</button>
+</div>
+</form>
+</div>
+</section>
+
+<div role="marquee" aria-label="Six jars, three sizes. Zero sleepy honey." style="position: relative; height: clamp(110px, 10vw, 150px); overflow: hidden; background: #F6EDDD;">
+<div style="position: absolute; left: -5%; width: 110%; top: 22%; background: #004832; color: #F6EDDD; padding: 20px 0; border-top: 2px solid #262626; border-bottom: 2px solid #262626; overflow: hidden;">
+<div class="sb-track" aria-hidden="true" style="display: flex; width: max-content; gap: 40px; font-family: 'Instrument Serif', serif; font-size: clamp(30px, 3vw, 42px); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap;"><span style="display: inline-flex; align-items: center; gap: 40px;"><span>Six jars</span><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 40px;"><span>Three sizes</span><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 40px;"><span>Zero sleepy honey</span><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 40px;"><span>No. 01 – No. 06</span><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 40px;"><span>Six jars</span><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 40px;"><span>Three sizes</span><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 40px;"><span>Zero sleepy honey</span><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 40px;"><span>No. 01 – No. 06</span><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span></div>
+</div>
+</div>
+
+<section aria-labelledby="current-h" style="padding: 0 clamp(20px, 5vw, 72px) clamp(72px, 9vw, 136px);">
+<div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px; padding-top: clamp(56px, 7vw, 96px);">
+<div style="display: flex; align-items: flex-end; gap: 20px;"><h2 id="current-h" style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(56px, 7vw, 112px); line-height: 0.92; letter-spacing: 0.015em; color: #FF007C;">On shelves <em>now.</em></h2><img src="/_blob/7e4c1720bdef819b3ce109a51a0726aa" alt="" aria-hidden="true" style="height: clamp(130px, 13vw, 190px); width: auto;"></div>
+<p style="margin: 0; font-size: 15px;">Updated with every new batch.</p>
+</div>
+<div role="group" aria-label="Filter by jar" style="display: flex; flex-wrap: wrap; gap: 10px;">
+<button type="button" aria-pressed="true" style="min-height: 44px; padding: 0 18px; background: #262626; color: #F6EDDD; border: 1px solid #262626; font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em; cursor: pointer;">All</button>
+<button type="button" aria-pressed="false" style="min-height: 44px; padding: 0 18px; background: transparent; color: #262626; border: 1px solid rgba(38,38,38,0.4); font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em; cursor: pointer;">No. 01</button>
+<button type="button" aria-pressed="false" style="min-height: 44px; padding: 0 18px; background: transparent; color: #262626; border: 1px solid rgba(38,38,38,0.4); font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em; cursor: pointer;">No. 02</button>
+<button type="button" aria-pressed="false" style="min-height: 44px; padding: 0 18px; background: transparent; color: #262626; border: 1px solid rgba(38,38,38,0.4); font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em; cursor: pointer;">No. 03</button>
+<button type="button" aria-pressed="false" style="min-height: 44px; padding: 0 18px; background: transparent; color: #262626; border: 1px solid rgba(38,38,38,0.4); font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em; cursor: pointer;">No. 04</button>
+<button type="button" aria-pressed="false" style="min-height: 44px; padding: 0 18px; background: transparent; color: #262626; border: 1px solid rgba(38,38,38,0.4); font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em; cursor: pointer;">No. 05</button>
+<button type="button" aria-pressed="false" style="min-height: 44px; padding: 0 18px; background: transparent; color: #262626; border: 1px solid rgba(38,38,38,0.4); font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em; cursor: pointer;">No. 06</button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 24px;">
+<article class="sb-bcard" style="display: flex; gap: 24px; align-items: stretch; padding: 0 24px 0 0; border: 2px solid #262626; background: #F6EDDD;">
+<div class="sb-panel" style="flex: 0 0 104px; background: rgba(38,38,38,0.06); display: flex; align-items: flex-end; justify-content: center; padding: 20px 0; box-sizing: border-box;"><div class="sb-cardjar" style="width: 60px;"><dc-import name="Jar" num="01" jar-name="Wildflower" descriptor="Raw wildflower honey" label-color="#FF007C" label-text="#F6EDDD" honey="#D9921E" honey-dark="#7E4006" flecks="none" hint-size="64px,198px"></dc-import></div></div>
+<div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 22px 0;">
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832;">No. 01 · Wildflower</p>
+<h3 style="margin: 0 0 8px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; letter-spacing: 0.025em;">Batch [No.]</h3>
+<dl style="margin: 0; display: flex; flex-direction: column;">
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Honey</dt><dd style="margin: 0; text-align: right; font-size: 15px;">Wildflower</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Beekeeper area</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Area], San Diego County</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Harvest</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Season, year]</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0;"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Status</dt><dd style="margin: 0; text-align: right; font-size: 15px;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #308F32;"></span>On shelves now</span></dd></div>
+</dl>
+</div>
+</article>
+<article class="sb-bcard" style="display: flex; gap: 24px; align-items: stretch; padding: 0 24px 0 0; border: 2px solid #262626; background: #F6EDDD;">
+<div class="sb-panel" style="flex: 0 0 104px; background: rgba(38,38,38,0.06); display: flex; align-items: flex-end; justify-content: center; padding: 20px 0; box-sizing: border-box;"><div class="sb-cardjar" style="width: 60px;"><dc-import name="Jar" num="02" jar-name="Avocado Blossom" descriptor="Raw avocado blossom honey" label-color="#308F32" label-text="#F6EDDD" honey="#6E3510" honey-dark="#2A1004" flecks="none" hint-size="64px,198px"></dc-import></div></div>
+<div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 22px 0;">
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832;">No. 02 · Avocado Blossom</p>
+<h3 style="margin: 0 0 8px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; letter-spacing: 0.025em;">Batch [No.]</h3>
+<dl style="margin: 0; display: flex; flex-direction: column;">
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Honey</dt><dd style="margin: 0; text-align: right; font-size: 15px;">Avocado blossom</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Beekeeper area</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Area], San Diego County</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Harvest</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Season, year]</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0;"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Status</dt><dd style="margin: 0; text-align: right; font-size: 15px;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #308F32;"></span>On shelves now</span></dd></div>
+</dl>
+</div>
+</article>
+<article class="sb-bcard" style="display: flex; gap: 24px; align-items: stretch; padding: 0 24px 0 0; border: 2px solid #262626; background: #F6EDDD;">
+<div class="sb-panel" style="flex: 0 0 104px; background: rgba(38,38,38,0.06); display: flex; align-items: flex-end; justify-content: center; padding: 20px 0; box-sizing: border-box;"><div class="sb-cardjar" style="width: 60px;"><dc-import name="Jar" num="03" jar-name="Vanilla Bean" descriptor="Raw honey + vanilla bean" label-color="#F6EDDD" label-text="#262626" honey="#E2A43A" honey-dark="#93590E" flecks="vanilla" hint-size="64px,198px"></dc-import></div></div>
+<div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 22px 0;">
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832;">No. 03 · Vanilla Bean</p>
+<h3 style="margin: 0 0 8px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; letter-spacing: 0.025em;">Batch [No.]</h3>
+<dl style="margin: 0; display: flex; flex-direction: column;">
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Honey</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Base honey] + vanilla bean</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Beekeeper area</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Area], San Diego County</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Harvest</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Season, year]</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0;"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Status</dt><dd style="margin: 0; text-align: right; font-size: 15px;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #308F32;"></span>On shelves now</span></dd></div>
+</dl>
+</div>
+</article>
+<article class="sb-bcard" style="display: flex; gap: 24px; align-items: stretch; padding: 0 24px 0 0; border: 2px solid #262626; background: #F6EDDD;">
+<div class="sb-panel" style="flex: 0 0 104px; background: rgba(38,38,38,0.06); display: flex; align-items: flex-end; justify-content: center; padding: 20px 0; box-sizing: border-box;"><div class="sb-cardjar" style="width: 60px;"><dc-import name="Jar" num="04" jar-name="Cinnamon" descriptor="Raw honey + cinnamon" label-color="#262626" label-text="#F6EDDD" honey="#B9661A" honey-dark="#5E2A05" flecks="cinnamon" hint-size="64px,198px"></dc-import></div></div>
+<div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 22px 0;">
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832;">No. 04 · Cinnamon</p>
+<h3 style="margin: 0 0 8px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; letter-spacing: 0.025em;">Batch [No.]</h3>
+<dl style="margin: 0; display: flex; flex-direction: column;">
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Honey</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Base honey] + cinnamon</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Beekeeper area</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Area], San Diego County</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Harvest</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Season, year]</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0;"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Status</dt><dd style="margin: 0; text-align: right; font-size: 15px;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #308F32;"></span>On shelves now</span></dd></div>
+</dl>
+</div>
+</article>
+<article class="sb-bcard" style="display: flex; gap: 24px; align-items: stretch; padding: 0 24px 0 0; border: 2px solid #262626; background: #F6EDDD;">
+<div class="sb-panel" style="flex: 0 0 104px; background: rgba(38,38,38,0.06); display: flex; align-items: flex-end; justify-content: center; padding: 20px 0; box-sizing: border-box;"><div class="sb-cardjar" style="width: 60px;"><dc-import name="Jar" num="05" jar-name="Bee Pollen" descriptor="Raw honey + bee pollen" label-color="#004832" label-text="#F6EDDD" honey="#E6A52A" honey-dark="#9C620C" flecks="pollen" hint-size="64px,198px"></dc-import></div></div>
+<div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 22px 0;">
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832;">No. 05 · Bee Pollen</p>
+<h3 style="margin: 0 0 8px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; letter-spacing: 0.025em;">Batch [No.]</h3>
+<dl style="margin: 0; display: flex; flex-direction: column;">
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Honey</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Base honey] + bee pollen</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Beekeeper area</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Area], San Diego County</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Harvest</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Season, year]</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0;"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Status</dt><dd style="margin: 0; text-align: right; font-size: 15px;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #308F32;"></span>On shelves now</span></dd></div>
+</dl>
+</div>
+</article>
+<article class="sb-bcard" style="display: flex; gap: 24px; align-items: stretch; padding: 0 24px 0 0; border: 2px solid #262626; background: #F6EDDD;">
+<div class="sb-panel" style="flex: 0 0 104px; background: rgba(38,38,38,0.06); display: flex; align-items: flex-end; justify-content: center; padding: 20px 0; box-sizing: border-box;"><div class="sb-cardjar" style="width: 60px;"><dc-import name="Jar" num="06" jar-name="Guarana + Salt" descriptor="Raw honey + guarana + salt" label-color="#FF0000" label-text="#F6EDDD" honey="#C9781C" honey-dark="#723A06" flecks="salt" hint-size="64px,198px"></dc-import></div></div>
+<div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 22px 0;">
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832;">No. 06 · Guarana + Salt</p>
+<h3 style="margin: 0 0 8px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; letter-spacing: 0.025em;">Batch [No.]</h3>
+<dl style="margin: 0; display: flex; flex-direction: column;">
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Honey</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Base honey] + guarana + salt</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Beekeeper area</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Area], San Diego County</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(38,38,38,0.15);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Harvest</dt><dd style="margin: 0; text-align: right; font-size: 15px;">[Season, year]</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0;"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; padding-top: 1px;">Status</dt><dd style="margin: 0; text-align: right; font-size: 15px;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #308F32;"></span>On shelves now</span></dd></div>
+</dl>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="past-h" style="padding: 0 clamp(20px, 5vw, 72px) clamp(72px, 9vw, 136px);">
+<div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px;"><h2 id="past-h" style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(40px, 4.4vw, 64px); line-height: 1; letter-spacing: 0.02em; color: #262626;">Past <em>batches.</em></h2><img src="/_blob/38645bcb339c7cbeeca8537c94659c29" alt="" aria-hidden="true" style="height: clamp(130px, 13vw, 190px); width: auto;"></div>
+<div style="overflow-x: auto;">
+<table style="width: 100%; min-width: 560px; border-collapse: collapse; font-size: 15px; text-align: left;">
+<thead><tr><th scope="col" style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; font-weight: 400; padding: 12px 12px 12px 0; text-align: left; border-top: 1px solid #262626; border-bottom: 1px solid rgba(38,38,38,0.2);">Batch</th><th scope="col" style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; font-weight: 400; padding: 12px 12px 12px 0; text-align: left; border-top: 1px solid #262626; border-bottom: 1px solid rgba(38,38,38,0.2);">Jar</th><th scope="col" style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; font-weight: 400; padding: 12px 12px 12px 0; text-align: left; border-top: 1px solid #262626; border-bottom: 1px solid rgba(38,38,38,0.2);">Beekeeper area</th><th scope="col" style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; font-weight: 400; padding: 12px 12px 12px 0; text-align: left; border-top: 1px solid #262626; border-bottom: 1px solid rgba(38,38,38,0.2);">Harvest</th></tr></thead>
+<tbody>
+<tr><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[No.]</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2); font-family: 'Instrument Serif', serif; font-size: 20px;">No. 01 Wildflower</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[Area]</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[Season, year]</td></tr>
+<tr><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[No.]</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2); font-family: 'Instrument Serif', serif; font-size: 20px;">No. 02 Avocado Blossom</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[Area]</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[Season, year]</td></tr>
+<tr><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[No.]</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2); font-family: 'Instrument Serif', serif; font-size: 20px;">No. 05 Bee Pollen</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[Area]</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[Season, year]</td></tr>
+<tr><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[No.]</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2); font-family: 'Instrument Serif', serif; font-size: 20px;">No. 01 Wildflower</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[Area]</td><td style="padding: 18px 12px 18px 0; border-bottom: 1px solid rgba(38,38,38,0.2);">[Season, year]</td></tr>
+</tbody>
+</table>
+</div>
+<div style="display: flex;"><button class="sb-btn" type="button" style="min-height: 48px; padding: 0 24px; border: 0; background: #262626; color: #F6EDDD; font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em; cursor: pointer;">Show older batches</button></div>
+</div>
+</section>
+
+<section aria-labelledby="source-h" style="background: #004832; color: #F6EDDD; padding: clamp(72px, 9vw, 136px) clamp(20px, 5vw, 72px);">
+<div style="max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 40px 96px;">
+<div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px;">
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase;">How we source</p>
+<h2 id="source-h" style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(56px, 7vw, 112px); line-height: 0.92; letter-spacing: 0.015em;">Raw. Local. <em>Traceable.</em></h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.75; max-width: 520px;">Every Sweet Bee jar starts with beekeepers across San Diego County. We keep it raw and unprocessed, and we log every batch here so you always know where your honey came from.</p>
+</div>
+<div style="flex: 0 1 auto; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center;">
+<a class="sb-btn" href="Main.dc.html#box" style="display: inline-flex; align-items: center; min-height: 56px; padding: 0 32px; background: #FF007C; color: #F6EDDD; font-family: 'Instrument Serif', serif; font-size: 24px; letter-spacing: 0.025em; text-decoration: none;">Start a subscription</a>
+<a href="Main.dc.html#shop" style="color: #F6EDDD; font-size: 15px; padding: 12px 0; text-underline-offset: 6px;">Shop the jars</a>
+</div>
+</div>
+</section>
+
+<footer id="about" style="background: #FF007C; color: #F6EDDD; padding: 56px clamp(20px, 5vw, 72px) 40px;">
+<div style="max-width: 1320px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 48px;">
+<img src="/_blob/17148661246ca395e011b75752095c19" alt="Sweet Bee" style="height: 64px; width: auto; max-width: 100%;">
+<div style="display: flex; flex-wrap: wrap; gap: 8px 40px; font-family: 'Instrument Serif', serif; font-size: 26px; letter-spacing: 0.025em;">
+<a href="Main.dc.html#shop" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">Shop</a>
+<a href="Main.dc.html#box" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">Subscribe</a>
+<a href="Batches.dc.html" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">Batches</a>
+<a href="Main.dc.html#find" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">Find Us</a>
+<a href="Main.dc.html#about" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">About</a>
+<a href="#honey101" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">Honey 101</a>
+<a href="#faq" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">FAQ</a>
+<a href="#instagram" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;"><em>Instagram</em></a>
+</div>
+</div>
+<div aria-hidden="true" style="margin: 0 calc(-1 * clamp(20px, 5vw, 72px)); overflow: hidden;"><div class="sb-track" style="display: flex; width: max-content; gap: 0.3em; font-family: 'Instrument Serif', serif; font-size: 15.5vw; line-height: 0.9; letter-spacing: -0.005em; white-space: nowrap;"><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span></div></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; padding-top: 24px; border-top: 1px solid rgba(246,237,221,0.5);"><p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 24px; letter-spacing: 0.025em;">© 2026 Sweet Bee · <em>San Diego County</em></p><button type="button" aria-pressed="{{motionPressed}}" onClick="{{toggleMotion}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 0; background: #F6EDDD; color: #262626; font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em; cursor: pointer;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="{{motionIcon}}" fill="currentColor"></path></svg>{{motionLabel}}</button></div>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":4150}}'>
+class Component extends DCLogic {
+renderVals() {
+    var st = this.state || {};
+    var self = this;
+    var menuOpen = !!st.menuOpen;
+    var motionOff = !!st.motionOff;
+    return {
+      menuClass: menuOpen ? 'sb-open' : '',
+      menuExp: menuOpen ? 'true' : 'false',
+      menuLabel: menuOpen ? 'Close' : 'Menu',
+      toggleMenu: function () { self.setState({ menuOpen: !menuOpen }); },
+      motionClass: motionOff ? 'sb-paused' : '',
+      motionPressed: motionOff ? 'true' : 'false',
+      motionLabel: motionOff ? 'Play motion' : 'Pause motion',
+      motionIcon: motionOff ? 'M2 1 L11 6 L2 11 Z' : 'M2 1 H5 V11 H2 Z M7 1 H10 V11 H7 Z',
+      toggleMotion: function () { self.setState({ motionOff: !motionOff }); }
+    };
+}
+}
+</script>
+</body>
+</html>

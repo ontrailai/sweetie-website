@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>No. 01 Wildflower</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0;background:#F6EDDD}
+a{color:#262626}a:hover{color:#FF007C}
+.sb-btn{transition:transform .2s ease, filter .2s ease}
+.sb-btn:hover{transform:translateY(-2px);filter:brightness(0.95)}
+.sb-input:focus{outline:3px solid #004832;outline-offset:3px}
+.sb-jar{transition:transform .35s cubic-bezier(.2,.9,.3,1.3)}
+.sb-jar:hover{transform:translateY(-18px) rotate(0deg) scale(1.04)!important}
+.sb-cardjar{transition:transform .35s cubic-bezier(.2,.9,.3,1.3)}
+.sb-panel:hover .sb-cardjar{transform:translateY(-12px)}
+.sb-track{animation:sb-scroll 32s linear infinite}
+@keyframes sb-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.sb-track-rev{animation:sb-scroll-rev 26s linear infinite}
+@keyframes sb-scroll-rev{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.sb-hum{display:inline-block;transform-origin:40% 85%;animation:sb-hum 2.6s ease-in-out infinite}
+@keyframes sb-hum{0%,64%,100%{transform:none}66%{transform:translate(-3px,1px) rotate(-2deg)}68%{transform:translate(3px,-1px) rotate(2deg)}70%{transform:translate(-3px,0) rotate(-1.5deg)}72%{transform:translate(3px,1px) rotate(1.5deg)}74%{transform:translate(-1px,0) rotate(-.5deg)}76%{transform:none}}
+.sb-float{animation:sb-float 4.2s ease-in-out infinite}
+@keyframes sb-float{0%,100%{translate:0 0}50%{translate:0 -14px}}
+.sb-spin{animation:sb-spin 3.2s ease-in-out infinite}
+@keyframes sb-spin{0%,100%{rotate:-7deg}50%{rotate:7deg}}
+.sb-drift{animation:sb-drift 16s linear infinite}
+@keyframes sb-drift{0%{transform:translateX(-160px) rotate(-4deg)}50%{transform:translateX(50vw) translateY(-18px) rotate(4deg)}100%{transform:translateX(calc(100vw + 160px)) rotate(-4deg)}}
+.sb-block{transition:transform .3s cubic-bezier(.2,.9,.3,1.3)}
+.sb-block:hover{transform:translateY(-6px)}
+.sb-twinkle{animation:sb-twinkle 2.4s ease-in-out infinite}
+@keyframes sb-twinkle{0%,100%{opacity:.25;transform:scale(.6) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(45deg)}}
+.sb-row{transition:background .2s ease, padding .2s ease}
+.sb-row:hover{background:#FF007C;padding-left:20px;padding-right:20px}
+.sb-menu{display:none}
+.sb-sticky{display:none}
+.sb-paused *,.sb-paused *::before,.sb-paused *::after{animation-play-state:paused!important}
+@media (max-width: 760px){.sb-menu{display:inline-flex;align-items:center}.sb-links{display:none!important}.sb-links.sb-open{display:flex!important;flex-direction:column;align-items:flex-start;width:100%;gap:0!important}.sb-sticky{display:flex!important}.sb-pad{padding-bottom:88px}.sb-bcard dd{text-align:left!important}.sb-bcard dl>div{flex-direction:column;gap:2px!important}.sb-bcard .sb-panel{flex-basis:76px!important}}
+@media (prefers-reduced-motion: reduce){.sb-track,.sb-track-rev,.sb-hum,.sb-float,.sb-spin,.sb-drift,.sb-twinkle{animation:none}.sb-jar,.sb-cardjar,.sb-btn,.sb-block,.sb-row{transition:none}}
+</style>
+</helmet>
+<div class="sb-pad {{motionClass}}" style="width: 100%; background: #F6EDDD; color: #262626; font-family: 'Courier Prime', monospace; letter-spacing: 0.075em; overflow-x: hidden;">
+
+<header style="padding: 18px clamp(20px, 5vw, 72px); background: #F6EDDD;">
+<nav aria-label="Main" style="max-width: 1320px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 40px;">
+<a href="Main.dc.html" aria-label="Sweet Bee home" style="display: flex; align-items: center;"><img src="/_blob/9cdda06d00c7ef1339d4d87264f6e2d9" alt="Sweet Bee" style="height: 36px; width: auto; display: block;"></a>
+<button class="sb-menu" type="button" aria-expanded="{{menuExp}}" aria-controls="sb-links" onClick="{{toggleMenu}}" style="min-height: 44px; padding: 0 18px; border: 2px solid #262626; background: transparent; color: #262626; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;">{{menuLabel}}</button>
+<div id="sb-links" class="sb-links {{menuClass}}" style="display: flex; flex-wrap: wrap; align-items: center; gap: 0 32px; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase;">
+<a href="Main.dc.html#shop" style="text-decoration: none; padding: 12px 0;">Shop</a>
+<a href="Main.dc.html#box" style="text-decoration: none; padding: 12px 0;">Subscribe</a>
+<a href="Batches.dc.html" style="text-decoration: none; padding: 12px 0;">Batches</a>
+<a href="Main.dc.html#find" style="text-decoration: none; padding: 12px 0;">Find Us</a>
+<a href="Main.dc.html#about" style="text-decoration: none; padding: 12px 0;">About</a>
+<a class="sb-btn" href="#cart" style="text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; background: #262626; color: #F6EDDD;">Cart (0)</a>
+</div>
+</nav>
+</header>
+
+<section style="padding: clamp(20px, 3vw, 36px) clamp(20px, 5vw, 72px) clamp(64px, 8vw, 112px);">
+<div style="max-width: 1320px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px;">
+<div><nav aria-label="Breadcrumb" style="font-size: 15px;"><a href="Main.dc.html#shop" style="padding: 10px 0;">Shop</a> <span aria-hidden="true" style="margin: 0 8px;">/</span> <span aria-current="page">No. 01 Wildflower</span></nav></div>
+<div style="display: flex; flex-wrap: wrap; gap: 40px 64px; align-items: flex-start;">
+
+<div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 14px;">
+<div class="sb-panel" style="position: relative; aspect-ratio: 4 / 5; background: rgba(38,38,38,0.06); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8%; box-sizing: border-box; overflow: hidden;">
+
+<div class="sb-cardjar" style="position: relative; width: 30%;"><dc-import name="Jar" num="01" jar-name="Wildflower" descriptor="Raw wildflower honey" label-color="#FF007C" label-text="#F6EDDD" honey="#D9921E" honey-dark="#7E4006" flecks="none" hint-size="100%,560px"></dc-import></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;">
+<div style="aspect-ratio: 1 / 1; background: rgba(38,38,38,0.07); display: flex; align-items: flex-end; padding: 12px; box-sizing: border-box;"><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 17px; line-height: 1.2;">[Photo: a spoonful, close up]</span></div>
+<div style="aspect-ratio: 1 / 1; background: rgba(38,38,38,0.07); display: flex; align-items: flex-end; padding: 12px; box-sizing: border-box;"><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 17px; line-height: 1.2;">[Photo: label and QR]</span></div>
+<div style="aspect-ratio: 1 / 1; background: rgba(38,38,38,0.07); display: flex; align-items: flex-end; padding: 12px; box-sizing: border-box;"><span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 17px; line-height: 1.2;">[Photo: at the market]</span></div>
+</div>
+</div>
+
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 22px;">
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832;">No. 01 · Everyday</p>
+<h1 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(72px, 8vw, 120px); line-height: 0.88; letter-spacing: 0.015em; color: #FF007C;">Wild<em>flower.</em></h1>
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 30px; letter-spacing: 0.025em;">Your everyday jar.</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.7;">Raw wildflower honey from San Diego County beekeepers. [Tasting notes in a sentence or two.]</p>
+<p style="margin: 0; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;"><span style="font-family: 'Instrument Serif', serif; font-size: 40px; letter-spacing: 0.025em;">{{price}}</span><span style="font-size: 15px;">{{priceNote}}</span></p>
+
+<div role="group" aria-label="Size" style="display: flex; flex-direction: column; gap: 10px;">
+<span style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; font-size: 15px;">Size</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;">
+<sc-for list="{{sizes}}" as="z" hint-placeholder-count="3"><button type="button" aria-pressed="{{z.pressed}}" onClick="{{z.pick}}" style="{{z.style}}">{{z.label}}</button></sc-for>
+</div>
+</div>
+
+<div role="group" aria-label="How to buy" style="display: flex; flex-direction: column; gap: 10px;">
+<span style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; font-size: 15px;">How to buy</span>
+<button type="button" aria-pressed="{{subPressed}}" onClick="{{pickSub}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; width: 100%; text-align: left; padding: 16px 18px; border: 2px solid #262626; cursor: pointer; {{subStyle}}"><span style="font-family: 'Instrument Serif', serif; font-size: 26px; letter-spacing: 0.025em;">Subscribe &amp; save [x]%</span><span style="font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em;">Pause, skip or cancel anytime.</span></button>
+<sc-if value="{{isSub}}" hint-placeholder-val="{{ true }}"><label style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 4px 2px; font-size: 15px;">Ships every<select style="min-height: 44px; padding: 0 12px; border: 2px solid #262626; background: #FFFFFF; font-family: 'Courier Prime', monospace; font-size: 15px; color: #262626;"><option>[2 weeks]</option><option>[4 weeks]</option><option>[6 weeks]</option></select></label></sc-if>
+<button type="button" aria-pressed="{{onePressed}}" onClick="{{pickOne}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; width: 100%; text-align: left; padding: 16px 18px; border: 2px solid #262626; cursor: pointer; {{oneStyle}}"><span style="font-family: 'Instrument Serif', serif; font-size: 26px; letter-spacing: 0.025em;">One-time purchase</span></button>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch;">
+<div role="group" aria-label="Quantity" style="display: flex; align-items: center; border: 2px solid #262626;">
+<button type="button" aria-label="One fewer" onClick="{{dec}}" style="width: 48px; min-height: 56px; border: 0; background: transparent; font-family: 'Courier Prime', monospace; font-size: 20px; cursor: pointer; color: #262626;">−</button>
+<span aria-live="polite" style="min-width: 32px; text-align: center; font-size: 16px;">{{qty}}</span>
+<button type="button" aria-label="One more" onClick="{{inc}}" style="width: 48px; min-height: 56px; border: 0; background: transparent; font-family: 'Courier Prime', monospace; font-size: 20px; cursor: pointer; color: #262626;">+</button>
+</div>
+<button class="sb-btn" type="button" style="flex: 1 1 220px; min-height: 60px; padding: 0 28px; border: 0; background: #FF007C; color: #F6EDDD; font-family: 'Instrument Serif', serif; font-size: 26px; letter-spacing: 0.025em; cursor: pointer;">{{cta}}</button>
+</div>
+
+<ul style="margin: 0; padding: 16px 0 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px 20px; border-top: 1px solid rgba(38,38,38,0.25); font-size: 15px;">
+<li>Raw &amp; unprocessed</li><li aria-hidden="true">·</li><li>Traceable to the hive</li><li aria-hidden="true">·</li><li>Ships [where]</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="how-h" style="padding: 0 clamp(20px, 5vw, 72px) clamp(64px, 8vw, 112px);">
+<div style="max-width: 1320px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px;"><h2 id="how-h" style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(40px, 4.4vw, 64px); line-height: 1; letter-spacing: 0.02em; color: #262626;">Three ways <em>to use it.</em></h2><img src="/_blob/5b1aa2089b9b84d4daeedacb5b8a745f" alt="" aria-hidden="true" style="height: clamp(130px, 13vw, 190px); width: auto;"></div>
+<ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px;">
+<li class="sb-block" style="background: #FF007C; color: #F6EDDD; padding: 32px; min-height: 260px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; gap: 28px;"><span style="font-family: 'Instrument Serif', serif; font-size: clamp(56px, 6vw, 88px); line-height: 0.9;">6 AM</span><div style="display: flex; flex-direction: column; gap: 8px;"><h3 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 32px; letter-spacing: 0.025em;">The sunrise spoonful</h3><p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 24px; line-height: 1.3;">Straight off the spoon before the surf check.</p></div></li>
+<li class="sb-block" style="background: #262626; color: #F6EDDD; padding: 32px; min-height: 260px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; gap: 28px;"><span style="font-family: 'Instrument Serif', serif; font-size: clamp(56px, 6vw, 88px); line-height: 0.9;">9 AM</span><div style="display: flex; flex-direction: column; gap: 8px;"><h3 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 32px; letter-spacing: 0.025em;">Cold brew, sweetened</h3><p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 24px; line-height: 1.3;">Stirred in on your way out the door.</p></div></li>
+<li class="sb-block" style="background: #004832; color: #F6EDDD; padding: 32px; min-height: 260px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; gap: 28px;"><span style="font-family: 'Instrument Serif', serif; font-size: clamp(56px, 6vw, 88px); line-height: 0.9;">6 PM</span><div style="display: flex; flex-direction: column; gap: 8px;"><h3 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 32px; letter-spacing: 0.025em;">Golden hour</h3><p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 24px; line-height: 1.3;">Over something warm as the sun drops.</p></div></li>
+</ol>
+</div>
+</section>
+
+<section aria-labelledby="batch-h" style="background: #262626; color: #F6EDDD; padding: clamp(64px, 8vw, 112px) clamp(20px, 5vw, 72px);">
+<div style="max-width: 1320px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 40px 96px;">
+<div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 22px;">
+<h2 id="batch-h" style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(52px, 6.4vw, 100px); line-height: 0.92; letter-spacing: 0.015em; color: #F6EDDD;">This batch, <em>traced.</em></h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.7; max-width: 460px;">Every jar of No. 01 carries a QR code. Scan it, or check the batch on shelves now.</p>
+<div><a class="sb-btn" href="Batches.dc.html" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 24px; background: #FF007C; color: #F6EDDD; font-family: 'Instrument Serif', serif; font-size: 24px; letter-spacing: 0.025em; text-decoration: none;">See every batch</a></div>
+</div>
+<dl style="flex: 1 1 420px; min-width: 0; margin: 0; display: flex; flex-direction: column; border-top: 2px solid #F6EDDD;">
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(246,237,221,0.3);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase;">Batch</dt><dd style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 28px;">[No.]</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(246,237,221,0.3);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase;">Honey</dt><dd style="margin: 0; font-size: 15px;">Wildflower</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(246,237,221,0.3);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase;">Beekeeper area</dt><dd style="margin: 0; font-size: 15px;">[Area], San Diego County</dd></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(246,237,221,0.3);"><dt style="font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase;">Harvest</dt><dd style="margin: 0; font-size: 15px;">[Season, year]</dd></div>
+</dl>
+</div>
+</section>
+
+<section aria-labelledby="details-h" style="padding: clamp(64px, 8vw, 112px) clamp(20px, 5vw, 72px);">
+<div style="max-width: 1320px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 32px 96px;">
+<div style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 20px;"><h2 id="details-h" style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(40px, 4.4vw, 64px); line-height: 1; letter-spacing: 0.02em; color: #262626;">The <em>details.</em></h2><span style="display: flex; align-items: flex-end; gap: 16px;"><img src="/_blob/8d330ab512ad62ace30b8dde03cf81bc" alt="" aria-hidden="true" style="height: clamp(130px, 13vw, 190px); width: auto; align-self: flex-start;"></span></div>
+<div style="flex: 2 1 520px; min-width: 0; border-bottom: 1px solid rgba(38,38,38,0.25);">
+<details open="" style="border-top: 1px solid rgba(38,38,38,0.25); padding: 6px 0;"><summary style="list-style: none; cursor: pointer; min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: 'Instrument Serif', serif; font-size: 28px; letter-spacing: 0.025em;">Tasting notes<span aria-hidden="true" style="font-family: 'Courier Prime', monospace; font-size: 22px;">+</span></summary><p style="margin: 0 0 18px; font-size: 15px; line-height: 1.7; max-width: 620px;">[Tasting notes for No. 01 Wildflower.]</p></details>
+<details style="border-top: 1px solid rgba(38,38,38,0.25); padding: 6px 0;"><summary style="list-style: none; cursor: pointer; min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: 'Instrument Serif', serif; font-size: 28px; letter-spacing: 0.025em;">Ingredients<span aria-hidden="true" style="font-family: 'Courier Prime', monospace; font-size: 22px;">+</span></summary><p style="margin: 0 0 18px; font-size: 15px; line-height: 1.7; max-width: 620px;">Raw wildflower honey. That is it.</p></details>
+<details style="border-top: 1px solid rgba(38,38,38,0.25); padding: 6px 0;"><summary style="list-style: none; cursor: pointer; min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: 'Instrument Serif', serif; font-size: 28px; letter-spacing: 0.025em;">Sizes<span aria-hidden="true" style="font-family: 'Courier Prime', monospace; font-size: 22px;">+</span></summary><p style="margin: 0 0 18px; font-size: 15px; line-height: 1.7; max-width: 620px;">6 oz, 16 oz and 32 oz, all in the tall slim jar.</p></details>
+<details style="border-top: 1px solid rgba(38,38,38,0.25); padding: 6px 0;"><summary style="list-style: none; cursor: pointer; min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: 'Instrument Serif', serif; font-size: 28px; letter-spacing: 0.025em;">Storage<span aria-hidden="true" style="font-family: 'Courier Prime', monospace; font-size: 22px;">+</span></summary><p style="margin: 0 0 18px; font-size: 15px; line-height: 1.7; max-width: 620px;">Keep it at room temperature with the lid on. Raw honey crystallizes naturally over time; set the jar in warm water to loosen it.</p></details>
+<details style="border-top: 1px solid rgba(38,38,38,0.25); padding: 6px 0;"><summary style="list-style: none; cursor: pointer; min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: 'Instrument Serif', serif; font-size: 28px; letter-spacing: 0.025em;">Shipping<span aria-hidden="true" style="font-family: 'Courier Prime', monospace; font-size: 22px;">+</span></summary><p style="margin: 0 0 18px; font-size: 15px; line-height: 1.7; max-width: 620px;">[Where Sweet Bee ships, rates and delivery times.]</p></details>
+<details style="border-top: 1px solid rgba(38,38,38,0.25); padding: 6px 0;"><summary style="list-style: none; cursor: pointer; min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: 'Instrument Serif', serif; font-size: 28px; letter-spacing: 0.025em;">Good to know<span aria-hidden="true" style="font-family: 'Courier Prime', monospace; font-size: 22px;">+</span></summary><p style="margin: 0 0 18px; font-size: 15px; line-height: 1.7; max-width: 620px;">Not for infants under 12 months.</p></details>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="pairs-h" style="padding: 0 clamp(20px, 5vw, 72px) clamp(64px, 8vw, 112px);">
+<div style="max-width: 1320px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px;"><h2 id="pairs-h" style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(52px, 6.4vw, 100px); line-height: 0.92; letter-spacing: 0.015em; color: #FF007C;">Try these <em>next.</em></h2><img src="/_blob/55807bfb2ce74120f2cdb544e9867d3b" alt="" aria-hidden="true" style="height: clamp(130px, 13vw, 190px); width: auto;"></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 32px 24px;">
+<article style="display: flex; flex-direction: column; gap: 10px;">
+<a href="#" class="sb-panel" aria-label="No. 03 Vanilla Bean" style="position: relative; aspect-ratio: 1 / 1; background: rgba(38,38,38,0.06); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8%; box-sizing: border-box; overflow: hidden;"><span class="sb-cardjar" style="position: relative; width: 24%; display: block;"><dc-import name="Jar" num="03" jar-name="Vanilla Bean" descriptor="Raw honey + vanilla bean" label-color="#F6EDDD" label-text="#262626" honey="#E2A43A" honey-dark="#93590E" flecks="vanilla" hint-size="100%,300px"></dc-import></span></a>
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; font-size: 15px;">No. 03</p>
+<h3 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; letter-spacing: 0.025em;">Vanilla Bean</h3>
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 20px; color: #004832;">Best at 6 PM · golden hour</p>
+</article>
+<article style="display: flex; flex-direction: column; gap: 10px;">
+<a href="#" class="sb-panel" aria-label="No. 06 Guarana + Salt" style="position: relative; aspect-ratio: 1 / 1; background: rgba(38,38,38,0.06); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8%; box-sizing: border-box; overflow: hidden;"><span class="sb-cardjar" style="position: relative; width: 24%; display: block;"><dc-import name="Jar" num="06" jar-name="Guarana + Salt" descriptor="Raw honey + guarana + salt" label-color="#FF0000" label-text="#F6EDDD" honey="#C9781C" honey-dark="#723A06" flecks="salt" hint-size="100%,300px"></dc-import></span></a>
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; font-size: 15px;">No. 06</p>
+<h3 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; letter-spacing: 0.025em;">Guarana + Salt</h3>
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 20px; color: #004832;">Best at 9 AM · before the paddle out</p>
+</article>
+<article style="display: flex; flex-direction: column; gap: 10px;">
+<a href="#" class="sb-panel" aria-label="No. 05 Bee Pollen" style="position: relative; aspect-ratio: 1 / 1; background: rgba(38,38,38,0.06); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8%; box-sizing: border-box; overflow: hidden;"><span class="sb-cardjar" style="position: relative; width: 24%; display: block;"><dc-import name="Jar" num="05" jar-name="Bee Pollen" descriptor="Raw honey + bee pollen" label-color="#004832" label-text="#F6EDDD" honey="#E6A52A" honey-dark="#9C620C" flecks="pollen" hint-size="100%,300px"></dc-import></span></a>
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: #004832; font-size: 15px;">No. 05</p>
+<h3 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; letter-spacing: 0.025em;">Bee Pollen</h3>
+<p style="margin: 0; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 20px; color: #004832;">Best at 6 AM · the sunrise spoonful</p>
+</article>
+</div>
+</div>
+</section>
+
+<footer id="about" style="background: #FF007C; color: #F6EDDD; padding: 56px clamp(20px, 5vw, 72px) 40px;">
+<div style="max-width: 1320px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 48px;">
+<img src="/_blob/17148661246ca395e011b75752095c19" alt="Sweet Bee" style="height: 64px; width: auto; max-width: 100%;">
+<div style="display: flex; flex-wrap: wrap; gap: 8px 40px; font-family: 'Instrument Serif', serif; font-size: 26px; letter-spacing: 0.025em;">
+<a href="Main.dc.html#shop" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">Shop</a>
+<a href="Main.dc.html#box" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">Subscribe</a>
+<a href="Batches.dc.html" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">Batches</a>
+<a href="Main.dc.html#find" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">Find Us</a>
+<a href="Main.dc.html#about" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">About</a>
+<a href="#honey101" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">Honey 101</a>
+<a href="#faq" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;">FAQ</a>
+<a href="#instagram" style="color: #F6EDDD; text-decoration: none; padding: 6px 0;"><em>Instagram</em></a>
+</div>
+</div>
+<div aria-hidden="true" style="margin: 0 calc(-1 * clamp(20px, 5vw, 72px)); overflow: hidden;"><div class="sb-track" style="display: flex; width: max-content; gap: 0.3em; font-family: 'Instrument Serif', serif; font-size: 15.5vw; line-height: 0.9; letter-spacing: -0.005em; white-space: nowrap;"><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span><span style="display: inline-flex; align-items: center; gap: 0.3em;"><span>Feel the <em>hum.</em></span><svg aria-hidden="true" width="0.5em" height="0.5em" viewBox="0 0 24 24" style="flex: 0 0 auto;"><path d="M12 0 L14.2 8.6 L22.4 5.6 L16.6 12 L22.4 18.4 L14.2 15.4 L12 24 L9.8 15.4 L1.6 18.4 L7.4 12 L1.6 5.6 L9.8 8.6 Z" fill="#F6EDDD"></path></svg></span></div></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; padding-top: 24px; border-top: 1px solid rgba(246,237,221,0.5);"><p style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 24px; letter-spacing: 0.025em;">© 2026 Sweet Bee · <em>San Diego County</em></p><button type="button" aria-pressed="{{motionPressed}}" onClick="{{toggleMotion}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 0; background: #F6EDDD; color: #262626; font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em; cursor: pointer;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="{{motionIcon}}" fill="currentColor"></path></svg>{{motionLabel}}</button></div>
+</div>
+</footer>
+
+<div class="sb-sticky" role="region" aria-label="Quick add" style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: #F6EDDD; border-top: 2px solid #262626;"><span style="display: flex; flex-direction: column; gap: 2px;"><span style="font-family: 'Instrument Serif', serif; font-size: 22px; letter-spacing: 0.025em;">No. 01 Wildflower</span><span style="font-size: 15px;">{{price}} · {{sizeLabel}}</span></span><button class="sb-btn" type="button" style="min-height: 52px; padding: 0 18px; border: 0; background: #FF007C; color: #F6EDDD; font-family: 'Instrument Serif', serif; font-size: 24px; letter-spacing: 0.025em; cursor: pointer;">{{cta}}</button></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":4950}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var st = this.state || {};
+    var self = this;
+    var size = st.size || '16';
+    var mode = st.mode || 'sub';
+    var qty = st.qty || 1;
+    var menuOpen = !!st.menuOpen;
+    var motionOff = !!st.motionOff;
+    var prices = { '6': '[6 oz price]', '16': '[16 oz price]', '32': '[32 oz price]' };
+    var base = "display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border: 2px solid #262626; font-family: 'Courier Prime', monospace; font-size: 15px; letter-spacing: 0.075em; cursor: pointer; ";
+    var on = 'background: #262626; color: #F6EDDD;';
+    var off = 'background: transparent; color: #262626;';
+    return {
+      menuClass: menuOpen ? 'sb-open' : '',
+      menuExp: menuOpen ? 'true' : 'false',
+      menuLabel: menuOpen ? 'Close' : 'Menu',
+      toggleMenu: function () { self.setState({ menuOpen: !menuOpen }); },
+      motionClass: motionOff ? 'sb-paused' : '',
+      motionPressed: motionOff ? 'true' : 'false',
+      motionLabel: motionOff ? 'Play motion' : 'Pause motion',
+      motionIcon: motionOff ? 'M2 1 L11 6 L2 11 Z' : 'M2 1 H5 V11 H2 Z M7 1 H10 V11 H7 Z',
+      toggleMotion: function () { self.setState({ motionOff: !motionOff }); },
+      sizes: ['6', '16', '32'].map(function (z) {
+        return { label: z + ' oz', pressed: z === size ? 'true' : 'false', style: base + (z === size ? on : off), pick: function () { self.setState({ size: z }); } };
+      }),
+      price: prices[size],
+      priceNote: mode === 'sub' ? 'subscriber price · ' + size + ' oz' : 'one-time · ' + size + ' oz',
+      isSub: mode === 'sub',
+      subPressed: mode === 'sub' ? 'true' : 'false',
+      onePressed: mode === 'one' ? 'true' : 'false',
+      subStyle: mode === 'sub' ? on : off,
+      oneStyle: mode === 'one' ? on : off,
+      pickSub: function () { self.setState({ mode: 'sub' }); },
+      pickOne: function () { self.setState({ mode: 'one' }); },
+      qty: qty,
+      dec: function () { self.setState({ qty: Math.max(1, qty - 1) }); },
+      inc: function () { self.setState({ qty: qty + 1 }); },
+      cta: mode === 'sub' ? 'Start my subscription' : 'Grab a jar',
+      sizeLabel: size + ' oz'
+    };
+  }
+}
+</script>
+</body>
+</html>
