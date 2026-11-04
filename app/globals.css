@@ -429,3 +429,9 @@ details.accordion[open] .plus {
   outline: 4px solid var(--color-peacock);
   outline-offset: 4px;
 }
+
+/* Jar label text is decorative artwork, not selectable copy. */
+svg.jar {
+  user-select: none;
+  -webkit-user-select: none;
+}

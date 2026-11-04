@@ -30,7 +30,7 @@ export function Header() {
     >
       <div className="px-gutter">
       <nav aria-label="Main" className="container-x flex items-center justify-between gap-6">
-        <Link href="/" aria-label="Sweet Bee home" className="group -my-1 inline-flex items-center py-1 text-nero transition-colors hover:text-peacock">
+        <Link href="/" className="group -my-1 inline-flex items-center py-1 text-nero transition-colors hover:text-peacock">
           <Wordmark size="md" />
         </Link>
         <ul className="hidden items-center gap-8 lg:flex">
@@ -39,10 +39,10 @@ export function Header() {
               <Link
                 href={l.href}
                 aria-current={isActive(l.href) ? "page" : undefined}
-                className="nav-link group t-eyebrow relative inline-flex py-3 text-nero transition-colors hover:text-peacock aria-[current=page]:text-peacock"
+                className="nav-link group t-eyebrow relative inline-flex py-3 text-nero transition-colors hover:text-forest"
               >
                 {l.label}
-                <span aria-hidden="true" className="absolute inset-x-0 bottom-2 h-[2px] origin-left scale-x-0 bg-current transition-transform duration-300 group-hover:scale-x-100" />
+                <span aria-hidden="true" className="absolute inset-x-0 bottom-2 h-[2px] origin-left scale-x-0 bg-peacock transition-transform duration-300 group-hover:scale-x-100 group-aria-[current=page]:scale-x-100" />
               </Link>
             </li>
           ))}

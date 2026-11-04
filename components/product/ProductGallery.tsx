@@ -4,6 +4,7 @@ import { Jar } from "@/components/jar/Jar";
 import { TurnableJar } from "@/components/jar/TurnableJar";
 import { Star } from "@/components/brand/Star";
 import { TbdTag } from "@/components/ui/Tbd";
+import { DecorNumber } from "@/components/ui/DecorNumber";
 
 /**
  * Main turnable jar + three supporting tiles. When real photos are added to
@@ -59,9 +60,7 @@ export function ProductGallery({ product }: { product: Product }) {
   return (
     <div className="flex flex-col gap-3">
       <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-nero/[0.06] pt-6">
-        <span aria-hidden="true" className="absolute left-5 top-3 font-serif text-[clamp(96px,14vw,200px)] italic leading-none opacity-[0.08]">
-          {product.number}
-        </span>
+        <DecorNumber value={product.number} opacity={0.08} className="absolute left-5 top-4 h-[clamp(72px,10vw,150px)]" />
         <Star className="twinkle absolute right-[9%] top-[12%] size-7 text-peacock" />
         <Star className="twinkle absolute bottom-[22%] left-[10%] size-4 text-forest [animation-delay:-1.4s]" />
         <TurnableJar product={product} />

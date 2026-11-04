@@ -7,6 +7,7 @@ import { Jar } from "@/components/jar/Jar";
 import { useJarSpin } from "@/components/jar/useJarSpin";
 import { useCart } from "@/components/cart/CartProvider";
 import { Price } from "@/components/ui/Price";
+import { DecorNumber } from "@/components/ui/DecorNumber";
 import { SizeChips } from "./SizeChips";
 
 export function ProductCard({ product, headingLevel = 3 }: { product: Product; headingLevel?: 2 | 3 }) {
@@ -28,7 +29,6 @@ export function ProductCard({ product, headingLevel = 3 }: { product: Product; h
     <article className="group/card flex flex-col gap-2.5">
       <Link
         href={href}
-        aria-label={`No. ${product.number} ${product.name}`}
         onPointerEnter={() => turn(1)}
         onFocus={() => turn(1)}
         className="relative mb-3.5 flex aspect-[4/5] items-end justify-center overflow-hidden bg-nero/[0.06] pb-[8%] max-sm:aspect-[3/4]"
@@ -38,9 +38,10 @@ export function ProductCard({ product, headingLevel = 3 }: { product: Product; h
           className="absolute inset-0 origin-bottom scale-y-0 transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover/card:scale-y-100 group-focus-within/card:scale-y-100"
           style={{ background: product.jar.labelColor, opacity: 0.16 }}
         />
-        <span aria-hidden="true" className="absolute left-4 top-3 font-serif text-[clamp(56px,7vw,96px)] italic leading-none opacity-[0.12]">
-          {product.number}
+        <span className="sr-only">
+          No. {product.number} {product.name}
         </span>
+        <DecorNumber value={product.number} opacity={0.12} className="absolute left-4 top-3 h-[clamp(44px,5.4vw,72px)]" />
         <span
           className="relative block w-[30%] transition-transform duration-[450ms] ease-[var(--ease-pop)] group-hover/card:-translate-y-3 group-hover/card:-rotate-3"
         >

@@ -14,12 +14,15 @@ export function useFocusTrap(
   active: boolean,
   onEscape: () => void,
   initialFocus?: RefObject<HTMLElement | null>,
+  /** Fallback for focus on close when nothing useful was focused on open (e.g. Safari clicks). */
+  returnFocus?: RefObject<HTMLElement | null>,
 ) {
   useEffect(() => {
     if (!active) return;
     const root = ref.current;
     if (!root) return;
     const previous = document.activeElement as HTMLElement | null;
+    const fallback = returnFocus?.current ?? null;
 
     const focusables = () =>
       Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
@@ -58,7 +61,9 @@ export function useFocusTrap(
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener("keydown", onKey);
-      if (previous && document.contains(previous)) previous.focus({ preventScroll: true });
+      const usable = (el: HTMLElement | null | undefined): el is HTMLElement => !!el && el !== document.body && document.contains(el);
+      const target = usable(previous) ? previous : fallback;
+      if (usable(target)) target.focus({ preventScroll: true });
     };
-  }, [active, ref, onEscape, initialFocus]);
+  }, [active, ref, onEscape, initialFocus, returnFocus]);
 }

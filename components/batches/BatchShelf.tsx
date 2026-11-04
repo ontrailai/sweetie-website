@@ -33,7 +33,7 @@ export function BatchShelf() {
           })}
         </div>
       </LayoutGroup>
-      <motion.ul layout className="grid grid-cols-[repeat(auto-fill,minmax(min(380px,100%),1fr))] gap-4">
+      <motion.ul layout className="grid grid-cols-[repeat(auto-fill,minmax(min(460px,100%),1fr))] gap-4">
         <AnimatePresence mode="popLayout" initial={false}>
           {shown.map((b) => {
             const p = getProduct(b.productSlug)!;

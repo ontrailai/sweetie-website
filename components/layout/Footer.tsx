@@ -10,7 +10,7 @@ export function Footer() {
       <div className="px-gutter">
       <div className="container-x flex flex-col gap-12 pb-10 pt-14">
         <div className="flex flex-wrap items-start justify-between gap-12">
-          <Link href="/" aria-label="Sweet Bee home" className="text-canvas">
+          <Link href="/" className="text-canvas">
             <Wordmark size="lg" onDark />
           </Link>
           <nav aria-label="Footer">
@@ -28,8 +28,8 @@ export function Footer() {
                     Instagram
                   </a>
                 ) : (
-                  <span className="inline-block py-1.5 italic opacity-80" title="Instagram link coming soon">
-                    Instagram <span className="tbd-tag">soon</span>
+                  <span className="inline-block py-1.5 italic" title="Instagram link coming soon">
+                    Instagram <span className="tbd-tag bg-canvas text-nero">soon</span>
                   </span>
                 )}
               </li>

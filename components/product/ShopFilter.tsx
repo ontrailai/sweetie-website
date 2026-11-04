@@ -30,7 +30,7 @@ export function ShopFilter() {
                 >
                   {active ? <motion.span layoutId="filter-pill" className="absolute inset-0 bg-nero" transition={{ type: "spring", stiffness: 420, damping: 34 }} /> : null}
                   <span className="relative">
-                    {f} <span className="opacity-60">({count})</span>
+                    {f} <span>({count})</span>
                   </span>
                 </button>
               );

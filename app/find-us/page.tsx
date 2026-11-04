@@ -22,12 +22,24 @@ function CoastMap() {
     { x: 300, y: 170, c: "#262626" },
   ];
   return (
-    <figure className="relative aspect-[4/5] w-full overflow-hidden bg-forest">
+    <figure className="relative aspect-[4/5] w-full overflow-hidden border-2 border-nero bg-forest">
       <svg viewBox="0 0 400 500" className="absolute inset-0 size-full" role="img" aria-label="Illustrated San Diego County coastline with market pins. Not to scale; locations to be confirmed.">
+        <defs>
+          <pattern id="land-dots" width="14" height="14" patternUnits="userSpaceOnUse">
+            <circle cx="7" cy="7" r="1.6" fill="#262626" opacity="0.18" />
+          </pattern>
+        </defs>
         <path
+          id="coast"
           d="M120 0 C 110 60, 140 90, 120 140 C 100 190, 150 210, 130 260 C 110 300, 90 330, 112 380 C 130 420, 100 460, 116 500 L 400 500 L 400 0 Z"
           fill="#F6EDDD"
         />
+        <path d="M120 0 C 110 60, 140 90, 120 140 C 100 190, 150 210, 130 260 C 110 300, 90 330, 112 380 C 130 420, 100 460, 116 500 L 400 500 L 400 0 Z" fill="url(#land-dots)" />
+        <path d="M120 0 C 110 60, 140 90, 120 140 C 100 190, 150 210, 130 260 C 110 300, 90 330, 112 380 C 130 420, 100 460, 116 500" fill="none" stroke="#262626" strokeWidth="3" />
+        <path d="M250 0 C 270 120, 380 160, 360 300 S 330 440, 400 500" fill="none" stroke="#308F32" strokeOpacity="0.35" strokeWidth="26" strokeLinecap="round" />
+        <text x="250" y="60" fill="#004832" fontSize="14" style={{ fontFamily: "var(--font-serif)", letterSpacing: "0.2em" }}>
+          SAN DIEGO COUNTY
+        </text>
         {Array.from({ length: 7 }, (_, i) => (
           <path key={i} d={`M${18 + (i % 2) * 20} ${40 + i * 64} q 14 -10 28 0 t 28 0`} fill="none" stroke="#F6EDDD" strokeOpacity="0.5" strokeWidth="3" strokeLinecap="round" />
         ))}
@@ -39,8 +51,11 @@ function CoastMap() {
             <circle cy="-21" r="4.5" fill="#F6EDDD" />
           </g>
         ))}
-        <text x="24" y="482" fill="#F6EDDD" fontSize="13" style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.12em" }}>
-          PACIFIC · NOT TO SCALE
+        <text x="20" y="482" fill="#F6EDDD" fontSize="13" style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.12em" }}>
+          PACIFIC
+        </text>
+        <text x="380" y="482" textAnchor="end" fill="#262626" fontSize="12" style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.12em" }}>
+          NOT TO SCALE · PINS TBD
         </text>
       </svg>
       <Wave className="absolute bottom-[18%] left-[4%] w-16" />

@@ -23,10 +23,11 @@ export function Wordmark({
   }
   const text = { sm: "text-[26px]", md: "text-[34px]", lg: "text-[60px]", xl: "text-[clamp(72px,12vw,140px)]" }[size];
   return (
-    <span className={`wordmark inline-flex items-baseline leading-none ${text} ${className}`} aria-label={SITE.name} role="img">
-      <span aria-hidden="true" className="font-serif italic tracking-[0.01em]">Sweet</span>
-      <span aria-hidden="true" className="wordmark-dot mx-[0.06em] inline-block size-[0.16em] -translate-y-[0.5em] rounded-full bg-current" />
-      <span aria-hidden="true" className="font-serif tracking-[0.025em]">Bee</span>
+    <span className={`wordmark inline-flex items-baseline leading-none ${text} ${className}`}>
+      <span className="font-serif italic tracking-[0.01em]">Sweet</span>
+      {/* The dot carries the word space, so the accessible name reads "Sweet Bee". */}
+      <span className="wordmark-dot mx-[0.06em] inline-block size-[0.16em] -translate-y-[0.5em] overflow-hidden rounded-full bg-current text-transparent">{" "}</span>
+      <span className="font-serif tracking-[0.025em]">Bee</span>
     </span>
   );
 }

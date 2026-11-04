@@ -54,7 +54,7 @@ export function Subscription() {
           <Flower className="spin-slow absolute left-[5%] top-[5%] w-[18%]" />
           <div className="absolute right-[6%] top-[7%] grid size-[clamp(84px,9vw,120px)] rotate-12 place-items-center text-peacock">
             <Star className="spin-slow absolute inset-0 size-full" />
-            <span className="relative text-center font-serif text-[clamp(15px,1.5vw,20px)] leading-tight text-canvas">
+            <span className="relative text-center font-serif text-[clamp(18px,1.6vw,22px)] font-bold leading-tight text-canvas">
               Save
               <br />
               {SUBSCRIPTION.discountPercent}%*
@@ -72,7 +72,7 @@ export function Subscription() {
             <span className="mt-2.5">
               <Wordmark size="md" onDark className="!text-[clamp(28px,3.4vw,48px)]" />
             </span>
-            <span className="font-serif text-[clamp(22px,2.2vw,32px)] italic tracking-[0.025em]">The Sweet Bee Box</span>
+            <span className="font-serif text-[clamp(24px,2.2vw,32px)] italic tracking-[0.025em]">The Sweet Bee Box</span>
           </div>
           <p className="absolute bottom-2 right-3 text-[11px] text-nero/70">*Placeholder discount, TBD</p>
         </Reveal>

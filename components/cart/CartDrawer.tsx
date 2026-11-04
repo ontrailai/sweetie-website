@@ -25,7 +25,12 @@ export function CartDrawer() {
     setCheckoutMsg(null);
   }, [close]);
 
-  useFocusTrap(panelRef, isOpen, handleClose, closeRef);
+  const cartButtonRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    cartButtonRef.current = document.querySelector<HTMLElement>("[data-cart-button]");
+  }, []);
+
+  useFocusTrap(panelRef, isOpen, handleClose, closeRef, cartButtonRef);
   useScrollLock(isOpen);
 
   // Close when the user navigates with a link inside the drawer.

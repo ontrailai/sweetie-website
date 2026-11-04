@@ -35,9 +35,9 @@ export function DiscoverySet({ headingLevel = 3 }: { headingLevel?: 2 | 3 }) {
         </div>
         <div className="absolute inset-x-[10%] bottom-[9%] z-[2] flex h-[30%] items-center justify-center gap-[18px] bg-peacock text-canvas shadow-[inset_0_12px_0_rgba(38,38,38,0.14)]">
           <span className="mt-2 text-canvas">
-            <Wordmark size="sm" onDark className="!text-[clamp(20px,2.4vw,34px)]" />
+            <Wordmark size="sm" onDark className="!text-[clamp(24px,2.4vw,34px)]" />
           </span>
-          <span className="mt-2 font-serif text-[clamp(20px,2vw,30px)] italic tracking-[0.025em]">Discovery Set</span>
+          <span className="mt-2 font-serif text-[clamp(24px,2vw,30px)] italic tracking-[0.025em]">Discovery Set</span>
         </div>
       </div>
       <div className="flex min-w-0 flex-[1_1_380px] flex-col justify-center gap-5 p-[clamp(28px,3.4vw,52px)]">

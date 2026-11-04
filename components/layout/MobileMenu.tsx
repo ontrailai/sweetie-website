@@ -19,15 +19,17 @@ export function MobileMenu() {
   // Portal target only exists on the client.
   const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const close = useCallback(() => setOpen(false), []);
 
-  useFocusTrap(panelRef, open, close);
+  useFocusTrap(panelRef, open, close, undefined, toggleRef);
   useScrollLock(open);
 
   return (
     <>
       <button
+        ref={toggleRef}
         type="button"
         onClick={() => setOpen(true)}
         aria-expanded={open}
@@ -53,7 +55,7 @@ export function MobileMenu() {
                   transition={{ duration: 0.55, ease: [0.7, 0, 0.2, 1] }}
                 >
                   <div className="px-gutter flex items-center justify-between py-[18px]">
-                    <Link href="/" onClick={close} aria-label="Sweet Bee home" className="text-canvas">
+                    <Link href="/" onClick={close} className="text-canvas">
                       <Wordmark size="md" onDark />
                     </Link>
                     <button type="button" onClick={close} className="t-eyebrow inline-flex min-h-11 items-center border-2 border-canvas px-[18px]">
