@@ -8,11 +8,13 @@ import { createPortal } from "react-dom";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { Bee } from "@/components/brand/Illustrations";
 import { MotionToggle } from "@/components/motion/MotionToggle";
+import { useMotionPref } from "@/components/motion/MotionPreference";
 import { NAV, SITE } from "@/lib/site";
 import { useFocusTrap } from "@/lib/hooks/useFocusTrap";
 import { useScrollLock } from "@/lib/hooks/useScrollLock";
 
 const noopSubscribe = () => () => {};
+const INSTANT = { duration: 0 } as const;
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
@@ -22,6 +24,10 @@ export function MobileMenu() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const close = useCallback(() => setOpen(false), []);
+  // MotionConfig's reducedMotion only covers transform/size values; the clip-path
+  // wipe and the link stagger must be switched off explicitly. Read at render time
+  // so pausing motion from inside the open menu also makes the exit instant.
+  const { enabled: motionOn } = useMotionPref();
 
   useFocusTrap(panelRef, open, close, undefined, toggleRef);
   useScrollLock(open);
@@ -49,10 +55,10 @@ export function MobileMenu() {
                   aria-modal="true"
                   aria-label="Menu"
                   className="on-pink fixed inset-0 z-[75] flex flex-col overflow-y-auto bg-peacock text-canvas lg:hidden"
-                  initial={{ clipPath: "circle(0% at 100% 0%)" }}
+                  initial={motionOn ? { clipPath: "circle(0% at 100% 0%)" } : false}
                   animate={{ clipPath: "circle(150% at 100% 0%)" }}
                   exit={{ clipPath: "circle(0% at 100% 0%)" }}
-                  transition={{ duration: 0.55, ease: [0.7, 0, 0.2, 1] }}
+                  transition={motionOn ? { duration: 0.55, ease: [0.7, 0, 0.2, 1] } : INSTANT}
                 >
                   <div className="px-gutter flex items-center justify-between py-[18px]">
                     <Link href="/" onClick={close} className="text-canvas">
@@ -67,9 +73,9 @@ export function MobileMenu() {
                       {NAV.map((l, i) => (
                         <motion.li
                           key={l.href}
-                          initial={{ opacity: 0, x: 40 }}
+                          initial={motionOn ? { opacity: 0, x: 40 } : false}
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.15 + i * 0.06, duration: 0.5, ease: [0.2, 0.9, 0.3, 1] }}
+                          transition={motionOn ? { delay: 0.15 + i * 0.06, duration: 0.5, ease: [0.2, 0.9, 0.3, 1] } : INSTANT}
                           className="border-b-2 border-canvas/40 first:border-t-2"
                         >
                           <Link
