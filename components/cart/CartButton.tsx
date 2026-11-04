@@ -15,7 +15,8 @@ export function CartButton({ className = "" }: { className?: string }) {
       className={`btn bg-nero px-[18px] font-serif text-[15px] uppercase tracking-[0.2em] text-canvas ${className}`}
     >
       Cart
-      <span key={addCount} className={`${addCount ? "bump" : ""} inline-grid min-w-6 place-items-center rounded-full bg-peacock px-1.5 font-mono text-[13px] leading-6 tracking-normal text-canvas`}>
+      {/* Nero on Canvas (13:1); Canvas on Peacock is only 3.26:1 at this size. */}
+      <span key={addCount} className={`${addCount ? "bump" : ""} inline-grid min-w-6 place-items-center rounded-full bg-canvas px-1.5 font-mono text-[13px] leading-6 tracking-normal text-nero ring-2 ring-peacock`}>
         {n}
         <span className="sr-only"> {n === 1 ? "item" : "items"}</span>
       </span>

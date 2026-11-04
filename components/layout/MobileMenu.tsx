@@ -64,7 +64,7 @@ export function MobileMenu() {
                     <Link href="/" onClick={close} className="text-canvas">
                       <Wordmark size="md" onDark />
                     </Link>
-                    <button type="button" onClick={close} className="t-eyebrow inline-flex min-h-11 items-center border-2 border-canvas px-[18px]">
+                    <button type="button" onClick={close} className="t-eyebrow inline-flex min-h-11 items-center border-2 border-canvas bg-canvas px-[18px] text-nero transition-colors hover:border-nero hover:bg-nero hover:text-canvas">
                       Close
                     </button>
                   </div>
@@ -85,7 +85,7 @@ export function MobileMenu() {
                             className="group flex items-baseline justify-between py-3 font-serif text-[56px] leading-none tracking-[0.025em]"
                           >
                             <span className="transition-transform duration-300 group-hover:translate-x-2 group-aria-[current=page]:italic">{l.label}</span>
-                            <span className="font-mono text-[13px] tracking-[0.075em]">0{i + 1}</span>
+                            <span className="bg-canvas px-1.5 py-0.5 font-mono text-[13px] tracking-[0.075em] text-nero">0{i + 1}</span>
                           </Link>
                         </motion.li>
                       ))}

@@ -28,8 +28,9 @@ export function CommunityTiles() {
           <div className="grid size-full place-items-center transition-transform duration-500 ease-[var(--ease-pop)] group-hover:scale-110" aria-hidden="true">
             {t.art}
           </div>
-          <span className={`absolute bottom-3 left-3 ${i === 2 ? "text-nero" : "text-canvas"}`}>
-            <TbdTag>Customer photo {i + 1}</TbdTag>
+          {/* Canvas-backed caption: small Canvas text fails contrast on Peacock, Jade and Ladybug. */}
+          <span className="absolute bottom-3 left-3">
+            <TbdTag className="bg-canvas text-nero">Customer photo {i + 1}</TbdTag>
           </span>
         </Reveal>
       ))}

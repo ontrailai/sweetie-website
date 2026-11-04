@@ -54,7 +54,7 @@ export function Subscription() {
           <Flower className="spin-slow absolute left-[5%] top-[5%] w-[18%]" />
           <div className="absolute right-[6%] top-[7%] grid size-[clamp(84px,9vw,120px)] rotate-12 place-items-center text-peacock">
             <Star className="spin-slow absolute inset-0 size-full" />
-            <span className="relative text-center font-serif text-[clamp(18px,1.6vw,22px)] font-bold leading-tight text-canvas">
+            <span className="relative text-center font-serif text-[clamp(20px,1.6vw,22px)] font-bold leading-tight text-canvas">
               Save
               <br />
               {SUBSCRIPTION.discountPercent}%*

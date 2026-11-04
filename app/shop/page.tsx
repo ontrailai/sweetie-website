@@ -48,7 +48,7 @@ export default function ShopPage() {
         <div className="container-x flex flex-wrap items-center justify-between gap-8">
           <h2 id="sub-band" className="flex items-center gap-4 text-[clamp(40px,5vw,72px)] leading-none">
             <Star className="spin-slow size-[0.7em] shrink-0" />
-            Subscribe &amp; save {SUBSCRIPTION.discountPercent}%<span className="text-[0.4em]">*</span>
+            Subscribe &amp; save {SUBSCRIPTION.discountPercent}%<span className="text-[max(24px,0.4em)]">*</span>
           </h2>
           <div className="flex flex-col items-start gap-2">
             <Link href="/#subscribe" className="btn bg-canvas px-7 py-2 font-serif text-[26px] tracking-[0.025em] text-peacock">
