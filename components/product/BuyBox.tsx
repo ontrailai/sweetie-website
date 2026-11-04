@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { DEFAULT_SIZE, SIZES, SUBSCRIPTION, getVariant, subscriberPrice, type Product, type SizeId } from "@/lib/catalog";
 import { useCart } from "@/components/cart/CartProvider";
 import { Price } from "@/components/ui/Price";
@@ -12,6 +13,8 @@ import { SizeChips } from "./SizeChips";
 
 type Mode = "subscribe" | "one-time";
 
+const noopSubscribe = () => () => {};
+
 export function BuyBox({ product }: { product: Product }) {
   const [size, setSize] = useState<SizeId>(DEFAULT_SIZE);
   const [mode, setMode] = useState<Mode>("subscribe");
@@ -20,6 +23,10 @@ export function BuyBox({ product }: { product: Product }) {
   const [ctaVisible, setCtaVisible] = useState(true);
   const ctaRef = useRef<HTMLButtonElement>(null);
   const { add } = useCart();
+  // The quick-add bar is portalled to <body>: any transformed/animated ancestor
+  // (entrance animations, page transitions) would otherwise become its containing
+  // block and drag the "fixed" bar off-screen with the page.
+  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
 
   const variant = getVariant(product, size);
   const unit = mode === "subscribe" ? subscriberPrice(variant.price) : variant.price;
@@ -30,11 +37,35 @@ export function BuyBox({ product }: { product: Product }) {
   useEffect(() => {
     const el = ctaRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([entry]) => setCtaVisible(entry!.isIntersecting || entry!.boundingClientRect.top > window.innerHeight), {
+    // The root is extended far below the viewport, so "intersecting" means "not yet
+    // scrolled past the top". Crossing the top edge is always an intersection change,
+    // even on an instant jump (no smooth scroll, End key, restored scroll position)
+    // that skips straight from below the viewport to above it.
+    const io = new IntersectionObserver(([entry]) => setCtaVisible(entry!.isIntersecting), {
+      rootMargin: "0px 0px 100000px 0px",
       threshold: 0,
     });
     io.observe(el);
     return () => io.disconnect();
+  }, []);
+
+  // While the bar is showing, reserve its measured height at the bottom of the page
+  // (mobile only, see globals.css) so it never covers the end of the footer.
+  const barRef = useCallback((bar: HTMLDivElement | null) => {
+    const root = document.documentElement;
+    if (!bar) {
+      delete root.dataset.quickAdd;
+      root.style.removeProperty("--quick-add-h");
+      return;
+    }
+    root.dataset.quickAdd = "";
+    const ro = new ResizeObserver(() => root.style.setProperty("--quick-add-h", `${bar.offsetHeight}px`));
+    ro.observe(bar);
+    return () => {
+      ro.disconnect();
+      delete root.dataset.quickAdd;
+      root.style.removeProperty("--quick-add-h");
+    };
   }, []);
 
   const onAdd = () =>
@@ -119,32 +150,39 @@ export function BuyBox({ product }: { product: Product }) {
       </ul>
 
       {/* Mobile quick-add bar */}
-      <AnimatePresence>
-        {!ctaVisible ? (
-          <motion.div
-            role="region"
-            aria-label="Quick add"
-            initial={{ y: "110%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "110%" }}
-            transition={{ type: "spring", stiffness: 380, damping: 36 }}
-            className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t-2 border-nero bg-canvas px-5 py-3 md:hidden"
-          >
-            <span className="flex min-w-0 flex-col">
-              <span className="truncate font-serif text-[20px] leading-tight">
-                No. {product.number} {product.name}
-              </span>
-              <span className="text-[13px]">
-                {formatMoney(total.money)} · {sizeLabel}
-                {unit.placeholder ? " · placeholder" : ""}
-              </span>
-            </span>
-            <button type="button" onClick={onAdd} className="btn min-h-12 shrink-0 bg-peacock px-4 font-serif text-[20px] text-canvas">
-              {cta}
-            </button>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+      {mounted
+        ? createPortal(
+            <AnimatePresence>
+              {!ctaVisible ? (
+                <motion.div
+                  ref={barRef}
+                  role="region"
+                  aria-label="Quick add"
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "110%" }}
+                  transition={{ type: "spring", stiffness: 380, damping: 36 }}
+                  className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t-2 border-nero bg-canvas px-5 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 md:hidden"
+                >
+                  <span className="flex min-w-0 flex-col">
+                    <span className="truncate font-serif text-[20px] leading-tight">
+                      No. {product.number} {product.name}
+                    </span>
+                    <span className="text-[13px]">
+                      {formatMoney(total.money)} · {sizeLabel}
+                      {unit.placeholder ? " · placeholder" : ""}
+                    </span>
+                  </span>
+                  {/* 24px serif = WCAG "large text": Canvas on Peacock (3.26:1) needs ≥ 24px. */}
+                  <button type="button" onClick={onAdd} className="btn min-h-12 shrink-0 bg-peacock px-4 font-serif text-[24px] leading-none text-canvas">
+                    {mode === "subscribe" ? "Subscribe" : cta}
+                  </button>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }
