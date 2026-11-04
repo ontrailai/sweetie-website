@@ -28,3 +28,4 @@ npm-debug.log*
 
 # local tooling
 .playwright-mcp/
+.qa/
