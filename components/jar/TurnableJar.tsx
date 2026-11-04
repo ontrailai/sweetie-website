@@ -108,8 +108,11 @@ export function TurnableJar({ product }: { product: Product }) {
       >
         <Jar {...product.jar} number={product.number} name={product.name} descriptor={product.descriptor} spin={spin} decorative />
       </div>
-      <p className={`flex items-center gap-2 text-[13px] transition-opacity duration-500 ${hinted ? "opacity-50" : "opacity-100"}`} aria-hidden="true">
-        <span className="inline-block animate-[float_2s_ease-in-out_infinite]">↔</span> Drag or use arrow keys to turn the jar
+      <p className={`max-w-full px-4 text-center text-[13px] text-balance transition-opacity duration-500 ${hinted ? "opacity-50" : "opacity-100"}`} aria-hidden="true">
+        <span className="whitespace-nowrap">
+          <span className="mr-2 inline-block animate-[float_2s_ease-in-out_infinite]">↔</span>Drag or
+        </span>{" "}
+        use arrow keys to turn the jar
       </p>
     </div>
   );

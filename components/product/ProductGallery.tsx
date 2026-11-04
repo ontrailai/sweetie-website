@@ -59,10 +59,15 @@ export function ProductGallery({ product }: { product: Product }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-nero/[0.06] pt-6">
-        <DecorNumber value={product.number} opacity={0.08} className="absolute left-5 top-4 h-[clamp(72px,10vw,150px)]" />
-        <Star className="twinkle absolute right-[9%] top-[12%] size-7 text-peacock" />
-        <Star className="twinkle absolute bottom-[22%] left-[10%] size-4 text-forest [animation-delay:-1.4s]" />
+      {/* No overflow clipping on the stage itself: aspect-ratio's content-based minimum
+          height only applies while overflow is visible, which lets a narrow stage grow
+          to fit the jar and its hint instead of cutting the hint off. */}
+      <div className="relative flex aspect-[4/5] items-center justify-center bg-nero/[0.06] pb-5 pt-6">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <DecorNumber value={product.number} opacity={0.08} className="absolute left-5 top-4 h-[clamp(72px,10vw,150px)]" />
+          <Star className="twinkle absolute right-[9%] top-[12%] size-7 text-peacock" />
+          <Star className="twinkle absolute bottom-[22%] left-[10%] size-4 text-forest [animation-delay:-1.4s]" />
+        </div>
         <TurnableJar product={product} />
       </div>
       <ul className="grid grid-cols-3 gap-3">
@@ -77,7 +82,11 @@ export function ProductGallery({ product }: { product: Product }) {
                 <span className="sr-only">Photo coming soon: {t.label}</span>
                 <div className="absolute inset-0 transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:scale-105">{t.node}</div>
                 <span className="absolute bottom-2 left-2 right-2 max-sm:hidden">
-                  <TbdTag className="bg-canvas text-nero">Photo: {t.label}</TbdTag>
+                  <TbdTag className="max-w-full whitespace-normal rounded-[10px] bg-canvas text-nero">
+                    {/* Small tiles get the short flag; the full caption wraps inside wider ones. */}
+                    <span className="xl:hidden">Photo</span>
+                    <span className="max-xl:hidden">Photo: {t.label}</span>
+                  </TbdTag>
                 </span>
               </li>
             ))}

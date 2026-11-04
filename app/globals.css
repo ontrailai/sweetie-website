@@ -162,28 +162,31 @@
 /* ------------------------------------------------------------------ */
 /* Placeholders (TBD content is always visibly flagged)                */
 /* ------------------------------------------------------------------ */
-.tbd {
-  display: inline;
-  padding: 0 0.3em;
-  border: 1.5px dashed currentColor;
-  border-radius: 4px;
-  opacity: 0.75;
-  font-style: normal;
-}
-.tbd-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35em;
-  padding: 2px 8px;
-  border: 1.5px dashed currentColor;
-  border-radius: 999px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 1.4;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  vertical-align: middle;
+/* Layered so utilities (e.g. bg-canvas, whitespace-normal) can adapt a tag in place. */
+@layer components {
+  .tbd {
+    display: inline;
+    padding: 0 0.3em;
+    border: 1.5px dashed currentColor;
+    border-radius: 4px;
+    opacity: 0.75;
+    font-style: normal;
+  }
+  .tbd-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding: 2px 8px;
+    border: 1.5px dashed currentColor;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
 }
 
 /* ------------------------------------------------------------------ */
