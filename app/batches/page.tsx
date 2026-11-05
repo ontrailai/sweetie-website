@@ -92,7 +92,7 @@ export default function BatchesPage() {
         </div>
       </section>
 
-      <section aria-labelledby="past-h" className="on-dark px-gutter bg-nero py-[clamp(80px,10vw,160px)] text-canvas">
+      <section id="past" aria-labelledby="past-h" className="on-dark px-gutter scroll-mt-24 bg-nero py-[clamp(80px,10vw,160px)] text-canvas">
         <div className="container-x flex flex-col gap-10">
           <h2 id="past-h" className="display text-[clamp(64px,7.6vw,140px)]">
             Past <em>batches.</em>

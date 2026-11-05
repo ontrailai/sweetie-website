@@ -204,10 +204,21 @@ export function BatchScanner() {
                     <BatchCode batch={result.batch} />
                   </p>
                   <BatchDl batch={result.batch} />
+                  {result.batch.status === "past" ? (
+                    <p className="text-[14px] leading-normal">
+                      This batch has sold out. The hive map only shows batches on shelves now, so it isn&apos;t pinned there.
+                    </p>
+                  ) : null}
                   <div className="mt-1 flex flex-wrap gap-x-5 gap-y-2 text-[14px] font-bold">
-                    <a href="#map" className="underline underline-offset-4">
-                      See it on the hive map
-                    </a>
+                    {result.batch.status === "past" ? (
+                      <a href={`#batch-${result.batch.code}`} className="underline underline-offset-4">
+                        Find it in past batches
+                      </a>
+                    ) : (
+                      <a href="#map" className="underline underline-offset-4">
+                        See it on the hive map
+                      </a>
+                    )}
                     <Link href={`/shop/${product.slug}`} className="underline underline-offset-4">
                       Shop No. {product.number}
                     </Link>
