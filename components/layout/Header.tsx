@@ -54,7 +54,7 @@ export function Header() {
       <nav aria-label="Main" className="container-x flex items-center justify-between gap-3">
         <Link
           href="/"
-          className="inline-flex min-h-11 items-center rounded-full border-2 border-nero bg-canvas px-4 py-1 text-nero shadow-[0_3px_0_0_#262626] transition-transform duration-300 ease-[var(--ease-pop)] hover:-rotate-3"
+          className="inline-flex min-h-11 items-center rounded-full border-2 border-nero bg-canvas px-3 py-1 text-nero sm:px-4 shadow-[0_3px_0_0_#262626] transition-transform duration-300 ease-[var(--ease-pop)] hover:-rotate-3"
         >
           <Wordmark size="sm" />
         </Link>

@@ -44,7 +44,7 @@ export function CustomCursor() {
       const t = e.target as Element | null;
       const field = t?.closest("input, textarea, select");
       const hot = t?.closest("a, button, label, summary, [role='slider'], [data-cursor]");
-      target = field ? 0 : hot ? 2.6 : 1;
+      target = field ? 0 : hot ? 1.7 : 1;
       r.dataset.hot = hot && !field ? "1" : "";
       const label = (hot as HTMLElement | null)?.dataset?.cursor;
       r.dataset.label = label ?? "";
@@ -84,7 +84,7 @@ export function CustomCursor() {
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[100]">
       <div
         ref={ring}
-        className="absolute left-0 top-0 size-9 rounded-full border-2 border-nero bg-honey/25 opacity-0 mix-blend-multiply transition-[background-color,border-color] duration-200 data-[hot=1]:border-peacock data-[hot=1]:bg-peacock/20"
+        className="absolute left-0 top-0 size-9 rounded-full border-2 border-nero bg-honey/25 opacity-0 transition-[background-color,border-color] duration-200 data-[hot=1]:border-[3px] data-[hot=1]:border-peacock data-[hot=1]:bg-transparent"
       />
       <div ref={dot} className="absolute left-0 top-0 size-2.5 rounded-full bg-peacock opacity-0 ring-2 ring-canvas" />
     </div>

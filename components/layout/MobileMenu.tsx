@@ -45,12 +45,12 @@ export function MobileMenu() {
         onClick={() => setOpen(true)}
         aria-expanded={open}
         aria-controls="mobile-menu"
-        className="inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-nero bg-canvas px-4 font-mono text-[13px] font-bold uppercase tracking-[0.14em] text-nero shadow-[0_3px_0_0_#262626] lg:hidden"
+        className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full border-2 border-nero bg-canvas px-3 font-mono text-[13px] font-bold uppercase tracking-[0.14em] text-nero shadow-[0_3px_0_0_#262626] sm:px-4 lg:hidden"
       >
         <svg aria-hidden="true" width="16" height="12" viewBox="0 0 16 12">
           <path d="M0 1h16M0 6h11M0 11h16" stroke="currentColor" strokeWidth="2" />
         </svg>
-        Menu
+        <span className="max-sm:sr-only">Menu</span>
       </button>
       {mounted
         ? createPortal(
