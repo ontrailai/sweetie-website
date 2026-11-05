@@ -55,7 +55,7 @@ export function CartDrawer() {
       {isOpen ? (
         <div className="fixed inset-0 z-[70]" key="cart">
           <motion.div
-            className="absolute inset-0 bg-nero/55 backdrop-blur-[2px]"
+            className="absolute inset-0 bg-peacock/70 backdrop-blur-[3px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -69,23 +69,26 @@ export function CartDrawer() {
             aria-modal="true"
             aria-labelledby="cart-title"
             tabIndex={-1}
-            className="absolute inset-y-0 right-0 flex w-full max-w-[460px] flex-col bg-canvas text-nero shadow-[-12px_0_0_0_#ff007c] outline-none"
-            initial={{ x: "105%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "105%" }}
-            transition={{ type: "spring", stiffness: 320, damping: 34 }}
+            data-lenis-prevent=""
+            className="absolute inset-y-2 right-2 flex w-[calc(100%-16px)] max-w-[480px] flex-col overflow-hidden rounded-[28px] border-2 border-nero bg-canvas text-nero shadow-[8px_8px_0_0_#262626] outline-none max-sm:inset-y-0 max-sm:right-0 max-sm:w-full max-sm:rounded-none max-sm:border-0"
+            initial={{ x: "110%", rotate: 4 }}
+            animate={{ x: 0, rotate: 0 }}
+            exit={{ x: "110%", rotate: 4 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            <div className="flex items-center justify-between border-b-2 border-nero px-6 py-5">
-              <h2 id="cart-title" className="text-[40px] leading-none">
-                Your <em>cart</em>
-                <span className="ml-3 align-middle font-mono text-[15px] tracking-[0.075em]">({cart.totalQuantity})</span>
+            <div className="relative flex items-end justify-between gap-4 bg-nero px-6 pb-5 pt-6 text-canvas">
+              <h2 id="cart-title" className="display text-[clamp(56px,14vw,76px)]">
+                Your <em className="text-peacock">stash.</em>
+                <span className="ml-3 inline-block align-middle font-mono text-[15px] font-bold tracking-[0.1em] [font-variation-settings:normal]">
+                  ({cart.totalQuantity})
+                </span>
               </h2>
               <button
                 ref={closeRef}
                 type="button"
                 onClick={handleClose}
                 aria-label="Close cart"
-                className="grid size-11 place-items-center border-2 border-nero transition-colors hover:bg-nero hover:text-canvas"
+                className="grid size-11 shrink-0 place-items-center rounded-full border-2 border-canvas bg-canvas text-nero transition-transform hover:rotate-90"
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
                   <path d="M2 2 L14 14 M14 2 L2 14" stroke="currentColor" strokeWidth="2" />
@@ -93,6 +96,7 @@ export function CartDrawer() {
               </button>
             </div>
 
+            <div aria-hidden="true" className="h-3 w-full bg-[radial-gradient(circle_at_8px_0,#262626_6px,transparent_6.5px)] bg-[length:16px_12px]" />
             <AnimatePresence mode="wait" initial={false}>
               {checkoutMsg ? (
                 <motion.div
@@ -103,9 +107,9 @@ export function CartDrawer() {
                   className="flex flex-1 flex-col justify-center gap-6 px-6 py-10"
                   role="status"
                 >
-                  <Star className="twinkle size-10 text-peacock" />
-                  <p className="t-eyebrow text-forest">Checkout · coming soon</p>
-                  <h3 className="text-[56px] leading-[0.9]">
+                  <Star className="spin-slow size-12 text-peacock" />
+                  <p className="t-eyebrow">Checkout · coming soon</p>
+                  <h3 className="display text-[64px]">
                     Almost <em className="text-peacock">ready.</em>
                   </h3>
                   <p className="max-w-[34ch] text-[15px] leading-relaxed">{checkoutMsg}</p>
@@ -113,26 +117,26 @@ export function CartDrawer() {
                     Can&apos;t wait? Grab a jar in person at one of our markets.
                   </p>
                   <div className="flex flex-wrap gap-3">
-                    <Link href="/find-us" className="btn bg-nero text-[15px] text-canvas">
+                    <Link href="/find-us" className="btn btn-sm bg-nero text-canvas">
                       Find us at a market
                     </Link>
-                    <button type="button" onClick={() => setCheckoutMsg(null)} className="btn border-2 border-nero text-[15px]">
+                    <button type="button" onClick={() => setCheckoutMsg(null)} className="btn btn-sm bg-canvas text-nero">
                       Back to cart
                     </button>
                   </div>
                 </motion.div>
               ) : cart.lines.length === 0 ? (
                 <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-1 flex-col justify-center gap-6 px-6 py-10">
-                  <p className="text-[48px] leading-[0.95]">
-                    Your cart is <em className="text-peacock">quiet.</em>
+                  <p className="display text-[64px]">
+                    It&apos;s <em className="text-peacock">quiet</em> in here.
                   </p>
-                  <p className="text-[15px] leading-relaxed">Six jars, three sizes. Let&apos;s fix that.</p>
+                  <p className="text-[15px] leading-relaxed">Six jars, three sizes, zero sleepy honey. Pick a number:</p>
                   <ul className="flex flex-wrap gap-2" aria-label="Jump to a jar">
                     {PRODUCTS.map((p) => (
                       <li key={p.slug}>
                         <Link
                           href={`/shop/${p.slug}`}
-                          className="grid size-12 place-items-center rounded-full border-2 border-nero text-[19px] font-bold tracking-normal transition-transform hover:-translate-y-1"
+                          className="grid size-14 place-items-center rounded-full border-2 border-nero font-serif text-[24px] font-semibold tracking-normal shadow-[0_3px_0_0_#262626] transition-transform duration-300 ease-[var(--ease-pop)] hover:-translate-y-1.5 hover:rotate-6"
                           style={{ background: p.jar.labelColor, color: p.jar.labelText }}
                           aria-label={`No. ${p.number} ${p.name}`}
                         >
@@ -142,7 +146,7 @@ export function CartDrawer() {
                     ))}
                   </ul>
                   <div>
-                    <Link href="/shop" className="btn bg-peacock px-7 font-serif text-[24px] tracking-[0.025em] text-canvas">
+                    <Link href="/shop" className="btn bg-peacock text-canvas">
                       Shop the jars
                     </Link>
                   </div>
@@ -166,10 +170,10 @@ export function CartDrawer() {
                       ))}
                     </AnimatePresence>
                   </ul>
-                  <div className="border-t-2 border-nero bg-canvas px-6 pb-6 pt-5">
+                  <div className="border-t-2 border-dashed border-nero bg-canvas px-6 pb-[max(24px,env(safe-area-inset-bottom))] pt-5">
                     <div className="flex items-baseline justify-between gap-4">
-                      <span className="t-eyebrow text-forest">Subtotal</span>
-                      <span className="font-serif text-[32px] tracking-[0.025em]">{formatMoney(cart.subtotal)}</span>
+                      <span className="t-eyebrow">Subtotal</span>
+                      <span className="font-serif text-[40px] font-medium tracking-[-0.02em]">{formatMoney(cart.subtotal)}</span>
                     </div>
                     {cart.placeholderPricing ? (
                       <p className="mt-2 flex flex-wrap items-center gap-2 text-[13px]">
@@ -181,7 +185,7 @@ export function CartDrawer() {
                     <button
                       type="button"
                       onClick={onCheckout}
-                      className="btn mt-5 min-h-[60px] w-full bg-peacock font-serif text-[26px] tracking-[0.025em] text-canvas"
+                      className="btn mt-5 min-h-[64px] w-full bg-peacock text-[30px] text-canvas"
                     >
                       Checkout
                     </button>
@@ -199,7 +203,7 @@ export function CartDrawer() {
 function LineItem({ line, onQty, onRemove }: { line: CartLine; onQty: (q: number) => void; onRemove: () => void }) {
   return (
     <div className="flex gap-4 py-5">
-      <div className="grid w-16 shrink-0 place-items-center bg-nero/[0.06] px-3 py-2">
+      <div className="grid w-16 shrink-0 place-items-center rounded-2xl px-3 py-2" style={{ background: line.jar ? `${line.jar.labelColor}22` : undefined }}>
         {line.jar ? (
           <Jar {...line.jar} alive={false} decorative />
         ) : (
@@ -212,14 +216,14 @@ function LineItem({ line, onQty, onRemove }: { line: CartLine; onQty: (q: number
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             {line.href ? (
-              <Link href={line.href} className="font-serif text-[24px] leading-tight tracking-[0.025em] hover:text-peacock">
+              <Link href={line.href} className="font-serif text-[26px] font-medium leading-tight tracking-[-0.01em] underline-offset-4 hover:underline">
                 {line.title}
               </Link>
             ) : (
               <span className="font-serif text-[24px] leading-tight">{line.title}</span>
             )}
             <p className="text-[13px]">{line.subtitle}</p>
-            <p className="text-[13px] text-forest">
+            <p className="text-[13px]">
               {line.purchase.mode === "subscribe" ? (
                 <>
                   Subscribe · {line.purchase.frequency} · save {SUBSCRIPTION.discountPercent}%

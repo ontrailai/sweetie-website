@@ -4,8 +4,12 @@ import "./globals.css";
 import { body, heading } from "./fonts";
 import { SITE } from "@/lib/site";
 import { MotionPreferenceProvider, motionBootScript } from "@/components/motion/MotionPreference";
+import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { RevealObserver } from "@/components/motion/RevealObserver";
+import { CustomCursor } from "@/components/motion/CustomCursor";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { CartFx } from "@/components/fx/CartFx";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageTransition } from "@/components/layout/PageTransition";
@@ -43,15 +47,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${heading.variable} ${body.variable}`} suppressHydrationWarning>
       <head>
-        {/* Sets html[data-motion] before paint so CSS loops respect the saved preference. */}
+        {/* Sets html[data-motion] before paint so CSS (pinning, loops) respects the saved preference. */}
         <script dangerouslySetInnerHTML={{ __html: motionBootScript }} />
       </head>
-      <body className="grain min-h-dvh bg-canvas text-nero">
+      <body className="grain min-h-dvh">
         <MotionPreferenceProvider>
           <CartProvider>
             <a
               href="#main"
-              className="sr-only z-[90] bg-nero px-4 py-3 text-canvas focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+              className="sr-only z-[110] rounded-full bg-nero px-5 py-3 font-mono text-[15px] font-bold text-canvas focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
             >
               Skip to content
             </a>
@@ -61,6 +65,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </main>
             <Footer />
             <CartDrawer />
+            <CartFx />
+            <SmoothScroll />
+            <RevealObserver />
+            <CustomCursor />
           </CartProvider>
         </MotionPreferenceProvider>
       </body>
