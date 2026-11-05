@@ -2,17 +2,33 @@
 
 Raw local honey from San Diego County. *Feel the hum.*
 
-A Next.js (App Router) + TypeScript site built from the design canvas in
-[`mockup/`](./mockup) (read-only design source; see `BUILD_BRIEF.md`). It
-deploys to Vercel with zero config, but **has not been deployed**.
+Next.js (App Router) + TypeScript. **Redesign v2** (`feat/redesign-v2`):
+an editorial, streetwear-meets-candy "drop" site with viewport-filling
+kinetic type, full-bleed palette colour-blocking, a WebGL honey jar, a pinned
+six-jar sequence and an interactive batch/hive explorer. It deploys to Vercel
+with zero config, but **has not been deployed**.
 
 | | |
 |---|---|
 | Framework | Next.js 16 (App Router, Turbopack), React 19, TypeScript (strict) |
-| Styling | Tailwind CSS v4: brand tokens live in `app/globals.css` (`@theme`) |
-| Motion | [`motion`](https://motion.dev) (Framer Motion) + CSS keyframes |
-| Fonts | `next/font/google`: Instrument Serif (headings), Courier Prime (body) |
+| Styling | Tailwind CSS v4; tokens + global layer in `app/globals.css` |
+| Motion | `motion` (scroll-linked values, springs, layout), `lenis` (smooth scroll), CSS keyframes |
+| 3D | `three` (imperative scene, lazy-loaded, static SVG fallback) |
+| Fonts | `next/font/google` (self-hosted at build): Fraunces (display), Courier Prime (body) |
 | Commerce | Client-side cart behind a `CommerceAdapter` interface (Shopify-ready) |
+
+## Libraries added in v2
+
+| Package | Version | Why |
+|---|---|---|
+| `three` | 0.187.0 | The hero / product honey jar (glass, sloshing honey, pour, label). Only ever loaded through `next/dynamic` |
+| `lenis` | 1.3.27 | Smooth wheel scrolling on desktop (never on touch, never with motion off) |
+| `@types/three` (dev) | 0.187.0 | Types |
+
+Considered and skipped: `@react-three/fiber` / `drei` (pins `react <19.4`,
+adds weight; one imperative scene is easier to dispose fully) and `gsap`
+(pinning is CSS `position: sticky` + `motion`'s `useScroll`, so one
+animation library covers everything). All versions are pinned exactly.
 
 ## Run it
 
@@ -25,65 +41,88 @@ npm run lint       # ESLint (flat config, next/core-web-vitals + TS)
 npm run typecheck  # tsc --noEmit
 ```
 
-Node 20.9+ is required (Next 16).
+Node 20.9+ is required (Next 16). Add `?static` to any URL to force the
+static (non-WebGL) jar while testing.
 
 ## Routes
 
 | Route | What |
 |---|---|
-| `/` | Homepage: hero with the rotating jar, selling points, marquee, six-jar grid, Discovery Set, rituals, subscription, markets & community, email signup |
-| `/shop` | All six jars with a category filter, Discovery Set, size guide |
-| `/shop/[slug]` | Product page per jar (static via `generateStaticParams`): turnable jar, buy box (size, subscribe/one-time, quantity, live price), ways to use, this batch, details, cross-sells, mobile quick-add bar |
-| `/batches` | Batch finder, how to read your jar, batches on shelves (filterable), past batches, sourcing |
-| `/about` | Story, values, founders' note, Honey 101 (`#honey-101`), FAQ (`#faq`) |
-| `/find-us` | Markets, illustrated coast map, stockists, community |
-| 404 | `app/not-found.tsx`, "Lost the hum." |
+| `/` | Hero ("Feel the hum." around the 3D jar pouring honey, cursor-chasing bee, sound rings) → velocity marquees → scroll-lit manifesto → **pinned six-jar sequence** (each jar irises open in its colour, honey rises, specks pop in, quick-add flies to the cart) → Discovery Set drop → sunrise-to-golden-hour sky (gradient shifts with scroll) → rotary subscription dial → hive-map teaser → community wall → signup |
+| `/shop` | Giant headline, sticker filter pills, full-colour JarCards (3D tilt + quick-add with size), Discovery Set, size line-up, subscribe band |
+| `/shop/[slug]` | Full-colour takeover in the jar's label colour: name, turnable 3D jar (drag / arrow keys), specks, buy box ticket, day arc of uses, batch ticket + map pin, details, cross-sells, mobile quick-add bar |
+| `/batches` | "Scan your jar" (manual entry, `?batch=` deep link, camera scan via `BarcodeDetector` where supported), how to read your jar, interactive hive map, batches on shelves, past batches, sourcing |
+| `/about` | "Honey that hums." (breathing variable font), jar line-up, value bands, founders' note, Honey 101 (`#honey-101`), FAQ (`#faq`) |
+| `/find-us` | Ladybug hero, market board, county map with market pins, stockists, community |
+| 404 | `app/not-found.tsx`, "Lost the hum." (rolling-lid zero, tipped jar) |
 
-Also: `/opengraph-image` and `/shop/[slug]/opengraph-image` (generated OG
-images), `/sitemap.xml`, `/robots.txt`, `/icon.svg`.
+Also: `/opengraph-image` and `/shop/[slug]/opengraph-image`, `/sitemap.xml`,
+`/robots.txt`, `/icon.svg`.
 
 ## Where things live
 
 ```
-app/                    routes, layout, globals.css (tokens + keyframes), fonts.ts
+app/                       routes, layout, globals.css (tokens, kinetic type, pinning, motion-off rules), fonts.ts
 components/
-  jar/Jar.tsx           the parametric SVG jar (see below)
-  jar/TurnableJar.tsx   drag / arrow-key "turn the jar" slider (product page)
-  home/Hero.tsx         homepage hero (autoplay ring, pointer tilt, spin-in)
-  cart/                 CartProvider (context), CartDrawer, CartButton
-  motion/               MotionPreference (toggle + reduced motion), Reveal, Marquee
-  layout/               Header, MobileMenu, Footer, PageTransition
-  product/ batches/ sections/ forms/ ui/ brand/
-lib/
-  catalog.ts            ★ ONE typed module for products, prices, sizes, Discovery Set, subscription, batches
-  site.ts               site config, nav, markets, stockists, quotes, founders' note
-  commerce/             types.ts (interface), local-adapter.ts, shopify-adapter.ts (stub), index.ts
-  hooks/                useFocusTrap, useScrollLock
-  og/                   fonts + simplified jar for generated OG images
-mockup/                 design source — do not edit
+  motion/                  MotionPreference (+ boot script), MotionToggle, SmoothScroll (Lenis), RevealObserver,
+                           SplitText, VelocityMarquee, Magnetic, CustomCursor, capability.ts
+  fx/                      CartFx (fly-to-cart + splash + toast), fly.ts, useQuickAdd, HumBee, hum-audio + HumToggle,
+                           tilt.ts + TiltButton, HoneyDrip, Sticker
+  jar3d/                   scene.ts (three.js), HoneyJarCanvas (client-only host), HoneyJar3D (fallback + lazy loader)
+  jar/                     Jar (parametric SVG jar = the static fallback), MiniJar, JarParticles, specks, jar-art
+  home/                    Hero, MarqueeBands, Manifesto, JarSequence, DiscoveryDrop, SkyRituals, SubscriptionDial, TraceTeaser
+  product/                 BuyBox, ProductJar, JarCard, DayArc, ShopFilter, SizeGuide, SizeChips
+  batches/                 BatchScanner, HiveLocator, CountyMap, BatchShelf, PastBatches, BatchDetails
+  cart/ layout/ sections/ forms/ ui/ brand/
+lib/                       catalog.ts, site.ts, commerce/ (unchanged data/commerce layer), hooks/, og/
 ```
 
-### The jar
+## Motion, fallbacks and accessibility
 
-`<Jar number name descriptor labelColor labelText? honey honeyDark specks />`
-mirrors the parameters of `mockup/Jar.dc.html` (specks: `none | vanilla |
-cinnamon | pollen | salt`). The label is a wrap-around strip (front, "Feel the
-hum." side, small-batch side), so passing a `spin` MotionValue turns the jar
-(300 units = one full turn). With `alive` on, the honey shimmers, specks drift
-and bubbles rise. Everything is seeded and deterministic, so server and client
-renders match.
+**One switch.** Motion is on unless the OS asks for reduced motion; the
+**Pause motion** toggle (header, footer, mobile menu) overrides it and is
+saved in `localStorage` (`sweetbee.motion`). An inline script sets
+`<html data-motion="on|off">` before first paint; `useMotionPref()` exposes
+the same value to React. Everything keys off it:
 
-### Motion & accessibility
+| Feature | Motion on | Motion off / reduced |
+|---|---|---|
+| Smooth scroll | Lenis (fine pointers only; touch stays native) | Native scroll, Lenis destroyed |
+| Six-jar sequence | Pinned (CSS sticky, only ≥1024px) with iris reveals; hidden panels `inert`; rail buttons/arrows drive it | Calm vertical stack (desktop) or swipe/snap track (phones) — no pinning, nothing inert |
+| Sunrise sky | Pinned, gradient interpolated from scroll | Three static panels, each with its own sky |
+| 3D jar | WebGL (see below) | Static SVG jar (WebGL never requested; unmounts if toggled off) |
+| Marquees, drips, specks, bee, letter reveals, buzz | Animated | `animation: none` globally; marquees static; bee perches |
+| Cursor, magnetic buttons, tilt | On (fine pointer / phones) | Off |
+| Fly-to-cart | Jar arcs to the cart, badge squishes, honey + confetti burst | No animation; the same live "added" toast is announced |
 
-- Motion is on unless the OS asks for reduced motion. The **Pause motion**
-  toggle (header, hero, footer, mobile menu) overrides that and is saved in
-  `localStorage` (`sweetbee.motion`). An inline script applies it to
-  `<html data-motion>` before first paint, which pauses every CSS loop and
-  switches `motion` to reduced mode.
-- Mobile menu and cart drawer: focus trap, Esc to close, body scroll lock,
-  focus returned to the trigger.
-- Skip link, visible focus rings (colour-aware per section), semantic
-  landmarks, radio-group size pickers, slider semantics on the turnable jar.
+**3D jar loading.** `HoneyJar3D` always server-renders the SVG `Jar` (so
+the page is complete without JS/WebGL and the LCP element is the headline
+text). After first paint + idle it requests the WebGL canvas through
+`next/dynamic(..., { ssr: false })` only if motion is on, the device isn't
+low-power (`hardwareConcurrency < 4`, `deviceMemory < 4`, Save-Data or 2G)
+and a WebGL probe passes. The canvas crossfades in after its first frame; a
+context loss or init failure falls back to the SVG. Rendering pauses when
+off-screen or the tab is hidden. On unmount it cancels RAF, disconnects
+observers/listeners, disposes geometries/materials/textures, force-loses the
+context and removes its canvas (a fresh canvas per mount).
+
+**Sound.** The hive hum (WebAudio) is **off by default**, only starts from
+a labelled button press (`aria-pressed`), and fades out when turned off.
+
+**Device tilt.** Android starts listening automatically (motion on, coarse
+pointer); iOS shows a "Tilt your phone" button because
+`DeviceOrientationEvent.requestPermission()` must come from a tap.
+
+**Accessibility.** Skip link; visible colour-aware focus rings; dialogs
+(cart, menu) trap focus, close on Esc, lock scroll (and stop Lenis) and
+return focus. Kinetic headings keep a real sr-only sentence (letters are
+`aria-hidden`); decorative motion is `aria-hidden`. The jar sequence is a
+labelled carousel with a button rail and a live "Showing No. 04…" message;
+the product jar is a `role="slider"` (arrow keys turn it); map pins are real
+buttons with a parallel button list. Contrast rule used throughout: small
+text only on Canvas/Nero/Forest (or on a Canvas `.chip` / `.ticket` when it
+sits on Peacock, Jade or Ladybug); bright panels carry ≥24px type only. The
+custom cursor never covers focus outlines and hides over text fields.
 
 ## Placeholder content (read before launch)
 
@@ -97,10 +136,13 @@ placeholders until filled in. Search the code for `TODO(` to find them all.
 ## Swapping in the real fonts
 
 The brand fonts are Perfectly Nineties (headings) and Courier Std (body).
-Drop the licensed files into `app/fonts/` and replace the two loaders in
-`app/fonts.ts` with `next/font/local`, **keeping the same `variable` names**
-(`--font-heading`, `--font-body`). Nothing else changes. There's a ready-made
-example in the comment at the top of that file.
+The redesign uses **Fraunces** (variable: `wght`, `opsz`, `SOFT`, `WONK`) as
+the display stand-in because the kinetic type animates its axes, and
+Courier Prime for body. Drop the licensed files into `app/fonts/` and replace
+the loaders in `app/fonts.ts` with `next/font/local`, **keeping the same
+`variable` names** (`--font-heading`, `--font-body`). A static font simply
+ignores the variation axes (headlines stop "breathing", nothing breaks).
+The 3D jar's label reads the same CSS variables, so it follows the swap.
 
 ## Adding the logo and photos
 
@@ -109,8 +151,8 @@ example in the comment at the top of that file.
   typographic wordmark to the image automatically.
 - **Product photos:** put them in `public/images/products/<slug>/` and add
   `{ src, alt }` entries to that product's `photos` array in
-  `lib/catalog.ts`. The gallery tiles switch from the illustrated
-  placeholders to `next/image`.
+  `lib/catalog.ts`. A photo strip appears on the product page under the
+  hero (`next/image`); with no photos the page is fully illustrated.
 - No external image URLs are used anywhere; keep it that way, or add the
   host to `images.remotePatterns` in `next.config.ts`.
 
@@ -150,4 +192,5 @@ real domain (used for canonical URLs, OG images, sitemap and robots).
 - Logo files, product and lifestyle photography, licensed fonts
 - Confirm the draft tasting notes and "good to know" copy
 - Email signup provider (form is UI-only), Shopify adapter
-- Replace the decorative QR pattern with a real QR code to `/batches`
+- Replace the decorative QR pattern with a real QR code to `/batches?batch=<code>` (the scanner and deep link already read that)
+- Real (privacy-safe) hive areas for the map pins (`PIN_POS` in `components/batches/CountyMap.tsx`) and market pins (`MARKET_PINS` in `app/find-us/page.tsx`)
