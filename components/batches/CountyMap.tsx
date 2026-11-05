@@ -28,12 +28,17 @@ export function CountyMap({
   onSelect,
   className = "",
   compact = false,
+  children,
+  caption,
 }: {
   batches: Batch[];
   selected?: string | null;
   onSelect?: (code: string) => void;
   className?: string;
   compact?: boolean;
+  /** Extra overlays (e.g. market pins) positioned inside the map box. */
+  children?: React.ReactNode;
+  caption?: React.ReactNode;
 }) {
   return (
     <figure className={`relative ${className}`}>
@@ -121,9 +126,10 @@ export function CountyMap({
             </span>
           );
         })}
+        {children}
       </div>
       <figcaption className={`mt-3 flex flex-wrap items-center gap-2 text-[13px] ${compact ? "sr-only" : ""}`}>
-        <span className="tbd-tag">Placeholder</span> Illustrated, not to scale. Hive pins are placeholders until real beekeeper areas are confirmed.
+        <span className="tbd-tag">Placeholder</span> {caption ?? "Illustrated, not to scale. Hive pins are placeholders until real beekeeper areas are confirmed."}
       </figcaption>
     </figure>
   );

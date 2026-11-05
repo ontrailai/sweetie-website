@@ -112,7 +112,7 @@ export function CartFx() {
             <span aria-hidden="true" className="mr-1.5 text-honey">✶</span>
             {toast.label} added
           </span>
-          <button type="button" onClick={open} className="rounded-full bg-canvas px-4 py-2 font-mono text-[13px] font-bold uppercase tracking-[0.12em] text-nero hover:bg-peacock hover:text-canvas">
+          <button type="button" onClick={open} className="rounded-full bg-canvas px-4 py-2 font-mono text-[13px] font-bold uppercase tracking-[0.12em] text-nero underline-offset-4 hover:underline">
             View cart
           </button>
         </div>

@@ -17,9 +17,9 @@ export function PastBatches() {
         <table className="w-full min-w-[640px] border-collapse text-left text-[15px]">
           <caption className="sr-only">Past Sweet Bee batches (placeholder data)</caption>
           <thead>
-            <tr className="border-b-2 border-nero">
+            <tr className="border-b-2 border-canvas">
               {["Batch", "Jar", "Honey", "Beekeeper area", "Harvest"].map((h) => (
-                <th key={h} scope="col" className="t-eyebrow py-3 pr-6 text-[13px] font-normal text-forest">
+                <th key={h} scope="col" className="t-eyebrow py-3 pr-6 text-[12px]">
                   {h}
                 </th>
               ))}
@@ -29,14 +29,14 @@ export function PastBatches() {
             {rows.map((b) => {
               const p = getProduct(b.productSlug)!;
               return (
-                <tr id={`batch-${b.code}`} key={b.code} className="batch-card border-b border-nero/25 transition-colors hover:bg-peacock/15">
+                <tr id={`batch-${b.code}`} key={b.code} className="batch-card border-b border-dashed border-canvas/30 transition-colors hover:bg-canvas/10">
                   <th scope="row" className="py-4 pr-6 font-normal">
                     <span className="inline-flex items-center gap-2 whitespace-nowrap">
                       {b.code} {b.placeholder ? <TbdTag>TBD</TbdTag> : null}
                     </span>
                   </th>
-                  <td className="py-4 pr-6 font-serif text-[22px] tracking-[0.025em]">
-                    <span className="mr-2 inline-block size-3 rounded-full border border-nero align-middle" style={{ background: p.jar.labelColor }} aria-hidden="true" />
+                  <td className="py-4 pr-6 font-serif text-[clamp(24px,2.4vw,34px)] font-medium tracking-[-0.02em]">
+                    <span className="mr-2 inline-block size-3.5 rounded-full border-2 border-canvas align-middle" style={{ background: p.jar.labelColor }} aria-hidden="true" />
                     No. {p.number} {p.name}
                   </td>
                   <td className="py-4 pr-6">
@@ -56,7 +56,7 @@ export function PastBatches() {
       </div>
       {PAST.length > INITIAL ? (
         <div>
-          <button type="button" aria-expanded={all} onClick={() => setAll((v) => !v)} className="btn min-h-[52px] bg-nero px-6 text-[15px] text-canvas">
+          <button type="button" aria-expanded={all} onClick={() => setAll((v) => !v)} className="btn btn-sm bg-canvas text-nero">
             {all ? "Show fewer batches" : "Show older batches"}
           </button>
         </div>
