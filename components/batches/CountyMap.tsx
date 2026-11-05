@@ -98,12 +98,21 @@ export function CountyMap({
           const pin = (
             <>
               <span aria-hidden="true" className="pulse-pin absolute inset-0 rounded-full" style={{ background: p.jar.labelColor }} />
+              {/* The jar colour is the ring; the number sits on its own
+                  Canvas (or, selected, Nero) badge so it passes AA on every
+                  label colour (Canvas on Peacock alone is only 3.3:1). */}
               <span
                 aria-hidden="true"
-                className={`relative grid size-full place-items-center rounded-full border-2 border-nero font-serif text-[13px] font-bold shadow-[0_3px_0_0_#262626] transition-transform duration-300 ease-[var(--ease-pop)] ${isSel ? "scale-125" : ""}`}
-                style={{ background: p.jar.labelColor, color: p.jar.labelText }}
+                className={`relative grid size-full place-items-center rounded-full border-2 border-nero shadow-[0_3px_0_0_#262626] transition-transform duration-300 ease-[var(--ease-pop)] ${isSel ? "scale-125" : ""}`}
+                style={{ background: p.jar.labelColor }}
               >
-                {p.number}
+                <span
+                  className={`grid size-[68%] place-items-center rounded-full border-[1.5px] border-nero font-serif text-[13px] font-bold leading-none tracking-normal ${
+                    isSel ? "bg-nero text-canvas" : "bg-canvas text-nero"
+                  }`}
+                >
+                  {p.number}
+                </span>
               </span>
             </>
           );

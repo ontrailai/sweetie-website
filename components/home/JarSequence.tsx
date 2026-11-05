@@ -146,12 +146,16 @@ export function JarSequence() {
               onClick={() => goTo(i)}
               aria-label={`No. ${p.number} ${p.name}`}
               aria-current={active === i ? "true" : undefined}
-              className={`grid size-11 place-items-center rounded-full border-2 font-serif text-[17px] font-semibold transition-transform duration-300 ease-[var(--ease-pop)] max-sm:size-9 max-sm:text-[14px] ${
-                active === i ? "scale-110 border-nero" : "border-transparent hover:-translate-y-0.5"
+              className={`grid size-11 place-items-center rounded-full border-2 font-serif text-[17px] font-semibold leading-none transition-transform duration-300 ease-[var(--ease-pop)] max-sm:size-9 max-sm:text-[14px] ${
+                active === i ? "scale-110 border-nero" : "border-transparent text-nero hover:-translate-y-0.5"
               }`}
-              style={{ background: active === i ? p.jar.labelColor : "transparent", color: active === i ? p.jar.labelText : "#262626" }}
+              style={{ background: active === i ? p.jar.labelColor : "transparent" }}
             >
-              {p.number}
+              {/* Active: the jar colour rings a Nero badge (Canvas on Nero,
+                  13.6:1) instead of putting small Canvas text on the colour. */}
+              <span className={`grid place-items-center rounded-full ${active === i ? "size-[76%] border-[1.5px] border-canvas bg-nero text-canvas" : "size-full"}`}>
+                {p.number}
+              </span>
             </button>
           ))}
           <button
