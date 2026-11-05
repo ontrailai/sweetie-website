@@ -1,26 +1,34 @@
 /**
- * Brand fonts.
+ * Brand fonts (self-hosted at build time by next/font).
  *
- * Instrument Serif stands in for Perfectly Nineties, Courier Prime for
- * Courier Std. To swap in the licensed fonts, drop the files in
- * app/fonts/ and replace each loader with next/font/local, keeping the
- * same `variable` names, e.g.:
+ * Display: Fraunces, a variable "wonky" serif. Its axes (wght 100–900,
+ * opsz 9–144, SOFT 0–100, WONK 0–1) are what make the kinetic type work:
+ * headlines inflate, soften and "hum" by animating font-variation-settings
+ * instead of swapping fonts. It stands in for Perfectly Nineties.
+ *
+ * Body: Courier Prime, standing in for Courier Std.
+ *
+ * To swap in licensed fonts, replace a loader with next/font/local and keep
+ * the same `variable` names (--font-heading, --font-body), e.g.:
  *
  *   import localFont from "next/font/local";
  *   export const heading = localFont({
  *     src: [
- *       { path: "./fonts/PerfectlyNineties-Thin.woff2", weight: "400", style: "normal" },
- *       { path: "./fonts/PerfectlyNineties-ThinItalic.woff2", weight: "400", style: "italic" },
+ *       { path: "./fonts/PerfectlyNineties-Regular.woff2", weight: "400", style: "normal" },
+ *       { path: "./fonts/PerfectlyNineties-Italic.woff2", weight: "400", style: "italic" },
  *     ],
  *     variable: "--font-heading",
  *     display: "swap",
  *   });
+ *
+ * (A static font simply ignores the variation axes; nothing breaks.)
  */
-import { Courier_Prime, Instrument_Serif } from "next/font/google";
+import { Courier_Prime, Fraunces } from "next/font/google";
 
-export const heading = Instrument_Serif({
-  weight: "400",
+export const heading = Fraunces({
+  weight: "variable",
   style: ["normal", "italic"],
+  axes: ["SOFT", "WONK", "opsz"],
   subsets: ["latin"],
   variable: "--font-heading",
   display: "swap",
