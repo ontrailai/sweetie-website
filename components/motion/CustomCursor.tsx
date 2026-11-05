@@ -5,10 +5,12 @@ import { useMotionPref } from "./MotionPreference";
 import { isFinePointer } from "./capability";
 
 /**
- * A honey drop that trails the pointer and swells into a ring over anything
- * clickable. Fine pointers + motion on only. It never covers focus rings
- * (pointer-events none, sits under dialogs) and hides while typing so the
- * native text caret is clear.
+ * A drop that trails the pointer and swells into a ring over anything
+ * clickable. Fine pointers + motion on only. It never covers focus rings:
+ * it is pointer-events none, it hides as soon as the keyboard is used
+ * (until the mouse moves again), and it hides over text fields so the
+ * native caret is clear. It sits above dialogs on purpose: the native
+ * cursor is hidden while it shows, so it must stay visible over the cart.
  */
 export function CustomCursor() {
   const dot = useRef<HTMLDivElement>(null);
@@ -49,11 +51,16 @@ export function CustomCursor() {
       const label = (hot as HTMLElement | null)?.dataset?.cursor;
       r.dataset.label = label ?? "";
     };
-    const onLeave = () => {
+    const hide = () => {
       shown = false;
       root.classList.remove("has-cursor");
       d.style.opacity = "0";
       r.style.opacity = "0";
+    };
+    const onLeave = hide;
+    // Keyboard users get the focus ring to themselves.
+    const onKey = (e: KeyboardEvent) => {
+      if (shown && !e.metaKey && !e.ctrlKey) hide();
     };
     const onDown = () => (target *= 0.7);
     const onUp = () => (target /= 0.7);
@@ -70,13 +77,18 @@ export function CustomCursor() {
     window.addEventListener("pointerdown", onDown);
     window.addEventListener("pointerup", onUp);
     document.addEventListener("pointerleave", onLeave);
+    window.addEventListener("keydown", onKey);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
       document.removeEventListener("pointerleave", onLeave);
-      root.classList.remove("has-cursor");
+      window.removeEventListener("keydown", onKey);
+      // Pause motion (or unmount): never leave a frozen ring painted.
+      hide();
+      delete r.dataset.hot;
+      delete r.dataset.label;
     };
   }, [enabled]);
 
@@ -84,7 +96,7 @@ export function CustomCursor() {
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[100]">
       <div
         ref={ring}
-        className="absolute left-0 top-0 size-9 rounded-full border-2 border-nero bg-honey/25 opacity-0 transition-[background-color,border-color] duration-200 data-[hot=1]:border-[3px] data-[hot=1]:border-peacock data-[hot=1]:bg-transparent"
+        className="absolute left-0 top-0 size-9 rounded-full border-2 border-nero bg-canvas/40 opacity-0 transition-[background-color,border-color] duration-200 data-[hot=1]:border-[3px] data-[hot=1]:border-peacock data-[hot=1]:bg-transparent"
       />
       <div ref={dot} className="absolute left-0 top-0 size-2.5 rounded-full bg-peacock opacity-0 ring-2 ring-canvas" />
     </div>
