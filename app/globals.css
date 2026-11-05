@@ -222,6 +222,19 @@
     background: var(--color-nero);
     color: var(--color-canvas);
   }
+  /* Chips and stickers are their own surface: ring in their ink colour,
+     tucked close so it stays on the chip. */
+  .chip,
+  .sticker {
+    --focus: #262626;
+  }
+  .chip.chip-dark {
+    --focus: #f6eddd;
+  }
+  .chip :focus-visible {
+    outline-width: 2px;
+    outline-offset: 2px;
+  }
 
   /* Die-cut sticker badge. */
   .sticker {
@@ -326,8 +339,8 @@ header :focus-visible,
 .ring-duo:focus-visible,
 .ring-duo:has(:focus-visible) {
   outline: 3px solid var(--color-nero);
-  outline-offset: 3px;
-  box-shadow: 0 0 0 3px var(--color-canvas);
+  outline-offset: var(--ring-gap, 3px);
+  box-shadow: 0 0 0 var(--ring-gap, 3px) var(--color-canvas);
 }
 
 /* A banded sun: the sky shows through horizontal cuts in its lower half. */

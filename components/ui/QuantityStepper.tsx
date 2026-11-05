@@ -16,6 +16,7 @@ export function QuantityStepper({
   size?: "sm" | "md";
 }) {
   const h = size === "sm" ? "h-10 min-w-10" : "h-[56px] min-w-12";
+  // The pill clips its children, so the buttons draw their focus ring inside.
   return (
     <div role="group" aria-label={label} className="inline-flex items-stretch overflow-hidden rounded-full border-2 border-nero bg-canvas">
       <button
@@ -23,7 +24,7 @@ export function QuantityStepper({
         aria-label={value <= min && min === 0 ? "Remove" : "One fewer"}
         onClick={() => onChange(Math.max(min, value - 1))}
         disabled={value <= min && min > 0}
-        className={`${h} grid place-items-center px-3 text-xl transition-colors hover:bg-nero hover:text-canvas disabled:opacity-35 disabled:hover:bg-transparent disabled:hover:text-nero`}
+        className={`${h} grid place-items-center px-3 text-xl transition-colors focus-visible:-outline-offset-[6px] hover:bg-nero hover:text-canvas disabled:opacity-35 disabled:hover:bg-transparent disabled:hover:text-nero`}
       >
         <span aria-hidden="true">−</span>
       </button>
@@ -35,7 +36,7 @@ export function QuantityStepper({
         aria-label="One more"
         onClick={() => onChange(Math.min(MAX_LINE_QUANTITY, value + 1))}
         disabled={value >= MAX_LINE_QUANTITY}
-        className={`${h} grid place-items-center px-3 text-xl transition-colors hover:bg-nero hover:text-canvas disabled:opacity-35`}
+        className={`${h} grid place-items-center px-3 text-xl transition-colors focus-visible:-outline-offset-[6px] hover:bg-nero hover:text-canvas disabled:opacity-35`}
       >
         <span aria-hidden="true">+</span>
       </button>
