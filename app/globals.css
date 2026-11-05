@@ -1,0 +1,853 @@
+@import "tailwindcss";
+
+@source not "../mockup";
+@source not "../.qa";
+
+/* ================================================================== */
+/* Brand tokens — the palette is EXACT and must not drift.             */
+/* Honey tones are product colour only (inside jars, shaders, drips).  */
+/* ================================================================== */
+@theme {
+  --color-peacock: #ff007c;
+  --color-jade: #308f32;
+  --color-forest: #004832;
+  --color-ladybug: #ff0000;
+  --color-canvas: #f6eddd;
+  --color-nero: #262626;
+
+  --color-honey: #e6a52a;
+  --color-honey-light: #ffd36b;
+  --color-honey-deep: #9c4f08;
+
+  --font-serif: var(--font-heading), "Fraunces", Georgia, serif;
+  --font-mono: var(--font-body), "Courier Prime", "Courier New", monospace;
+
+  --ease-pop: cubic-bezier(0.2, 0.9, 0.3, 1.35);
+  --ease-out-soft: cubic-bezier(0.2, 0.9, 0.3, 1);
+  --ease-drip: cubic-bezier(0.65, 0, 0.25, 1);
+  --ease-snap: cubic-bezier(0.7, 0, 0.2, 1);
+
+  --animate-spin-slow: spin 18s linear infinite;
+}
+
+/* ================================================================== */
+/* Contrast rules (WCAG AA), applied everywhere:                       */
+/*   small text  → Nero on Canvas, Canvas on Nero, Canvas on Forest    */
+/*   ≥24px text  → may also be Canvas on Peacock / Jade / Ladybug,     */
+/*                 Peacock on Canvas / Nero, Nero on Peacock / Jade    */
+/*   small text on Peacock/Jade/Ladybug sits on a .chip / .ticket      */
+/*   Peacock on Forest is decoration only (2.8:1).                     */
+/* ================================================================== */
+
+@layer base {
+  :root {
+    --focus: #262626;
+    --gutter: clamp(18px, 4.4vw, 64px);
+    --header-h: 76px;
+    color-scheme: light;
+    interpolate-size: allow-keywords;
+  }
+  html {
+    background: var(--color-nero);
+    color: var(--color-nero);
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + 16px);
+  }
+  body {
+    background: var(--color-canvas);
+    font-family: var(--font-mono);
+    letter-spacing: 0.02em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 440;
+    letter-spacing: -0.02em;
+    font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 1;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  em {
+    font-style: italic;
+  }
+  ::selection {
+    background: var(--color-peacock);
+    color: var(--color-canvas);
+  }
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  button {
+    cursor: pointer;
+  }
+  .on-pink,
+  .on-jade,
+  .on-red {
+    --focus: #262626;
+  }
+  .on-dark {
+    --focus: #f6eddd;
+  }
+  summary {
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+/* ================================================================== */
+/* Type                                                                */
+/* ================================================================== */
+
+/* Viewport-filling display serif. Axes come from CSS vars so kinetic  */
+/* components can animate them without touching the font stack.        */
+@utility display {
+  font-family: var(--font-serif);
+  font-weight: var(--wght, 460);
+  font-variation-settings: "opsz" 144, "SOFT" var(--soft, 60), "WONK" var(--wonk, 1);
+  line-height: 0.8;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+@utility t-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+@utility t-mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+@utility container-x {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+}
+@utility px-gutter {
+  padding-inline: var(--gutter);
+}
+@utility pt-header {
+  padding-top: calc(var(--header-h) + clamp(20px, 3vw, 40px));
+}
+/* Below lg the hero jar sits under the headline (never across it) and fills
+   the rest of the first screen. The headline is fixed px on phones (its
+   clamps bottom out below ~470px wide) and ≈45vw tall above that. */
+@utility h-hero-jar {
+  height: clamp(400px, calc(100svh - var(--header-h) - clamp(20px, 3vw, 40px) - max(221px, 45vw) - 24px), 640px);
+}
+@utility text-stroke {
+  /* fill-color, not color: the stroke uses currentColor */
+  -webkit-text-stroke: 2px currentColor;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ================================================================== */
+/* Components                                                          */
+/* ================================================================== */
+@layer components {
+  /* Chunky candy pill with a hard shadow. Colours come from utilities. */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    min-height: 52px;
+    padding-inline: 26px;
+    border: 2px solid var(--color-nero);
+    border-radius: 999px;
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 500;
+    font-variation-settings: "opsz" 72, "SOFT" 100, "WONK" 1;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 4px 0 0 var(--color-nero);
+    transition:
+      transform 0.25s var(--ease-pop),
+      box-shadow 0.25s var(--ease-pop),
+      background-color 0.2s,
+      color 0.2s;
+  }
+  .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 0 0 var(--color-nero);
+  }
+  .btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 0 var(--color-nero);
+  }
+  .btn-sm {
+    min-height: 44px;
+    padding-inline: 18px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-variation-settings: normal;
+  }
+  .btn[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* Small text that has to sit on Peacock / Jade / Ladybug. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--color-canvas);
+    color: var(--color-nero);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .chip-dark {
+    background: var(--color-nero);
+    color: var(--color-canvas);
+  }
+  /* Chips and stickers are their own surface: ring in their ink colour,
+     tucked close so it stays on the chip. */
+  .chip,
+  .sticker {
+    --focus: #262626;
+  }
+  .chip.chip-dark {
+    --focus: #f6eddd;
+  }
+  .chip :focus-visible {
+    outline-width: 2px;
+    outline-offset: 2px;
+  }
+
+  /* Die-cut sticker badge. */
+  .sticker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
+    padding: 8px 16px;
+    border: 2px solid var(--color-nero);
+    border-radius: 999px;
+    background: var(--color-canvas);
+    color: var(--color-nero);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    rotate: var(--r, -6deg);
+    box-shadow: 3px 3px 0 0 var(--color-nero);
+    white-space: nowrap;
+  }
+
+  /* Perforated ticket / receipt card. The body is a masked ::before so the
+     hard shadow (a drop-shadow filter) follows the notched outline. */
+  .ticket {
+    --notch: 12px;
+    /* A ticket is a Canvas surface wherever it sits (even inside .on-dark). */
+    --focus: #262626;
+    position: relative;
+    isolation: isolate;
+    color: var(--color-nero);
+    border-radius: 18px;
+    filter: drop-shadow(var(--ticket-shadow, 6px 6px 0 #262626));
+    transition: filter 0.4s var(--ease-out-soft);
+  }
+  .ticket::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--ticket-bg, var(--color-canvas));
+    mask:
+      radial-gradient(circle var(--notch) at 0 var(--notch-y, 50%), #0000 98%, #000) left / 51% 100% no-repeat,
+      radial-gradient(circle var(--notch) at 100% var(--notch-y, 50%), #0000 98%, #000) right / 51% 100% no-repeat;
+  }
+
+  :where(.on-dark) .ticket {
+    --ticket-shadow: 6px 6px 0 #ff007c;
+  }
+
+  /* Placeholders: TBD content is always visibly flagged. */
+  .tbd {
+    display: inline;
+    padding: 0 0.3em;
+    border: 1.5px dashed currentColor;
+    border-radius: 6px;
+    font-style: normal;
+  }
+  .tbd-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding: 2px 8px;
+    border: 1.5px dashed currentColor;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    vertical-align: middle;
+    font-variation-settings: normal;
+  }
+
+  /* Big-type accordion (details/summary). */
+  details.accordion::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.5s var(--ease-out-soft),
+      content-visibility 0.5s allow-discrete;
+  }
+  details.accordion[open]::details-content {
+    block-size: auto;
+  }
+  details.accordion .plus {
+    transition: rotate 0.4s var(--ease-pop), background-color 0.2s;
+  }
+  details.accordion[open] .plus {
+    rotate: 135deg;
+  }
+}
+
+/* Two-tone focus ring for controls that float over changing colours (the
+   header over every section, map pins, the dial's options). A Canvas band
+   fills the offset gap and a Nero outline sits outside it, so one of the two
+   always contrasts. Unlayered so it beats component box-shadows. */
+header :focus-visible,
+.ring-duo:focus-visible,
+.ring-duo:has(:focus-visible) {
+  outline: 3px solid var(--color-nero);
+  outline-offset: var(--ring-gap, 3px);
+  box-shadow: 0 0 0 var(--ring-gap, 3px) var(--color-canvas);
+}
+
+/* A banded sun: the sky shows through horizontal cuts in its lower half. */
+.sun-banded {
+  background: linear-gradient(
+    180deg,
+    var(--sun) 0 54%,
+    transparent 54% 60%,
+    var(--sun) 60% 69%,
+    transparent 69% 74%,
+    var(--sun) 74% 82%,
+    transparent 82% 86%,
+    var(--sun) 86% 91%,
+    transparent 91%
+  );
+}
+
+/* Paper grain over everything (static). */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.15 0 0 0 0 0.15 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ================================================================== */
+/* Kinetic type                                                         */
+/* ================================================================== */
+/* <SplitText>: letters are aria-hidden spans with --i; the sentence is
+   also present as sr-only text. Nothing is hidden before JS runs: the
+   "from" state only exists inside the running animation. */
+.ch {
+  display: inline-block;
+  white-space: pre;
+  will-change: transform;
+}
+html[data-motion="on"] .split-load .ch {
+  animation: ch-rise 1s var(--ease-pop) backwards;
+  animation-delay: calc(var(--d, 0ms) + var(--i) * 32ms);
+}
+html[data-motion="on"] .split.is-in .ch {
+  animation: ch-pop 0.9s var(--ease-pop) backwards;
+  animation-delay: calc(var(--d, 0ms) + var(--i) * 28ms);
+}
+/* Transform-only (no opacity) so the hero headline paints at once and
+   stays the LCP element. */
+@keyframes ch-rise {
+  from {
+    transform: translateY(0.42em) rotate(9deg) scale(0.7);
+  }
+}
+@keyframes ch-pop {
+  from {
+    opacity: 0;
+    transform: translateY(0.6em) rotate(-12deg) scale(0.5);
+  }
+}
+
+/* Hover: letters buzz like a hive. */
+html[data-motion="on"] .buzz:hover .ch,
+html[data-motion="on"] .buzz:focus-visible .ch {
+  animation: buzz 0.14s linear infinite alternate;
+  animation-delay: calc(var(--i) * -37ms);
+}
+@keyframes buzz {
+  from {
+    transform: translate(-0.012em, 0.01em) rotate(-1.5deg);
+  }
+  to {
+    transform: translate(0.012em, -0.012em) rotate(1.5deg);
+  }
+}
+
+/* Inflate: the variable font breathes between weights. */
+html[data-motion="on"] .breathe {
+  animation: breathe 5.5s var(--ease-out-soft) infinite alternate;
+}
+@keyframes breathe {
+  from {
+    font-weight: 300;
+    font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  }
+  to {
+    font-weight: 820;
+    font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 1;
+  }
+}
+
+/* Fade/rise for blocks (IntersectionObserver adds .is-in). */
+html[data-motion="on"] .rise.is-in {
+  animation: rise 0.9s var(--ease-out-soft) backwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+
+/* ================================================================== */
+/* Loops (all paused / removed when motion is off)                     */
+/* ================================================================== */
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+.spin-slow {
+  animation: spin 18s linear infinite;
+}
+.spin-rev {
+  animation: spin 26s linear infinite reverse;
+}
+.float {
+  animation: float 4.4s ease-in-out infinite;
+}
+@keyframes float {
+  50% {
+    translate: 0 -14px;
+  }
+}
+.wiggle {
+  animation: wiggle 3.2s ease-in-out infinite;
+}
+@keyframes wiggle {
+  0%,
+  100% {
+    rotate: -4deg;
+  }
+  50% {
+    rotate: 4deg;
+  }
+}
+.bee-wings {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flutter 0.09s linear infinite alternate;
+}
+@keyframes flutter {
+  to {
+    transform: scaleY(0.7) skewX(6deg);
+  }
+}
+/* Flying bee: each wing flaps from its root, a half-beat apart. */
+.bee-wing {
+  transform-box: view-box;
+  animation: flap 0.075s ease-in-out infinite alternate;
+}
+.bee-wing-back {
+  transform-origin: 56px 44px;
+}
+.bee-wing-front {
+  transform-origin: 64px 44px;
+  animation-delay: -0.0375s;
+}
+@keyframes flap {
+  from {
+    transform: rotate(-16deg) scaleY(1.04);
+  }
+  to {
+    transform: rotate(14deg) scaleY(0.42);
+  }
+}
+/* Photo jars at rest: a slow sway, as if just set down. */
+.jar-sway {
+  transform-origin: 50% 100%;
+  animation: jar-sway 5.5s ease-in-out infinite;
+}
+@keyframes jar-sway {
+  0%,
+  100% {
+    rotate: -1.2deg;
+  }
+  50% {
+    rotate: 1.2deg;
+    translate: 0 -1.5%;
+  }
+}
+/* Hero jar: a slow breath; the lid bobs and tumbles on its own beat. */
+.hero-breathe {
+  animation: hero-breathe 6.5s ease-in-out infinite;
+}
+@keyframes hero-breathe {
+  50% {
+    translate: 0 -1.2%;
+  }
+}
+.hero-lid-float {
+  animation: hero-lid 4.8s ease-in-out infinite;
+}
+@keyframes hero-lid {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  35% {
+    translate: 3% -9%;
+    rotate: 5deg;
+  }
+  70% {
+    translate: -2% -4%;
+    rotate: -3deg;
+  }
+}
+.hum-ring {
+  animation: hum-ring 1.6s var(--ease-out-soft) infinite;
+}
+@keyframes hum-ring {
+  from {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+.twinkle {
+  animation: twinkle 2.4s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.7) rotate(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) rotate(45deg);
+  }
+}
+.drip-strand {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: drip-strand var(--dur, 6s) var(--ease-drip) infinite;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes drip-strand {
+  0%,
+  100% {
+    transform: scaleY(0.75);
+  }
+  55% {
+    transform: scaleY(1.25);
+  }
+}
+.drip-drop {
+  animation: drip-drop var(--dur, 6s) var(--ease-drip) infinite;
+  animation-delay: var(--delay, 0s);
+  opacity: 0;
+}
+@keyframes drip-drop {
+  0%,
+  50% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  58% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(160px) scale(0.8);
+    opacity: 0;
+  }
+}
+.honey-wave {
+  animation: honey-wave 7s linear infinite;
+}
+@keyframes honey-wave {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.scanline {
+  animation: scanline 2.4s var(--ease-drip) infinite alternate;
+}
+@keyframes scanline {
+  from {
+    top: 8%;
+  }
+  to {
+    top: 88%;
+  }
+}
+.pulse-pin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse-pin 2.2s var(--ease-out-soft) infinite;
+}
+@keyframes pulse-pin {
+  from {
+    transform: scale(0.4);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* Cart badge squish + honey splash (fly-to-cart). */
+.squish {
+  animation: squish 0.6s var(--ease-pop);
+}
+@keyframes squish {
+  0% {
+    transform: scale(1, 1);
+  }
+  25% {
+    transform: scale(1.3, 0.72);
+  }
+  50% {
+    transform: scale(0.86, 1.18);
+  }
+  75% {
+    transform: scale(1.06, 0.96);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+/* Page transition curtain (client navigations only). */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  pointer-events: none;
+  background: var(--color-peacock);
+  animation: curtain 0.8s var(--ease-snap) 0.05s both;
+}
+@keyframes curtain {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+.page-enter {
+  animation: page-enter 0.7s var(--ease-out-soft) backwards;
+}
+@keyframes page-enter {
+  from {
+    transform: translateY(36px);
+  }
+}
+
+/* ================================================================== */
+/* Pinned six-jar sequence                                              */
+/* Pinning is pure CSS (sticky) and only exists when motion is on and  */
+/* the viewport is wide; otherwise the same DOM is a swipeable snap    */
+/* track (phones) or a calm vertical stack (desktop, motion off).      */
+/* ================================================================== */
+.seq-stage {
+  position: relative;
+}
+@media (max-width: 1023.98px) {
+  .seq-stage {
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .seq-stage::-webkit-scrollbar {
+    display: none;
+  }
+  .seq-panel {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+}
+@media (min-width: 1024px) {
+  html[data-motion="on"] .seq {
+    height: calc(var(--panels) * 110svh);
+  }
+  /* The wrapper sticks; the stage (panels) and the jar rail live inside it. */
+  html[data-motion="on"] .seq-pin {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+  }
+  html[data-motion="on"] .seq-stage {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  html[data-motion="on"] .seq-panel {
+    position: absolute;
+    inset: 0;
+  }
+  html[data-motion="on"] .seq-panel:not(:first-child) {
+    clip-path: circle(0% at 50% 55%);
+  }
+}
+
+/* Scroll-driven sunrise: same idea, sticky only when motion is on (wide). */
+@media (min-width: 1024px) {
+  html[data-motion="on"] .sky-track {
+    height: 340svh;
+  }
+  html[data-motion="on"] .sky-stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+}
+
+/* ================================================================== */
+/* Custom cursor (fine pointers, motion on)                             */
+/* ================================================================== */
+html.has-cursor,
+html.has-cursor a,
+html.has-cursor button,
+html.has-cursor label,
+html.has-cursor summary,
+html.has-cursor [role="slider"] {
+  cursor: none;
+}
+html.has-cursor input,
+html.has-cursor textarea,
+html.has-cursor select {
+  cursor: auto;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Mobile quick-add bar (product page): keep the page end clear of it. */
+@media (max-width: 47.99rem) {
+  html[data-quick-add] body {
+    padding-bottom: var(--quick-add-h, 0px);
+  }
+  /* Tabbing scrolls focused controls clear of the fixed bar (2.4.11). */
+  html[data-quick-add] {
+    scroll-padding-bottom: calc(var(--quick-add-h, 0px) + 24px);
+  }
+}
+
+/* Deep-linked batch gets a highlight. */
+.batch-card:target {
+  outline: 4px solid var(--color-peacock);
+  outline-offset: 4px;
+}
+
+svg.jar {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Visually hidden but focusable range input over the 3D jar. */
+.sr-range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: grab;
+}
+
+/* ================================================================== */
+/* Motion off (user toggle or prefers-reduced-motion): calm EVERYTHING */
+/* ================================================================== */
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after {
+  animation: none !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+html[data-motion="off"] .curtain {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion]) *,
+  html:not([data-motion]) *::before,
+  html:not([data-motion]) *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
