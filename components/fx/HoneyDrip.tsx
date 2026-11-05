@@ -24,13 +24,14 @@ function strand(x: number, w: number, len: number) {
   return `M${x - w * 1.4} 0 C ${x - w} ${len * 0.35}, ${x - r} ${len * 0.5}, ${x - r} ${len - r} A ${r} ${r} 0 0 0 ${x + r} ${len - r} C ${x + r} ${len * 0.5}, ${x + w} ${len * 0.35}, ${x + w * 1.4} 0 Z`;
 }
 
-export function HoneyDrip({ className = "", flip = false }: { className?: string; flip?: boolean }) {
+export function HoneyDrip({ className = "", flip = false, color }: { className?: string; flip?: boolean; color?: string }) {
   return (
     <svg
       viewBox="0 0 1440 140"
       preserveAspectRatio="xMidYMin slice"
       className={`pointer-events-none block w-full overflow-visible ${flip ? "-scale-y-100" : ""} ${className}`}
       aria-hidden="true"
+      style={color ? { color } : undefined}
     >
       <rect x="0" y="-2" width="1440" height="14" fill="currentColor" />
       {STRANDS.map(([x, w, len, dur], i) => (

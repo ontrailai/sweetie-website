@@ -636,7 +636,8 @@ export function createJarScene(
     const ty = tilt.active ? tilt.y : 0;
 
     // Rotation targets: idle spin + pointer lean + device tilt + host spin.
-    const idle = isHero ? t * 0.35 : t * 0.12;
+    // Hero spins idly; the product jar only sways so the turn slider stays true.
+    const idle = isHero ? t * 0.35 : Math.sin(t * 0.6) * 0.1;
     const targetY = idle + spin + px * 0.55;
     const targetZ = -px * 0.12 - tx * 0.42;
     const targetX = py * 0.16 + ty * 0.3;

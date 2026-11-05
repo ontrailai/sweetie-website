@@ -15,9 +15,9 @@ export function QuantityStepper({
   label?: string;
   size?: "sm" | "md";
 }) {
-  const h = size === "sm" ? "h-10 min-w-10" : "h-14 min-w-12";
+  const h = size === "sm" ? "h-10 min-w-10" : "h-[56px] min-w-12";
   return (
-    <div role="group" aria-label={label} className="inline-flex items-stretch border-2 border-nero bg-canvas">
+    <div role="group" aria-label={label} className="inline-flex items-stretch overflow-hidden rounded-full border-2 border-nero bg-canvas">
       <button
         type="button"
         aria-label={value <= min && min === 0 ? "Remove" : "One fewer"}
@@ -27,7 +27,7 @@ export function QuantityStepper({
       >
         <span aria-hidden="true">−</span>
       </button>
-      <output aria-live="polite" aria-label={`${label}: ${value}`} className={`${h} grid place-items-center border-x-2 border-nero px-2 text-base tabular-nums`}>
+      <output aria-live="polite" aria-label={`${label}: ${value}`} className={`${h} grid place-items-center px-2 font-serif text-[22px] font-semibold tabular-nums`}>
         {value}
       </output>
       <button

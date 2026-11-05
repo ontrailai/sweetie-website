@@ -5,7 +5,7 @@ import { motion, useMotionValueEvent, useScroll, useTransform, type MotionValue 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { DEFAULT_SIZE, PRODUCTS, SIZES, getVariant, type Product, type SizeId } from "@/lib/catalog";
 import { Jar, TURN } from "@/components/jar/Jar";
-import { makeParticles, particleShape } from "@/components/jar/specks";
+import { HoneyPool, JarParticles } from "@/components/jar/JarParticles";
 import { useMotionPref } from "@/components/motion/MotionPreference";
 import { scrollToTarget } from "@/components/motion/SmoothScroll";
 import { useQuickAdd } from "@/components/fx/useQuickAdd";
@@ -188,8 +188,6 @@ function JarPanel({ product: p, index: i, f, mode, active, motionOn }: { product
   const variant = getVariant(p, size);
   const quickAdd = useQuickAdd();
   const jarRef = useRef<HTMLDivElement>(null);
-  const particles = makeParticles(p.number);
-  const shape = particleShape(p.jar.specks, p.slug);
   const ink = p.jar.labelText ?? "#F6EDDD";
   const onLight = ink.toUpperCase() === "#262626";
   const sizeLabel = SIZES.find((s) => s.id === size)!.label;
@@ -212,38 +210,15 @@ function JarPanel({ product: p, index: i, f, mode, active, motionOn }: { product
       </span>
 
       {/* honey rising from the bottom */}
-      <motion.div aria-hidden="true" className="absolute inset-x-0 bottom-0 -z-10" style={{ height: pinned ? pool : "22%" }}>
-        <div className="absolute inset-x-0 -top-[38px] h-10 overflow-hidden">
-          <svg viewBox="0 0 1440 40" preserveAspectRatio="none" className="honey-wave h-full w-[200%]">
-            <path d="M0 20 Q 90 0 180 20 T 360 20 T 540 20 T 720 20 T 900 20 T 1080 20 T 1260 20 T 1440 20 V40 H0 Z" fill={p.jar.honey} transform="scale(0.5 1)" />
-            <path d="M0 20 Q 90 0 180 20 T 360 20 T 540 20 T 720 20 T 900 20 T 1080 20 T 1260 20 T 1440 20 V40 H0 Z" fill={p.jar.honey} transform="translate(720 0) scale(0.5 1)" />
-          </svg>
-        </div>
-        <div className="size-full" style={{ background: `linear-gradient(180deg, ${p.jar.honey}, ${p.jar.honeyDark})` }} />
-      </motion.div>
+      {pinned ? (
+        <motion.div aria-hidden="true" className="absolute inset-x-0 bottom-0 -z-10" style={{ height: pool }}>
+          <HoneyPool product={p} className="!absolute !inset-0 !z-0" />
+        </motion.div>
+      ) : (
+        <HoneyPool product={p} style={{ height: "22%" }} />
+      )}
 
-      {/* specks / blossoms */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        {particles.map((pt, k) => (
-          <span
-            key={k}
-            className="absolute block transition-[scale,opacity] duration-700 ease-[var(--ease-pop)]"
-            style={{
-              left: `${pt.x}%`,
-              top: `${pt.y}%`,
-              width: shape.base * pt.size,
-              scale: shown ? "1" : "0",
-              opacity: shown ? "1" : "0",
-              transitionDelay: shown && motionOn ? `${0.15 + pt.delay}s` : "0s",
-              translate: `calc(var(--tx, 0) * ${pt.depth * 40}px) calc(var(--ty, 0) * ${pt.depth * 30}px)`,
-            }}
-          >
-            <svg viewBox={shape.viewBox} className="float block w-full" style={{ rotate: `${pt.rot}deg`, animationDuration: `${pt.drift}s`, animationDelay: `${-pt.delay * 8}s` }}>
-              <path d={shape.path} fill={shape.fill} stroke={shape.stroke} strokeWidth={shape.stroke ? 1.5 : 0} fillRule="evenodd" />
-            </svg>
-          </span>
-        ))}
-      </div>
+      <JarParticles product={p} shown={shown} staggered={motionOn} />
 
       <div className="pt-header px-gutter relative flex flex-1 flex-col pb-32 lg:pb-10">
         <div className="container-x relative grid flex-1 items-center gap-6 lg:grid-cols-[1.15fr_0.9fr_0.95fr]">

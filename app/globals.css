@@ -267,6 +267,10 @@
       radial-gradient(circle var(--notch) at 100% var(--notch-y, 50%), #0000 98%, #000) right / 51% 100% no-repeat;
   }
 
+  :where(.on-dark) .ticket {
+    --ticket-shadow: 6px 6px 0 #ff007c;
+  }
+
   /* Placeholders: TBD content is always visibly flagged. */
   .tbd {
     display: inline;
