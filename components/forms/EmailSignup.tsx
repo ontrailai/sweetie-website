@@ -25,20 +25,20 @@ export function EmailSignup({ className = "" }: { className?: string }) {
   };
 
   return (
-    <div className={`relative bg-canvas p-7 text-nero ${className}`}>
-      <Bee className="bee-fly absolute -top-12 right-5 w-[clamp(84px,9vw,120px)]" />
+    <div className={`ticket relative p-7 [--notch-y:40%] ${className}`}>
+      <Bee className="float absolute -top-14 right-5 w-[clamp(84px,9vw,120px)]" />
       <AnimatePresence mode="wait" initial={false}>
         {done ? (
           <motion.div key="done" role="status" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="flex min-h-[156px] flex-col justify-center gap-3">
-            <Star className="twinkle size-8 text-peacock" />
-            <p className="font-serif text-[40px] leading-none tracking-[0.025em]">
+            <Star className="spin-slow size-10 text-peacock" />
+            <p className="display text-[56px]">
               You&apos;re <em className="text-peacock">in.</em>
             </p>
             <p className="text-[15px] leading-normal">Watch your inbox for the hum. (Sign-up isn&apos;t live yet, so nothing was sent.)</p>
           </motion.div>
         ) : (
           <motion.form key="form" noValidate onSubmit={onSubmit} exit={{ opacity: 0, y: -12 }} className="flex flex-col gap-3">
-            <label htmlFor={`${id}-email`} className="t-eyebrow text-forest">
+            <label htmlFor={`${id}-email`} className="t-eyebrow">
               Email address
             </label>
             <div className="flex flex-wrap gap-3">
@@ -56,9 +56,9 @@ export function EmailSignup({ className = "" }: { className?: string }) {
                 }}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={`${id}-hint${error ? ` ${id}-err` : ""}`}
-                className="min-h-[52px] min-w-0 flex-[1_1_200px] border-2 border-nero bg-white px-3.5 font-mono text-base text-nero placeholder:text-nero/60 aria-[invalid]:border-ladybug"
+                className="min-h-[56px] min-w-0 flex-[1_1_200px] rounded-full border-2 border-nero bg-white px-5 font-mono text-base text-nero placeholder:text-nero/60 aria-[invalid]:border-ladybug"
               />
-              <button type="submit" className="btn min-h-[52px] bg-forest px-6 text-base text-canvas">
+              <button type="submit" className="btn min-h-[56px] bg-nero text-canvas">
                 I&apos;m in
               </button>
             </div>

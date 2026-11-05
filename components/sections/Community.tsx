@@ -2,37 +2,40 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { FOUNDERS_NOTE, QUOTES, SITE } from "@/lib/site";
 import { Bee, Dipper, Flower, Honeycomb, Sun, Wave } from "@/components/brand/Illustrations";
-import { Star } from "@/components/brand/Star";
-import { Reveal } from "@/components/motion/Reveal";
-import { OrTbd, Tbd, TbdTag } from "@/components/ui/Tbd";
+import { SplitText } from "@/components/motion/SplitText";
+import { OrTbd, Tbd } from "@/components/ui/Tbd";
 import { MarketList } from "./Markets";
 
-const TILES: { bg: string; art: ReactNode }[] = [
-  { bg: "bg-peacock", art: <Bee className="bee-fly w-[46%]" /> },
-  { bg: "bg-forest", art: <Sun className="w-[46%]" color="#E6A52A" /> },
-  { bg: "bg-canvas border-2 border-nero", art: <Flower className="spin-slow w-[42%]" /> },
-  { bg: "bg-nero", art: <Wave className="w-[56%]" /> },
-  { bg: "bg-jade", art: <Dipper className="float w-[22%]" /> },
-  { bg: "bg-ladybug", art: <Honeycomb className="w-[46%]" color="#F6EDDD" /> },
+const TILES: { bg: string; art: ReactNode; rot: number }[] = [
+  { bg: "bg-peacock", art: <Bee className="w-[52%]" />, rot: -4 },
+  { bg: "bg-forest", art: <Sun className="w-[50%]" color="#ffd36b" />, rot: 3 },
+  { bg: "bg-canvas", art: <Flower className="spin-slow w-[48%]" />, rot: -2 },
+  { bg: "bg-nero", art: <Wave className="w-[60%]" />, rot: 5 },
+  { bg: "bg-ladybug", art: <Dipper className="float w-[24%]" />, rot: -5 },
+  { bg: "bg-canvas", art: <Honeycomb className="w-[50%]" />, rot: 2 },
 ];
 
 export function InstagramHandle() {
   return SITE.instagram.handle ? <strong>@{SITE.instagram.handle}</strong> : <Tbd>@handle</Tbd>;
 }
 
+/** Placeholder "customer photo" polaroid stickers (until real UGC exists). */
 export function CommunityTiles() {
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+    <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-6">
       {TILES.map((t, i) => (
-        <Reveal as="li" key={i} delay={i * 0.06} className={`group relative grid aspect-square place-items-center overflow-hidden ${t.bg}`}>
-          <div className="grid size-full place-items-center transition-transform duration-500 ease-[var(--ease-pop)] group-hover:scale-110" aria-hidden="true">
-            {t.art}
+        <li
+          key={i}
+          className="rise group rounded-[14px] border-2 border-nero bg-canvas p-2 pb-3 text-nero shadow-[5px_5px_0_0_#262626] transition-transform duration-500 ease-[var(--ease-pop)] hover:z-10 hover:rotate-0 hover:scale-105"
+          style={{ rotate: `${t.rot}deg`, ["--d" as string]: `${i * 70}ms` }}
+        >
+          <div className={`grid aspect-square place-items-center overflow-hidden rounded-[8px] ${t.bg}`} aria-hidden="true">
+            <div className="grid size-full place-items-center transition-transform duration-500 ease-[var(--ease-pop)] group-hover:scale-110 group-hover:rotate-6">{t.art}</div>
           </div>
-          {/* Canvas-backed caption: small Canvas text fails contrast on Peacock, Jade and Ladybug. */}
-          <span className="absolute bottom-3 left-3">
-            <TbdTag className="bg-canvas text-nero">Customer photo {i + 1}</TbdTag>
-          </span>
-        </Reveal>
+          <p className="mt-2 font-mono text-[12px] font-bold">
+            <span className="tbd-tag">Customer photo {i + 1}</span>
+          </p>
+        </li>
       ))}
     </ul>
   );
@@ -40,21 +43,16 @@ export function CommunityTiles() {
 
 export function Quotes() {
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-x-8 gap-y-10">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-6">
       {QUOTES.map((q, i) => (
-        <Reveal key={i} delay={i * 0.08}>
-          <figure className="flex flex-col gap-[18px] border-t-2 border-nero pt-[22px]">
-            <blockquote className="font-serif text-[clamp(28px,2.6vw,36px)] leading-[1.15] tracking-[0.02em]">
-              “<OrTbd value={q.quote} fallback="Customer quote, in their words." />”
-            </blockquote>
-            <figcaption className="text-[15px]">
-              <OrTbd value={q.name} fallback="First name" /> ·{" "}
-              <span className="t-eyebrow text-forest">
-                <OrTbd value={q.jar} fallback="Their jar" />
-              </span>
-            </figcaption>
-          </figure>
-        </Reveal>
+        <figure key={i} className="ticket rise flex flex-col gap-4 p-6 [--notch-y:72%]" style={{ ["--d" as string]: `${i * 90}ms` }}>
+          <blockquote className="font-serif text-[clamp(26px,2.4vw,34px)] font-normal italic leading-[1.1] tracking-[-0.02em]">
+            “<OrTbd value={q.quote} fallback="Customer quote, in their words." />”
+          </blockquote>
+          <figcaption className="mt-auto text-[14px]">
+            <OrTbd value={q.name} fallback="First name" /> · <OrTbd value={q.jar} fallback="Their jar" />
+          </figcaption>
+        </figure>
       ))}
     </div>
   );
@@ -62,65 +60,56 @@ export function Quotes() {
 
 export function FoundersNote() {
   return (
-    <div className="on-dark flex flex-wrap items-center gap-x-12 gap-y-6 bg-forest p-[clamp(28px,3vw,40px)] text-canvas">
-      <p className="min-w-0 flex-[1_1_480px] font-serif text-[clamp(26px,2.4vw,34px)] italic leading-[1.25] tracking-[0.02em]">
-        “<OrTbd value={FOUNDERS_NOTE.note} fallback="A short note from the two of you: why you started Sweet Bee, in two sentences." />”
-      </p>
-      <p className="flex-none font-serif text-[26px] tracking-[0.025em]">
-        — <OrTbd value={FOUNDERS_NOTE.names} fallback="Your names" />
-      </p>
-    </div>
+    <figure className="on-dark relative flex flex-col gap-6 rounded-[28px] border-2 border-nero bg-forest p-[clamp(28px,4vw,56px)] text-canvas shadow-[8px_8px_0_0_#262626]">
+      <span aria-hidden="true" className="display absolute -top-[0.35em] left-6 text-[160px] leading-none text-peacock">
+        “
+      </span>
+      <blockquote className="font-serif text-[clamp(28px,3vw,48px)] font-normal italic leading-[1.15] tracking-[-0.02em]">
+        <OrTbd value={FOUNDERS_NOTE.note} fallback="A short note from the two of you: why you started Sweet Bee, in two sentences." />
+      </blockquote>
+      <figcaption className="t-eyebrow">
+        — <OrTbd value={FOUNDERS_NOTE.names} fallback="Your names" />, founders
+      </figcaption>
+    </figure>
   );
 }
 
+/** Home: "Come hum with us." on full-bleed Jade. */
 export function Community() {
   return (
-    <section id="community" aria-labelledby="community-h" className="px-gutter py-[clamp(72px,9vw,136px)]">
+    <section id="community" aria-labelledby="community-h" className="on-jade px-gutter relative overflow-hidden bg-jade py-[clamp(80px,10vw,170px)] text-canvas">
       <div className="container-x flex flex-col gap-14">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div className="flex flex-col gap-[18px]">
-            <p className="t-eyebrow text-forest">Community</p>
-            <h2 id="community-h" className="text-[clamp(64px,8.4vw,132px)] leading-[0.9] tracking-[0.015em] text-peacock">
-              Come hum <em>with us.</em>
-            </h2>
-          </div>
-          <div className="flex max-w-[360px] flex-col items-start gap-3">
-            <p className="text-[15px] leading-[1.7]">
+        <div className="flex flex-wrap items-end justify-between gap-8">
+          <h2 id="community-h" className="display text-[clamp(72px,10vw,190px)]">
+            <SplitText text="Come hum" /> <em><SplitText text="with us." start={7} /></em>
+          </h2>
+          <div className="ticket flex max-w-[380px] flex-col gap-3 p-5">
+            <p className="text-[15px] leading-[1.6]">
               Find us at a market, or share your spoonful. Tag <InstagramHandle /> and <strong>{SITE.hashtag}</strong> to land here.
             </p>
             {SITE.instagram.url ? (
-              <a href={SITE.instagram.url} target="_blank" rel="noopener noreferrer" className="btn min-h-[52px] bg-nero px-6 text-[15px] text-canvas">
+              <a href={SITE.instagram.url} target="_blank" rel="noopener noreferrer" className="btn btn-sm self-start bg-nero text-canvas">
                 Follow on Instagram
               </a>
             ) : (
-              <span className="inline-flex min-h-[52px] items-center gap-2 border-2 border-dashed border-nero px-6 text-[15px]">
-                Instagram coming soon
-              </span>
+              <span className="tbd-tag self-start">Instagram coming soon</span>
             )}
           </div>
         </div>
-
-        <div id="find" className="flex flex-col gap-5">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h3 className="text-[clamp(40px,4.4vw,64px)] leading-none tracking-[0.02em]">
+        <CommunityTiles />
+        <div className="grid items-start gap-10 lg:grid-cols-[1fr_1.2fr]">
+          <div className="flex flex-col gap-5">
+            <h3 className="display text-[clamp(48px,5vw,88px)]">
               At the <em>market.</em>
             </h3>
-            <Link href="/find-us" className="btn min-h-[52px] bg-nero px-6 text-[15px] text-canvas">
-              Full schedule &amp; stockists
+            <p className="font-serif text-[26px] italic leading-tight">Taste before you buy. Schedule updated every week.</p>
+            <Link href="/find-us" className="btn self-start bg-canvas text-nero">
+              Full schedule &amp; stockists →
             </Link>
           </div>
           <MarketList />
-          <p className="flex items-center gap-2 text-[15px]">
-            <Star className="size-3.5 text-peacock" /> Schedule updated every week.
-          </p>
         </div>
-
-        <h3 className="text-[clamp(40px,4.4vw,64px)] leading-none tracking-[0.02em]">
-          Out <em>there.</em>
-        </h3>
-        <CommunityTiles />
         <Quotes />
-        <FoundersNote />
       </div>
     </section>
   );

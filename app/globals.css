@@ -144,8 +144,9 @@
   padding-top: calc(var(--header-h) + clamp(20px, 3vw, 40px));
 }
 @utility text-stroke {
+  /* fill-color, not color: the stroke uses currentColor */
   -webkit-text-stroke: 2px currentColor;
-  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 /* ================================================================== */
@@ -243,13 +244,24 @@
     white-space: nowrap;
   }
 
-  /* Perforated ticket / receipt card. */
+  /* Perforated ticket / receipt card. The body is a masked ::before so the
+     hard shadow (a drop-shadow filter) follows the notched outline. */
   .ticket {
     --notch: 12px;
     position: relative;
-    background: var(--color-canvas);
+    isolation: isolate;
     color: var(--color-nero);
     border-radius: 18px;
+    filter: drop-shadow(var(--ticket-shadow, 6px 6px 0 #262626));
+    transition: filter 0.4s var(--ease-out-soft);
+  }
+  .ticket::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--ticket-bg, var(--color-canvas));
     mask:
       radial-gradient(circle var(--notch) at 0 var(--notch-y, 50%), #0000 98%, #000) left / 51% 100% no-repeat,
       radial-gradient(circle var(--notch) at 100% var(--notch-y, 50%), #0000 98%, #000) right / 51% 100% no-repeat;
@@ -621,8 +633,8 @@ html[data-motion="on"] .rise.is-in {
   }
 }
 
-/* Scroll-driven sunrise: same idea, sticky only when motion is on. */
-@media (min-width: 0px) {
+/* Scroll-driven sunrise: same idea, sticky only when motion is on (wide). */
+@media (min-width: 1024px) {
   html[data-motion="on"] .sky-track {
     height: 340svh;
   }

@@ -1,206 +1,137 @@
 "use client";
 
 import Link from "next/link";
-import { AnimatePresence, animate, motion, useMotionValue, useSpring, useTransform, type MotionValue } from "motion/react";
-import { useEffect, useState } from "react";
-import { PRODUCTS, type Product } from "@/lib/catalog";
-import { Jar, TURN } from "@/components/jar/Jar";
-import { Bee } from "@/components/brand/Illustrations";
-import { Star } from "@/components/brand/Star";
-import { MotionToggle } from "@/components/motion/MotionToggle";
+import { motion, useScroll, useTransform } from "motion/react";
+import { useRef } from "react";
+import { PRODUCTS } from "@/lib/catalog";
+import { Jar } from "@/components/jar/Jar";
+import { HoneyJar3D } from "@/components/jar3d/HoneyJar3D";
+import { SplitText } from "@/components/motion/SplitText";
+import { Magnetic } from "@/components/motion/Magnetic";
 import { useMotionPref } from "@/components/motion/MotionPreference";
-import { Drip } from "@/components/ui/Drip";
+import { HumBee } from "@/components/fx/HumBee";
+import { HumToggle } from "@/components/fx/HumToggle";
+import { TiltButton } from "@/components/fx/TiltButton";
+import { RoundSticker } from "@/components/fx/Sticker";
+import { HoneyDrip } from "@/components/fx/HoneyDrip";
 
-const RING_TEXT = "RAW HONEY · SAN DIEGO COUNTY · SMALL BATCH · TRACEABLE TO THE HIVE · ";
+const HERO = PRODUCTS[0]!;
 
-function HeroJar({ product, nudge, spinIn }: { product: Product; nudge: MotionValue<number>; spinIn: boolean }) {
-  const { enabled } = useMotionPref();
-  const base = useMotionValue(spinIn && enabled ? -TURN : 0);
-  const spin = useTransform(() => base.get() + nudge.get());
-
-  useEffect(() => {
-    if (base.get() === 0) return;
-    // The saved preference is applied to <html> before hydration; trust it here.
-    if (document.documentElement.dataset.motion === "off") {
-      base.set(0);
-      return;
-    }
-    const controls = animate(base, 0, { type: "spring", stiffness: 30, damping: 12, mass: 1.1 });
-    return () => controls.stop();
-  }, [base]);
-
-  return <Jar {...product.jar} number={product.number} name={product.name} descriptor={product.descriptor} spin={spin} decorative />;
+/** The static jar: SVG jar + a still ribbon of honey pouring in. */
+function StaticHeroJar() {
+  return (
+    <div className="relative mx-auto h-full w-full">
+      <div
+        aria-hidden="true"
+        className="absolute left-1/2 top-[-10%] h-[38%] w-[clamp(8px,0.9vw,14px)] -translate-x-1/2 rounded-b-full"
+        style={{ background: `linear-gradient(90deg, ${HERO.jar.honeyDark}, ${HERO.jar.honey} 35%, #fff4c8 50%, ${HERO.jar.honey} 70%, ${HERO.jar.honeyDark})` }}
+      />
+      <div className="absolute bottom-[8%] left-1/2 h-[60%] -translate-x-1/2" style={{ aspectRatio: "100 / 318" }}>
+        <Jar {...HERO.jar} number={HERO.number} name={HERO.name} descriptor={HERO.descriptor} decorative />
+      </div>
+    </div>
+  );
 }
 
 export function Hero() {
-  const [idx, setIdx] = useState(0);
-  const [picked, setPicked] = useState(false);
-  const [hover, setHover] = useState(false);
-  const [hasCycled, setHasCycled] = useState(false);
+  const ref = useRef<HTMLElement>(null);
   const { enabled } = useMotionPref();
-  const product = PRODUCTS[idx]!;
-
-  // Pointer → tilt + a gentle turn of the label.
-  const px = useMotionValue(0);
-  const tilt = useSpring(useTransform(px, [-1, 1], [-7, 7]), { stiffness: 120, damping: 16 });
-  const nudge = useSpring(useTransform(px, [-1, 1], [26, -26]), { stiffness: 80, damping: 18 });
-  const rotate = useTransform(tilt, (t) => t - 6);
-
-  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!enabled || e.pointerType === "touch") return;
-    const r = e.currentTarget.getBoundingClientRect();
-    px.set(((e.clientX - r.left) / r.width) * 2 - 1);
-  };
-
-  const pick = (i: number) => {
-    setPicked(true);
-    setHasCycled(true);
-    setIdx(i);
-  };
-
-  // Autoplay is driven by the progress ring's CSS animation (see onAnimationEnd),
-  // so hover-pause and the global motion toggle pause it for free.
-  const advance = () => {
-    setHasCycled(true);
-    setIdx((i) => (i + 1) % PRODUCTS.length);
-  };
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  // Scroll-linked: the jar spins 1¼ turns as the hero leaves; the headline splits apart.
+  const spin = useTransform(scrollYProgress, [0, 1], [0, Math.PI * 2.5]);
+  const feelX = useTransform(scrollYProgress, [0, 1], ["0%", "-28%"]);
+  const humX = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
+  const jarY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  const jarScale = useTransform(scrollYProgress, [0, 1], [1, 1.25]);
 
   return (
-    <section aria-labelledby="hero-title" className="on-pink relative z-10 bg-peacock text-canvas">
-      <div className="px-gutter overflow-hidden pb-[clamp(72px,7vw,112px)] pt-[clamp(28px,3.5vw,56px)]">
-        <div className="container-x flex flex-wrap items-center gap-x-16 gap-y-10">
-          <div className="flex min-w-0 flex-[1_1_540px] flex-col gap-7">
-            <span className="fade-up inline-flex min-h-9 items-center self-start bg-canvas px-4 text-forest t-eyebrow">
-              Raw honey · San Diego County
-            </span>
-            <h1 id="hero-title" className="text-[clamp(88px,13.5vw,212px)] leading-[0.82] tracking-[0.005em]">
-              {["Feel", "the"].map((w, i) => (
-                <span key={w} className="mr-[0.22em] inline-block overflow-hidden pb-[0.08em] align-bottom">
-                  <span className="rise-in" style={{ animationDelay: `${0.05 + i * 0.09}s` }}>
-                    {w}
-                  </span>
-                </span>
+    <section ref={ref} aria-labelledby="hero-title" className="on-pink relative z-10 bg-peacock text-canvas">
+      <div className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
+      {/* soft honey glow behind the jar */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[-10%] top-[10%] -z-10 aspect-square w-[min(80vw,900px)] rounded-full opacity-60 blur-3xl max-lg:right-[-30%] max-lg:top-[30%]"
+        style={{ background: "radial-gradient(circle, #ffd36b 0%, rgba(255,211,107,0.35) 35%, transparent 65%)" }}
+      />
+
+      <h1 id="hero-title" className="sr-only">
+        Feel the hum. Sweet Bee raw honey from San Diego County.
+      </h1>
+
+      {/* Headline (decorative copy of the h1; letters ride in on load). */}
+      <div aria-hidden="true" className="pt-header px-gutter relative z-10 flex flex-1 flex-col justify-center lg:z-auto">
+        <div className="container-x relative">
+          <motion.p key={`feel-${enabled}`} style={enabled ? { x: feelX } : undefined} className="display relative z-0 text-[clamp(118px,25vw,400px)] leading-[0.78]">
+            <SplitText text="Feel" mode="load" />
+          </motion.p>
+          <p className="display relative z-0 -mt-[0.1em] ml-[0.08em] text-[clamp(48px,7vw,120px)] italic text-nero lg:ml-[30vw] lg:-mt-[0.6em]">
+            <SplitText text="the" mode="load" start={4} delay={120} />
+          </p>
+          <motion.p
+            key={`hum-${enabled}`}
+            style={enabled ? { x: humX } : undefined}
+            className="buzz group relative z-20 -mt-[0.06em] inline-block lg:-mt-[0.2em]"
+          >
+            <em className="display relative block text-[clamp(130px,29vw,470px)] leading-[0.74] [--wght:700]">
+              <SplitText text="hum." mode="load" start={7} delay={200} />
+            </em>
+            {/* sound-wave rings */}
+            <span className="pointer-events-none absolute left-[38%] top-[45%] -z-10 hidden size-[0.9em] text-[clamp(130px,29vw,470px)] group-hover:block">
+              {[0, 1, 2].map((i) => (
+                <span key={i} className="hum-ring absolute inset-0 rounded-full border-[6px] border-canvas/70" style={{ animationDelay: `${i * 0.45}s` }} />
               ))}
-              <span className="inline-block overflow-hidden pb-[0.08em] pr-[0.06em] align-bottom">
-                <span className="rise-in" style={{ animationDelay: "0.23s" }}>
-                  <em className="hum">hum.</em>
-                </span>
-              </span>
-            </h1>
-            <p className="fade-up max-w-[520px] font-serif text-[clamp(24px,2.2vw,30px)] leading-[1.25] tracking-[0.025em] [animation-delay:0.35s]">
-              Raw, small-batch honey from San Diego County beekeepers. Your daily spoonful, six ways. Zero sleepy honey.
+            </span>
+          </motion.p>
+        </div>
+      </div>
+
+      {/* The jar: 3D when allowed, SVG otherwise. Sits between the words. */}
+      <motion.div
+        key={`jar-${enabled}`}
+        style={enabled ? { y: jarY, scale: jarScale } : undefined}
+        className="pointer-events-none relative z-10 mx-auto -mt-[22vw] h-[62svh] w-full max-w-[560px] lg:absolute lg:inset-y-0 lg:left-[30vw] lg:mt-0 lg:h-full lg:w-[52vw] lg:max-w-none"
+      >
+        <HoneyJar3D product={HERO} mode="hero" spin={spin} fallback={<StaticHeroJar />} className="size-full" />
+      </motion.div>
+
+      <HumBee perch={{ x: 0.56, y: 0.26 }} />
+
+      {/* Stickers */}
+      <RoundSticker
+        text="RAW · LOCAL · TRACEABLE · SAN DIEGO · "
+        className="absolute right-[4vw] top-[calc(var(--header-h)+3vh)] z-20 w-[clamp(96px,10vw,150px)] max-lg:hidden"
+        center={<span className="font-serif text-[clamp(22px,2.2vw,34px)] font-semibold italic leading-none text-nero">No. 01</span>}
+      />
+
+      {/* Ticket: small copy on Canvas, CTAs, sound + tilt */}
+      <div className="px-gutter relative z-20 pb-[clamp(40px,7vh,88px)] lg:absolute lg:bottom-0 lg:right-0 lg:pb-[6vh]">
+        <div className="container-x flex flex-col items-start gap-4 lg:w-[min(400px,27vw)] lg:items-end">
+          <div className="ticket flex flex-col gap-4 px-6 py-5 [--notch-y:30%]">
+            <p className="max-w-[44ch] text-[15px] leading-[1.6]">
+              Raw, small-batch honey from San Diego County beekeepers. Six numbered jars, every batch traced to the hive. <strong>Zero sleepy honey.</strong>
             </p>
-            <div className="fade-up flex flex-wrap items-center gap-4 [animation-delay:0.45s]">
-              <Link href="/shop" className="btn min-h-[60px] bg-canvas px-9 font-serif text-[26px] tracking-[0.025em] text-peacock">
-                Shop the jars
-              </Link>
-              <Link href="/#subscribe" className="btn on-nero-shadow min-h-[60px] bg-nero px-7 text-base text-canvas">
-                Start a subscription
-              </Link>
+            <div className="flex flex-wrap items-center gap-3">
+              <Magnetic>
+                <Link href="/#jars" className="btn bg-nero text-canvas" data-cursor="shop">
+                  Shop the six <span aria-hidden="true">↓</span>
+                </Link>
+              </Magnetic>
+              <Magnetic>
+                <Link href="/#subscribe" className="btn bg-peacock text-canvas">
+                  Subscribe
+                </Link>
+              </Magnetic>
             </div>
           </div>
-
-          <div
-            className="relative flex min-w-0 flex-[1_1_440px] flex-col items-center gap-5 pt-6"
-            onPointerMove={onMove}
-            onPointerEnter={() => setHover(true)}
-            onPointerLeave={() => {
-              setHover(false);
-              px.set(0);
-            }}
-          >
-            {/* Canvas sun + rotating ring */}
-            <div aria-hidden="true" className="absolute left-1/2 top-[36%] aspect-square w-[clamp(250px,27vw,400px)] -translate-x-1/2 -translate-y-1/2">
-              <div className="absolute inset-0 rounded-full bg-canvas" />
-              <svg viewBox="0 0 200 200" className="spin-ring absolute -inset-[13%] size-[126%] overflow-visible">
-                <defs>
-                  <path id="hero-ring" d="M100,100 m-92,0 a92,92 0 1,1 184,0 a92,92 0 1,1 -184,0" />
-                </defs>
-                <text fontSize="8.6" fill="#F6EDDD" style={{ fontFamily: "var(--font-serif)", letterSpacing: "0.28em" }}>
-                  <textPath href="#hero-ring">{RING_TEXT + RING_TEXT.slice(0, 22)}</textPath>
-                </text>
-              </svg>
-              <div className="absolute left-[2%] top-[30%] z-[3] w-[24%]">
-                <Bee className="bee-fly w-full" />
-              </div>
-              <Star className="twinkle absolute right-[4%] top-[8%] size-7 text-peacock" />
-              <Star className="twinkle absolute bottom-[14%] left-[10%] size-5 text-forest [animation-delay:-1s]" />
-            </div>
-
-            <motion.div className="relative w-[clamp(112px,11vw,168px)]" style={{ rotate }} whileHover={{ y: -18, scale: 1.04 }} transition={{ type: "spring", stiffness: 260, damping: 18 }}>
-              <div className="float">
-                <AnimatePresence mode="popLayout" initial={false}>
-                  <motion.div
-                    key={product.slug}
-                    initial={{ opacity: 0, y: 70, rotate: -16, scale: 0.88 }}
-                    animate={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -60, rotate: 14, scale: 0.9 }}
-                    transition={{ type: "spring", stiffness: 140, damping: 16 }}
-                  >
-                    <HeroJar product={product} nudge={nudge} spinIn={hasCycled || idx === 0} />
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </motion.div>
-
-            <div aria-live={picked ? "polite" : "off"} className="relative flex flex-col gap-1 text-center">
-              <span className="font-serif text-[clamp(32px,3vw,44px)] italic leading-none tracking-[0.025em]">
-                No. {product.number} {product.name}
-              </span>
-              <span className="font-serif text-[24px] tracking-[0.025em]">{product.tagline}</span>
-            </div>
-
-            <div className="relative flex flex-wrap items-center justify-center gap-3">
-              <MotionToggle />
-              <Link href={`/shop/${product.slug}`} className="btn on-nero-shadow min-h-11 bg-nero px-4 text-[15px] text-canvas">
-                Meet No. {product.number}
-              </Link>
-            </div>
-
-            <div role="group" aria-label="Pick a jar" className="relative flex flex-wrap justify-center gap-2.5">
-              {PRODUCTS.map((p, i) => {
-                const active = i === idx;
-                return (
-                  <button
-                    key={p.slug}
-                    type="button"
-                    aria-label={`No. ${p.number} ${p.name}`}
-                    aria-pressed={active}
-                    onClick={() => pick(i)}
-                    className="relative grid size-12 place-items-center rounded-full border-2 border-nero text-[19px] font-bold tracking-normal transition-transform duration-300 ease-[var(--ease-pop)] hover:-translate-y-1 aria-pressed:scale-110"
-                    style={{ background: p.jar.labelColor, color: p.jar.labelText }}
-                  >
-                    {p.number}
-                    {active ? (
-                      <svg aria-hidden="true" viewBox="0 0 56 56" className="pointer-events-none absolute -inset-[6px] size-[calc(100%+12px)] -rotate-90">
-                        <circle cx="28" cy="28" r="26" fill="none" stroke="#F6EDDD" strokeWidth="3" opacity={picked ? 1 : 0.35} />
-                        {!picked ? (
-                          <circle
-                            key={idx}
-                            cx="28"
-                            cy="28"
-                            r="26"
-                            fill="none"
-                            stroke="#F6EDDD"
-                            strokeWidth="3"
-                            strokeLinecap="round"
-                            pathLength={1}
-                            strokeDasharray="1"
-                            className="hero-progress"
-                            style={{ animationPlayState: hover ? "paused" : undefined }}
-                            onAnimationEnd={advance}
-                          />
-                        ) : null}
-                      </svg>
-                    ) : null}
-                  </button>
-                );
-              })}
-            </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <HumToggle className="border-nero bg-canvas text-nero lg:hidden" />
+            <TiltButton />
           </div>
         </div>
       </div>
-      <Drip className="absolute inset-x-0 top-[calc(100%-1px)] h-[clamp(40px,5vw,72px)] w-full text-peacock" />
+
+      </div>
+      <HoneyDrip className="absolute inset-x-0 top-[calc(100%-2px)] h-[clamp(40px,6vw,96px)] text-peacock" />
     </section>
   );
 }

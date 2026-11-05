@@ -2,7 +2,7 @@
 
 import { SIZES, type SizeId } from "@/lib/catalog";
 
-/** Size picker as a radio group (arrow keys move between sizes). */
+/** Size picker as a native radio group (arrow keys move between sizes). */
 export function SizeChips({
   value,
   onChange,
@@ -16,7 +16,7 @@ export function SizeChips({
   size?: "sm" | "lg";
   label?: string;
 }) {
-  const pad = size === "lg" ? "min-h-12 px-[18px]" : "min-h-11 px-[14px]";
+  const pad = size === "lg" ? "min-h-12 px-5 text-[15px]" : "min-h-11 px-4 text-[14px]";
   return (
     <fieldset className="flex flex-wrap gap-2">
       <legend className="sr-only">{label}</legend>
@@ -25,8 +25,8 @@ export function SizeChips({
         return (
           <label
             key={s.id}
-            className={`relative inline-flex cursor-pointer items-center border-[1.5px] border-nero text-[15px] tracking-[0.075em] transition-colors has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-forest ${pad} ${
-              checked ? "bg-nero text-canvas" : "bg-transparent text-nero hover:bg-nero/10"
+            className={`relative inline-flex cursor-pointer items-center rounded-full border-2 border-nero font-mono font-bold tracking-[0.06em] transition-[background-color,color,transform] duration-200 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-nero ${pad} ${
+              checked ? "-translate-y-0.5 bg-nero text-canvas shadow-[0_3px_0_0_#ff007c]" : "bg-canvas text-nero hover:bg-nero/10"
             }`}
           >
             <input type="radio" className="sr-only" name={name} value={s.id} checked={checked} onChange={() => onChange(s.id)} />
