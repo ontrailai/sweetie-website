@@ -9,6 +9,8 @@ let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
 let nodes: AudioScheduledSourceNode[] = [];
 let on = false;
+/** Bumped on every request so a slow resume() can't start a stale "on". */
+let gen = 0;
 const listeners = new Set<Listener>();
 
 const emit = () => listeners.forEach((l) => l());
@@ -23,6 +25,7 @@ export const getHumServer = () => false;
 export async function setHum(next: boolean) {
   if (next === on) return;
   on = next;
+  const mine = ++gen;
   emit();
   if (next) {
     const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
@@ -32,7 +35,16 @@ export async function setHum(next: boolean) {
       return;
     }
     ctx ??= new AC();
-    await ctx.resume();
+    try {
+      await ctx.resume();
+    } catch {
+      /* resume refused (autoplay policy): the nodes stay silent */
+    }
+    // Turned off (or toggled again) while resume() was pending: start nothing.
+    if (mine !== gen || !on) {
+      if (!on && !master) void ctx.suspend();
+      return;
+    }
     const t = ctx.currentTime;
     master = ctx.createGain();
     master.gain.setValueAtTime(0, t);
