@@ -735,6 +735,10 @@ html.lenis body {
   html[data-quick-add] body {
     padding-bottom: var(--quick-add-h, 0px);
   }
+  /* Tabbing scrolls focused controls clear of the fixed bar (2.4.11). */
+  html[data-quick-add] {
+    scroll-padding-bottom: calc(var(--quick-add-h, 0px) + 24px);
+  }
 }
 
 /* Deep-linked batch gets a highlight. */
