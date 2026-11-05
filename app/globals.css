@@ -330,6 +330,21 @@ header :focus-visible,
   box-shadow: 0 0 0 3px var(--color-canvas);
 }
 
+/* A banded sun: the sky shows through horizontal cuts in its lower half. */
+.sun-banded {
+  background: linear-gradient(
+    180deg,
+    var(--sun) 0 54%,
+    transparent 54% 60%,
+    var(--sun) 60% 69%,
+    transparent 69% 74%,
+    var(--sun) 74% 82%,
+    transparent 82% 86%,
+    var(--sun) 86% 91%,
+    transparent 91%
+  );
+}
+
 /* Paper grain over everything (static). */
 .grain::after {
   content: "";

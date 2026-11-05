@@ -36,12 +36,12 @@ export function DayArc({ rituals, title, id = "day-h" }: { rituals: Ritual[]; ti
         </h2>
         <div aria-hidden="true" className="relative -mb-10 hidden md:block">
           <svg viewBox="0 0 1200 320" className="w-full overflow-visible">
-            <path d={ARC} fill="none" stroke="#e6a52a" strokeWidth="3" strokeDasharray="2 14" strokeLinecap="round" />
+            <path d={ARC} fill="none" stroke="#ff007c" strokeWidth="3" strokeDasharray="2 14" strokeLinecap="round" />
             <path d="M0 300 H1200" stroke="#f6eddd" strokeOpacity="0.3" strokeWidth="2" />
           </svg>
           <motion.span
             key={String(enabled)}
-            className="absolute block size-[clamp(48px,5vw,80px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-honey shadow-[0_0_60px_20px_rgba(255,211,107,0.35)]"
+            className="absolute block size-[clamp(48px,5vw,80px)] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-canvas bg-ladybug shadow-[0_0_60px_20px_rgba(255,0,124,0.35)]"
             style={enabled ? { left, top } : { left: onArc(0.5, 0), top: onArc(0.5, 1) }}
           />
         </div>

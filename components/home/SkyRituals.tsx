@@ -14,6 +14,8 @@ interface Moment {
   jars: string[];
   /** static gradient for the stacked (calm / phone) layout */
   sky: [string, string, string];
+  /** the sun for that moment */
+  sun: string;
 }
 
 const MOMENTS: Moment[] = [
@@ -22,13 +24,15 @@ const MOMENTS: Moment[] = [
     title: "The sunrise spoonful",
     body: "Straight off the spoon before the surf check. Bright, floral, awake.",
     jars: ["wildflower", "bee-pollen"],
-    sky: ["#004832", "#ff007c", "#ffd36b"],
+    sun: "#ff0000",
+    sky: ["#004832", "#ff007c", "#f6eddd"],
   },
   {
     time: "9 AM",
     title: "Before the paddle out",
     body: "No. 06 Guarana + Salt comes along for the paddle out, the bluff run, the long beach walk.",
     jars: ["guarana-salt", "avocado-blossom"],
+    sun: "#f6eddd",
     sky: ["#308f32", "#308f32", "#f6eddd"],
   },
   {
@@ -36,7 +40,8 @@ const MOMENTS: Moment[] = [
     title: "Golden hour",
     body: "Vanilla Bean or Cinnamon, stirred into something warm as the sun drops into the Pacific.",
     jars: ["vanilla-bean", "cinnamon"],
-    sky: ["#ff007c", "#ff0000", "#e6a52a"],
+    sun: "#f6eddd",
+    sky: ["#ff007c", "#ff0000", "#ff0000"],
   },
 ];
 
@@ -115,13 +120,15 @@ function PinnedSky() {
     setActive((a) => (a === i ? a : i));
   });
   const stops = [0.05, 0.5, 0.95];
+  // Brand colours only: Forest night → Peacock dawn over a Canvas horizon,
+  // a Jade morning, then a Peacock/Ladybug golden hour.
   const top = useTransform(p, stops, ["#004832", "#308f32", "#ff007c"]);
   const mid = useTransform(p, stops, ["#ff007c", "#308f32", "#ff0000"]);
-  const low = useTransform(p, stops, ["#ffd36b", "#f6eddd", "#e6a52a"]);
+  const low = useTransform(p, stops, ["#f6eddd", "#f6eddd", "#ff0000"]);
   const bg = useTransform([top, mid, low] as MotionValue<string>[], ([t, m, l]) => `linear-gradient(180deg, ${t} 0%, ${m} 55%, ${l} 82%)`);
   const sunX = useTransform(p, [0, 0.5, 1], ["8%", "50%", "88%"]);
   const sunY = useTransform(p, [0, 0.5, 1], ["62%", "6%", "58%"]);
-  const sunColor = useTransform(p, stops, ["#ffd36b", "#f6eddd", "#e6a52a"]);
+  const sunColor = useTransform(p, stops, MOMENTS.map((m) => m.sun));
   const sunScale = useTransform(p, [0, 0.5, 1], [1.3, 0.8, 1.5]);
   const surferX = useTransform(p, [0, 1], ["-5%", "70%"]);
   const timeLabel = MOMENTS[active]!.time;
@@ -131,8 +138,8 @@ function PinnedSky() {
       <motion.div className="sky-stage on-dark relative isolate flex flex-col overflow-hidden text-canvas" style={{ background: bg }}>
         <motion.div
           aria-hidden="true"
-          className="absolute -z-10 aspect-square w-[clamp(140px,16vw,260px)] -translate-x-1/2 rounded-full shadow-[0_0_120px_40px_rgba(255,211,107,0.45)]"
-          style={{ left: sunX, top: sunY, background: sunColor, scale: sunScale }}
+          className="sun-banded absolute -z-10 aspect-square w-[clamp(140px,16vw,260px)] -translate-x-1/2 rounded-full"
+          style={{ left: sunX, top: sunY, ["--sun" as string]: sunColor, scale: sunScale }}
         />
         <Waves className="h-[22%]" />
         <motion.div aria-hidden="true" className="absolute bottom-[12%] z-30 w-[clamp(110px,12vw,180px)]" style={{ left: surferX }}>
@@ -181,8 +188,8 @@ function StackedSky() {
           >
             <div
               aria-hidden="true"
-              className="absolute -z-10 aspect-square w-[42vw] max-w-[220px] -translate-x-1/2 rounded-full"
-              style={{ left: ["18%", "50%", "80%"][i], top: ["40%", "10%", "36%"][i], background: m.sky[2] === "#f6eddd" ? "#ffd36b" : "#f6eddd" }}
+              className="sun-banded absolute -z-10 aspect-square w-[42vw] max-w-[220px] -translate-x-1/2 rounded-full"
+              style={{ left: ["18%", "50%", "80%"][i], top: ["40%", "10%", "36%"][i], ["--sun" as string]: m.sun }}
             />
             <Waves className="h-[22%]" />
             <p aria-hidden="true" className="display text-stroke absolute left-[var(--gutter)] top-10 text-[clamp(96px,26vw,220px)]">

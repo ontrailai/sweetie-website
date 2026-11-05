@@ -69,22 +69,39 @@ export function CountyMap({
             ].map(([x, y]) => (
               <path key={`${x}-${y}`} d={`M${x! - 18} ${y! + 14} L${x} ${y! - 14} L${x! + 18} ${y! + 14} Z`} fill="none" stroke="#f6eddd" strokeWidth="2.5" strokeLinejoin="round" opacity="0.7" />
             ))}
-            {/* desert */}
-            <path d="M440 0 C 480 140, 440 300, 460 440 L 600 440 L 600 0 Z" fill="#ffd36b" />
+            {/* desert: hot Peacock, with a Ladybug sun and Canvas dunes */}
+            <path d="M440 0 C 480 140, 440 300, 460 440 L 600 440 L 600 0 Z" fill="#ff007c" />
+            <circle cx="514" cy="72" r="20" fill="#ff0000" stroke="#262626" strokeWidth="2.5" />
+            {[0, 1, 2].map((i) => (
+              <rect key={`r${i}`} x={490 + i * 6} y={98 + i * 7} width={48 - i * 12} height="3" rx="1.5" fill="#ff0000" />
+            ))}
             {[
-              [500, 100], [530, 220], [490, 320], [540, 380],
+              [500, 160], [530, 240], [490, 320], [540, 360],
             ].map(([x, y]) => (
-              <path key={`d${x}`} d={`M${x! - 22} ${y} q 22 -16 44 0`} fill="none" stroke="#262626" strokeWidth="2.5" strokeLinecap="round" opacity="0.5" />
+              <path key={`d${x}`} d={`M${x! - 22} ${y} q 22 -16 44 0`} fill="none" stroke="#f6eddd" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
             ))}
           </g>
           <path d={OUTLINE} fill="none" stroke="#262626" strokeWidth="4" />
           {!compact ? (
+            // Region names sit on little Canvas chips: small text never
+            // relies on Canvas-on-colour contrast.
             <g style={{ fontFamily: "var(--font-mono)", fontWeight: 700, letterSpacing: "0.14em" }} fontSize="11">
-              <text x="120" y="400" fill="#262626">COAST</text>
-              <text x="250" y="400" fill="#f6eddd">VALLEYS</text>
-              <text x="372" y="400" fill="#f6eddd">MOUNTAINS</text>
-              <text x="490" y="400" fill="#262626">DESERT</text>
-              <text x="14" y="425" fill="#f6eddd" opacity="0.8">PACIFIC</text>
+              {(
+                [
+                  ["COAST", 116, 388],
+                  ["VALLEYS", 246, 388],
+                  ["MOUNTAINS", 366, 388],
+                  ["DESERT", 486, 388],
+                  ["PACIFIC", 10, 414],
+                ] as const
+              ).map(([t, x, y]) => (
+                <g key={t} transform={`translate(${x} ${y})`}>
+                  <rect width={t.length * 8.2 + 10} height="17" rx="8.5" fill="#f6eddd" stroke="#262626" strokeWidth="1.5" />
+                  <text x="6" y="12.5" fill="#262626">
+                    {t}
+                  </text>
+                </g>
+              ))}
             </g>
           ) : null}
         </svg>

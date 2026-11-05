@@ -47,11 +47,11 @@ export function Hero() {
   return (
     <section ref={ref} aria-labelledby="hero-title" className="on-pink relative z-10 bg-peacock text-canvas">
       <div className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
-      {/* soft honey glow behind the jar */}
+      {/* hot Ladybug glow behind the jar */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute right-[-10%] top-[10%] -z-10 aspect-square w-[min(80vw,900px)] rounded-full opacity-60 blur-3xl max-lg:right-[-30%] max-lg:top-[30%]"
-        style={{ background: "radial-gradient(circle, #ffd36b 0%, rgba(255,211,107,0.35) 35%, transparent 65%)" }}
+        style={{ background: "radial-gradient(circle, rgba(255,0,0,0.75) 0%, rgba(255,0,0,0.28) 38%, transparent 66%)" }}
       />
 
       <h1 id="hero-title" className="sr-only">

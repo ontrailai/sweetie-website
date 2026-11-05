@@ -81,7 +81,7 @@ export function SubscriptionDial() {
             {/* pointer */}
             <div aria-hidden="true" className="absolute inset-[16%] rounded-full border-2 border-nero bg-peacock transition-transform duration-700 ease-[var(--ease-pop)]" style={{ transform: `rotate(${angle}deg)` }}>
               <span className="absolute left-1/2 top-[6%] h-[26%] w-3 -translate-x-1/2 rounded-full border-2 border-nero bg-canvas" />
-              <span className="absolute inset-[30%] rounded-full border-2 border-nero bg-honey" />
+              <span className="absolute inset-[30%] rounded-full border-2 border-nero bg-canvas shadow-[inset_0_0_0_6px_#ff0000]" />
             </div>
             <div className="absolute inset-[38%] grid place-items-center text-center">
               <p className="leading-none" aria-live="polite">
