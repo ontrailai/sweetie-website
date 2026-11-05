@@ -115,7 +115,7 @@ export function CountyMap({
               onClick={() => onSelect(b.code)}
               aria-pressed={isSel}
               aria-label={`Hive pin for batch ${b.code}, No. ${p.number} ${p.name} (placeholder location)`}
-              className="absolute size-10 -translate-x-1/2 -translate-y-1/2 rounded-full hover:z-10 focus-visible:z-10"
+              className="ring-duo absolute size-10 -translate-x-1/2 -translate-y-1/2 rounded-full hover:z-10 focus-visible:z-10"
               style={pos2}
             >
               {pin}

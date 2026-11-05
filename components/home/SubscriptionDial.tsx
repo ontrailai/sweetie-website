@@ -96,7 +96,7 @@ export function SubscriptionDial() {
               return (
                 <label
                   key={f}
-                  className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-nero px-3 py-2 whitespace-nowrap font-mono text-[13px] font-bold uppercase tracking-[0.08em] transition-transform has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-canvas ${
+                  className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-nero px-3 py-2 whitespace-nowrap font-mono text-[13px] font-bold uppercase tracking-[0.08em] ring-duo transition-transform ${
                     checked ? "scale-110 bg-nero text-canvas" : "bg-canvas text-nero hover:-translate-y-[60%]"
                   }`}
                   style={{ left: `${50 + Math.cos(a) * 50}%`, top: `${50 + Math.sin(a) * 50}%` }}

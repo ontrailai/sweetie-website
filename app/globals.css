@@ -248,6 +248,8 @@
      hard shadow (a drop-shadow filter) follows the notched outline. */
   .ticket {
     --notch: 12px;
+    /* A ticket is a Canvas surface wherever it sits (even inside .on-dark). */
+    --focus: #262626;
     position: relative;
     isolation: isolate;
     color: var(--color-nero);
@@ -314,6 +316,18 @@
   details.accordion[open] .plus {
     rotate: 135deg;
   }
+}
+
+/* Two-tone focus ring for controls that float over changing colours (the
+   header over every section, map pins, the dial's options). A Canvas band
+   fills the offset gap and a Nero outline sits outside it, so one of the two
+   always contrasts. Unlayered so it beats component box-shadows. */
+header :focus-visible,
+.ring-duo:focus-visible,
+.ring-duo:has(:focus-visible) {
+  outline: 3px solid var(--color-nero);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--color-canvas);
 }
 
 /* Paper grain over everything (static). */

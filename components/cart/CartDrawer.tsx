@@ -78,7 +78,7 @@ export function CartDrawer() {
             exit={{ x: "110%", rotate: 4 }}
             transition={t({ type: "spring", stiffness: 300, damping: 30 })}
           >
-            <div className="relative flex items-end justify-between gap-4 bg-nero px-6 pb-5 pt-6 text-canvas">
+            <div className="on-dark relative flex items-end justify-between gap-4 bg-nero px-6 pb-5 pt-6 text-canvas">
               <h2 id="cart-title" className="display text-[clamp(56px,14vw,76px)]">
                 Your <em className="text-peacock">stash.</em>
                 <span className="ml-3 inline-block align-middle font-mono text-[15px] font-bold tracking-[0.1em] [font-variation-settings:normal]">
