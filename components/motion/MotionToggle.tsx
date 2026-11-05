@@ -4,6 +4,7 @@ import { useMotionPref } from "./MotionPreference";
 
 type Variant = "pill" | "icon";
 
+/** The site-wide pause-motion switch (persisted; overrides the OS setting). */
 export function MotionToggle({ variant = "pill", className = "" }: { variant?: Variant; className?: string }) {
   const { enabled, toggle } = useMotionPref();
   const label = enabled ? "Pause motion" : "Play motion";
@@ -20,7 +21,7 @@ export function MotionToggle({ variant = "pill", className = "" }: { variant?: V
         aria-pressed={!enabled}
         aria-label={label}
         title={label}
-        className={`grid size-11 place-items-center rounded-full border-2 border-current transition-transform hover:-translate-y-0.5 ${className}`}
+        className={`grid size-11 place-items-center rounded-full border-2 transition-transform hover:-translate-y-0.5 ${className}`}
       >
         {icon}
       </button>
@@ -31,7 +32,7 @@ export function MotionToggle({ variant = "pill", className = "" }: { variant?: V
       type="button"
       onClick={toggle}
       aria-pressed={!enabled}
-      className={`inline-flex min-h-11 items-center gap-2 bg-canvas px-4 font-mono text-[15px] tracking-[0.075em] text-nero transition-transform hover:-translate-y-0.5 ${className}`}
+      className={`inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-current px-4 font-mono text-[13px] font-bold uppercase tracking-[0.12em] transition-transform hover:-translate-y-0.5 ${className}`}
     >
       {icon}
       {label}
