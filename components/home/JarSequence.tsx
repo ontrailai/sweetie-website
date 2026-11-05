@@ -111,6 +111,9 @@ export function JarSequence() {
       <h2 id="jars-h" className="sr-only">
         Six jars. Pick yours.
       </h2>
+      {/* .seq-pin is what sticks (pinned mode), so the rail inside it stays
+          on screen for the whole pinned interval, not just at its start. */}
+      <div className="seq-pin">
       <div
         ref={stage}
         className="seq-stage"
@@ -126,7 +129,11 @@ export function JarSequence() {
       {/* Rail: the keyboard (and thumb) way through the six. */}
       <div
         className={`pointer-events-none z-30 flex justify-center px-4 ${
-          mode === "stack" ? "hidden" : "sticky bottom-[max(12px,env(safe-area-inset-bottom))] -mt-[84px] h-[84px] items-end"
+          mode === "stack"
+            ? "hidden"
+            : mode === "pinned"
+              ? "absolute inset-x-0 bottom-[max(18px,env(safe-area-inset-bottom))]"
+              : "sticky bottom-[max(12px,env(safe-area-inset-bottom))] -mt-[84px] h-[84px] items-end"
         }`}
       >
         <div role="group" aria-label="Choose a jar" className="pointer-events-auto flex items-center gap-1.5 rounded-full border-2 border-nero bg-canvas p-1.5 shadow-[0_4px_0_0_#262626]">
@@ -168,6 +175,7 @@ export function JarSequence() {
             <span aria-hidden="true">→</span>
           </button>
         </div>
+      </div>
       </div>
       <p aria-live="polite" className="sr-only">
         Showing No. {PRODUCTS[active]!.number} {PRODUCTS[active]!.name}, {active + 1} of {N}
@@ -224,7 +232,7 @@ function JarPanel({ product: p, index: i, f, mode, active, motionOn }: { product
 
       <JarParticles product={p} shown={shown} staggered={motionOn} />
 
-      <div className="pt-header px-gutter relative flex flex-1 flex-col pb-32 lg:pb-10">
+      <div className={`pt-header px-gutter relative flex flex-1 flex-col pb-32 ${pinned ? "lg:pb-28" : "lg:pb-10"}`}>
         <div className="container-x relative grid flex-1 items-center gap-6 lg:grid-cols-[1.15fr_0.9fr_0.95fr]">
           {/* name */}
           <motion.div style={pinned && motionOn ? { x: nameX } : undefined} className="relative z-10 flex flex-col gap-4 max-lg:order-1">

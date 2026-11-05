@@ -636,11 +636,17 @@ html[data-motion="on"] .rise.is-in {
   html[data-motion="on"] .seq {
     height: calc(var(--panels) * 110svh);
   }
-  html[data-motion="on"] .seq-stage {
+  /* The wrapper sticks; the stage (panels) and the jar rail live inside it. */
+  html[data-motion="on"] .seq-pin {
     position: sticky;
     top: 0;
     height: 100svh;
+  }
+  html[data-motion="on"] .seq-stage {
+    position: absolute;
+    inset: 0;
     overflow: hidden;
+    isolation: isolate;
   }
   html[data-motion="on"] .seq-panel {
     position: absolute;
