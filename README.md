@@ -4,7 +4,7 @@ Raw local honey from San Diego County. *Feel the hum.*
 
 Next.js (App Router) + TypeScript. **Redesign v2** (`feat/redesign-v2`):
 an editorial, streetwear-meets-candy "drop" site with viewport-filling
-kinetic type, full-bleed palette colour-blocking, a WebGL honey jar, a pinned
+kinetic type, full-bleed palette colour-blocking, photoreal jar packshots, a pinned
 six-jar sequence and an interactive batch/hive explorer. It deploys to Vercel
 with zero config, but **has not been deployed**.
 
@@ -13,7 +13,7 @@ with zero config, but **has not been deployed**.
 | Framework | Next.js 16 (App Router, Turbopack), React 19, TypeScript (strict) |
 | Styling | Tailwind CSS v4; tokens + global layer in `app/globals.css` |
 | Motion | `motion` (scroll-linked values, springs, layout), `lenis` (smooth scroll), CSS keyframes |
-| 3D | `three` (imperative scene, lazy-loaded, static SVG fallback) |
+| Jars | Photoreal packshot cutouts via `next/image` (WebP + PNG, 1x/2x, built by `scripts/jar-assets/`) |
 | Fonts | `next/font/google` (self-hosted at build): Fraunces (display), Courier Prime (body) |
 | Commerce | Client-side cart behind a `CommerceAdapter` interface (Shopify-ready) |
 
@@ -21,12 +21,10 @@ with zero config, but **has not been deployed**.
 
 | Package | Version | Why |
 |---|---|---|
-| `three` | 0.187.0 | The hero / product honey jar (glass, sloshing honey, pour, label). Only ever loaded through `next/dynamic` |
 | `lenis` | 1.3.27 | Smooth wheel scrolling on desktop (never on touch, never with motion off) |
-| `@types/three` (dev) | 0.187.0 | Types |
 
-Considered and skipped: `@react-three/fiber` / `drei` (pins `react <19.4`,
-adds weight; one imperative scene is easier to dispose fully) and `gsap`
+Considered and skipped: `three` (the WebGL jar was replaced by the
+photoreal packshots, so it was removed) and `gsap`
 (pinning is CSS `position: sticky` + `motion`'s `useScroll`, so one
 animation library covers everything). All versions are pinned exactly.
 
@@ -41,16 +39,15 @@ npm run lint       # ESLint (flat config, next/core-web-vitals + TS)
 npm run typecheck  # tsc --noEmit
 ```
 
-Node 20.9+ is required (Next 16). Add `?static` to any URL to force the
-static (non-WebGL) jar while testing.
+Node 20.9+ is required (Next 16).
 
 ## Routes
 
 | Route | What |
 |---|---|
-| `/` | Hero ("Feel the hum." around the 3D jar pouring honey, cursor-chasing bee, sound rings) → velocity marquees → scroll-lit manifesto → **pinned six-jar sequence** (each jar irises open in its colour, honey rises, specks pop in, quick-add flies to the cart) → Discovery Set drop → sunrise-to-golden-hour sky (gradient shifts with scroll) → rotary subscription dial → hive-map teaser → community wall → signup |
+| `/` | Hero ("Feel the hum." around the open No. 01 jar mid-pour with its lid floating free, a bee flying laps around it, sound rings) → velocity marquees → scroll-lit manifesto → **pinned six-jar sequence** (each jar irises open in its colour, honey rises, specks pop in, quick-add flies to the cart) → Discovery Set drop → sunrise-to-golden-hour sky (gradient shifts with scroll) → rotary subscription dial → hive-map teaser → community wall → signup |
 | `/shop` | Giant headline, sticker filter pills, full-colour JarCards (3D tilt + quick-add with size), Discovery Set, size line-up, subscribe band |
-| `/shop/[slug]` | Full-colour takeover in the jar's label colour: name, turnable 3D jar (drag / arrow keys), specks, buy box ticket, day arc of uses, batch ticket + map pin, details, cross-sells, mobile quick-add bar |
+| `/shop/[slug]` | Full-colour takeover in the jar's label colour: name, the jar photo (drag to swing it, mouse lean, glass sheen), specks, buy box ticket, day arc of uses, batch ticket + map pin, details, cross-sells, mobile quick-add bar |
 | `/batches` | "Scan your jar" (manual entry, `?batch=` deep link, camera scan via `BarcodeDetector` where supported), how to read your jar, interactive hive map, batches on shelves, past batches, sourcing |
 | `/about` | "Honey that hums." (breathing variable font), jar line-up, value bands, founders' note, Honey 101 (`#honey-101`), FAQ (`#faq`) |
 | `/find-us` | Ladybug hero, market board, county map with market pins, stockists, community |
@@ -68,8 +65,7 @@ components/
                            SplitText, VelocityMarquee, Magnetic, CustomCursor, capability.ts
   fx/                      CartFx (fly-to-cart + splash + toast), fly.ts, useQuickAdd, HumBee, hum-audio + HumToggle,
                            tilt.ts + TiltButton, HoneyDrip, Sticker
-  jar3d/                   scene.ts (three.js), HoneyJarCanvas (client-only host), HoneyJar3D (fallback + lazy loader)
-  jar/                     Jar (parametric SVG jar = the static fallback), MiniJar, JarParticles, specks, jar-art
+  jar/                     JarPhoto (the packshot everywhere), Jar (SVG, only if a product has no photo), MiniJar (icons), JarParticles, specks, jar-art
   home/                    Hero, MarqueeBands, Manifesto, JarSequence, DiscoveryDrop, SkyRituals, SubscriptionDial, TraceTeaser
   product/                 BuyBox, ProductJar, JarCard, DayArc, ShopFilter, SizeGuide, SizeChips
   batches/                 BatchScanner, HiveLocator, CountyMap, BatchShelf, PastBatches, BatchDetails
@@ -95,21 +91,29 @@ to a label panel.
 | Smooth scroll | Lenis (fine pointers only; touch stays native) | Native scroll, Lenis destroyed |
 | Six-jar sequence | Pinned (CSS sticky `.seq-pin`, only ≥1024px) with iris reveals; hidden panels `inert`; the rail lives inside the pinned wrapper so it stays on screen for the whole sequence | Calm vertical stack (desktop) or swipe/snap track (phones) — no pinning, nothing inert |
 | Sunrise sky | Pinned, gradient interpolated from scroll | Three static panels, each with its own sky |
-| 3D jar | WebGL (see below) | Static SVG scene: open jar mid-pour with the lid flipping off (WebGL never requested; unmounts if toggled off) |
-| Marquees, drips, specks, bee, letter reveals, buzz | Animated | `animation: none` globally; marquees static; bee perches |
+| Hero jar | Jar breathes, lid bobs and tumbles, both drift with the mouse at different depths; scrolling away lifts the lid off and tips the jar | One still composition |
+| Marquees, drips, specks, bee, letter reveals, buzz | Animated; the bee flies laps around the hero jar (behind it on the far side), banks and turns, mouse steers it, touch never does | `animation: none` globally; marquees static; bee perches on the lid |
 | Cursor, magnetic buttons, tilt | On (fine pointer / phones); the cursor hides on any keypress | Off (cursor elements hidden, not frozen) |
-| Fly-to-cart | Jar arcs to the cart, badge squishes, honey + confetti burst | No animation; the same live "added" toast is announced |
+| Fly-to-cart | Jar arcs to the cart (the Discovery Set flies as the cart line's fan of three jars), badge squishes, honey + confetti burst | No animation; the same live "added" toast is announced |
 
-**3D jar loading.** `HoneyJar3D` always server-renders the SVG `Jar` (so
-the page is complete without JS/WebGL and the LCP element is the headline
-text). After first paint + idle it requests the WebGL canvas through
-`next/dynamic(..., { ssr: false })` only if motion is on, the device isn't
-low-power (`hardwareConcurrency < 4`, `deviceMemory < 4`, Save-Data or 2G)
-and a WebGL probe passes. The canvas crossfades in after its first frame; a
-context loss or init failure falls back to the SVG. Rendering pauses when
-off-screen or the tab is hidden. On unmount it cancels RAF, disconnects
-observers/listeners, disposes geometries/materials/textures, force-loses the
-context and removes its canvas (a fresh canvas per mount).
+**Jar photos.** Every jar shoppers see is a photoreal packshot cutout
+(`components/jar/JarPhoto.tsx`, `next/image`), mapped from product slug in
+`lib/jarAssets.ts`. The files in `public/jars/` (WebP for `next/image`, PNG
+fallbacks, 1x/2x, a tiny transparent placeholder each) are generated from
+the master PNGs by `node scripts/jar-assets/build.mjs [mastersDir]` (macOS:
+the cutout mask is Apple Vision, on-device; edges are colour-decontaminated
+against the studio backdrop; all six share one canvas so rows line up). The
+two Wildflower masters were shot with different label layouts, so the build
+first composites the sealed jar's label art onto the open-pour jar
+(`scripts/jar-assets/relabel.mjs`: a local warp of the supplied pixels,
+re-lit to the hero's own paper and ink, inside the hero label's edges). The
+hero then splits the open-pour shot into jar + pour and a separate lid, and
+continues the ribbon upward along the pour's own flare (a small extra layer,
+then its top row stretched), so the pour falls from above the fold on
+desktop and fades in just under the headline below `lg`. Masters never ship; jars below the fold are lazy, the hero and
+product jar load eagerly with high priority. The SVG `Jar` remains only as
+a fallback for a product without a photo, `MiniJar` for icon-sized jars,
+and `lib/og` for share images.
 
 **Sound.** The hive hum (WebAudio) is **off by default**, only starts from
 a labelled button press (`aria-pressed`), and fades out when turned off.
@@ -153,7 +157,6 @@ Courier Prime for body. Drop the licensed files into `app/fonts/` and replace
 the loaders in `app/fonts.ts` with `next/font/local`, **keeping the same
 `variable` names** (`--font-heading`, `--font-body`). A static font simply
 ignores the variation axes (headlines stop "breathing", nothing breaks).
-The 3D jar's label reads the same CSS variables, so it follows the swap.
 
 ## Adding the logo and photos
 

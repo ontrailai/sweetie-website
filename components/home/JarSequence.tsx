@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion, useMotionValueEvent, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { DEFAULT_SIZE, PRODUCTS, SIZES, getVariant, type Product, type SizeId } from "@/lib/catalog";
-import { Jar, TURN } from "@/components/jar/Jar";
+import { JarPhoto } from "@/components/jar/JarPhoto";
 import { HoneyPool, JarParticles } from "@/components/jar/JarParticles";
 import { useMotionPref } from "@/components/motion/MotionPreference";
 import { scrollToTarget } from "@/components/motion/SmoothScroll";
@@ -190,9 +190,10 @@ function JarPanel({ product: p, index: i, f, mode, active, motionOn }: { product
   const reveal = useTransform(f, (v) => (i === 0 ? 1 : smooth(i - 0.85, i - 0.15, v)));
   const clip = useTransform(reveal, (r) => `circle(${(r * 150).toFixed(2)}% at 50% 55%)`);
   const local = useTransform(f, (v) => v - i);
-  const spin = useTransform(local, (l) => -l * TURN * 0.9);
   const jarY = useTransform(reveal, (r) => `${((1 - r) * 40).toFixed(2)}%`);
   const jarRot = useTransform(local, (l) => l * -10);
+  // The packshot can't turn, so it swings in on a 3D yaw as the iris opens.
+  const jarYaw = useTransform(local, (l) => Math.max(-55, Math.min(55, l * -60)));
   const pool = useTransform(reveal, (r) => `${(8 + r * 20).toFixed(2)}%`);
   const nameX = useTransform(local, (l) => `${(l * -14).toFixed(2)}vw`);
 
@@ -250,10 +251,14 @@ function JarPanel({ product: p, index: i, f, mode, active, motionOn }: { product
           {/* the jar */}
           <motion.div
             ref={jarRef}
-            className="relative mx-auto w-[clamp(120px,15vw,250px)] max-lg:order-2 max-lg:my-2 max-lg:w-[min(27vw,124px)]"
+            className="relative mx-auto w-[clamp(170px,20vw,320px)] [perspective:900px] max-lg:order-2 max-lg:my-1 max-lg:w-[min(40vw,170px)]"
             style={pinned && motionOn ? { y: jarY, rotate: jarRot } : { translate: "calc(var(--tx, 0) * 18px) calc(var(--ty, 0) * 10px)" }}
           >
-            <Jar {...p.jar} number={p.number} name={p.name} descriptor={p.descriptor} spin={pinned && motionOn ? spin : undefined} alive={shown && motionOn} decorative />
+            {/* soft contact shadow so the cutout sits on the colour */}
+            <div aria-hidden="true" className="absolute inset-x-[14%] bottom-[1%] h-[4%] rounded-[50%] bg-nero/45 blur-[8px]" />
+            <motion.div style={pinned && motionOn ? { rotateY: jarYaw } : undefined} className={shown && motionOn ? "jar-sway" : ""}>
+              <JarPhoto product={p} sizes="(min-width: 1024px) 20vw, 40vw" />
+            </motion.div>
           </motion.div>
 
           {/* ticket */}

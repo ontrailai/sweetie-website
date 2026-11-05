@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { DISCOVERY_SET, PRODUCTS } from "@/lib/catalog";
-import { Jar } from "@/components/jar/Jar";
+import { DISCOVERY_FAN, DISCOVERY_SET, PRODUCTS } from "@/lib/catalog";
+import { JarPhoto } from "@/components/jar/JarPhoto";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { SplitText } from "@/components/motion/SplitText";
 import { Magnetic } from "@/components/motion/Magnetic";
@@ -33,10 +33,10 @@ export function DiscoveryDrop({ headingLevel = 2 }: { headingLevel?: 2 | 3 }) {
               {PRODUCTS.map((p, i) => (
                 <div
                   key={p.slug}
-                  className="rise w-[14.5%] transition-transform duration-500 ease-[var(--ease-pop)] group-hover/set:-translate-y-[var(--lift)] group-hover/set:rotate-[var(--tip)]"
+                  className="rise w-[15.5%] transition-transform duration-500 ease-[var(--ease-pop)] group-hover/set:-translate-y-[var(--lift)] group-hover/set:rotate-[var(--tip)]"
                   style={{ ["--d" as string]: `${120 + i * 90}ms`, ["--lift" as string]: `${18 + (i % 3) * 12}%`, ["--tip" as string]: `${(i - 2.5) * 3}deg` }}
                 >
-                  <Jar {...p.jar} number={p.number} name={p.name} descriptor={p.descriptor} decorative alive={false} />
+                  <JarPhoto product={p} sizes="(min-width: 1024px) 7vw, 15vw" />
                 </div>
               ))}
             </div>
@@ -63,7 +63,13 @@ export function DiscoveryDrop({ headingLevel = 2 }: { headingLevel?: 2 | 3 }) {
                 onClick={() =>
                   void quickAdd(
                     { merchandiseId: DISCOVERY_SET.id, quantity: 1, purchase: { mode: "one-time" } },
-                    { source: boxRef.current, look: { labelColor: "#ff007c", honey: "#e6a52a" }, label: "Discovery Set" },
+                    {
+                      source: boxRef.current,
+                      look: { labelColor: "#ff007c", honey: "#e6a52a" },
+                      label: "Discovery Set",
+                      // flies as the set (the cart line's fan of three), not as one jar
+                      bundle: DISCOVERY_FAN.map((p) => ({ slug: p.slug, look: { labelColor: p.jar.labelColor, honey: p.jar.honey } })),
+                    },
                   )
                 }
               >

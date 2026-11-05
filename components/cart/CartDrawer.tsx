@@ -5,12 +5,12 @@ import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useCart } from "./CartProvider";
 import { useCalmTransition } from "@/components/motion/MotionPreference";
-import { Jar } from "@/components/jar/Jar";
+import { JarPhoto } from "@/components/jar/JarPhoto";
 import { QuantityStepper } from "@/components/ui/QuantityStepper";
 import { TbdTag } from "@/components/ui/Tbd";
 import { Star } from "@/components/brand/Star";
 import { formatMoney } from "@/lib/format";
-import { PRODUCTS, SUBSCRIPTION } from "@/lib/catalog";
+import { DISCOVERY_FAN, PRODUCTS, SUBSCRIPTION } from "@/lib/catalog";
 import { useFocusTrap } from "@/lib/hooks/useFocusTrap";
 import { useScrollLock } from "@/lib/hooks/useScrollLock";
 import type { CartLine } from "@/lib/commerce";
@@ -205,12 +205,25 @@ export function CartDrawer() {
 function LineItem({ line, onQty, onRemove }: { line: CartLine; onQty: (q: number) => void; onRemove: () => void }) {
   return (
     <div className="flex gap-4 py-5">
-      <div className="grid w-16 shrink-0 place-items-center rounded-2xl px-3 py-2" style={{ background: line.jar ? `${line.jar.labelColor}22` : undefined }}>
+      <div
+        className="relative grid w-16 shrink-0 place-items-end justify-items-center overflow-hidden rounded-2xl px-2 pb-1.5 pt-2"
+        style={{ background: line.jar ? `${line.jar.labelColor}22` : "#ff007c22" }}
+      >
         {line.jar ? (
-          <Jar {...line.jar} alive={false} decorative />
+          <JarPhoto
+            product={{ slug: line.jar.slug, number: line.jar.number, name: line.jar.name, descriptor: line.jar.descriptor, jar: line.jar }}
+            sizes="48px"
+            placeholder={false}
+            className="h-auto w-[78%]"
+          />
         ) : (
-          <div className="grid aspect-[3/4] w-full place-items-center bg-peacock text-canvas" aria-hidden="true">
-            <Star className="size-5" />
+          // The Discovery Set: three of the six, fanned.
+          <div className="relative h-[72px] w-full" aria-hidden="true">
+            {DISCOVERY_FAN.map((p, k) => (
+              <div key={p.slug} className="absolute bottom-0 w-[50%]" style={{ left: `${k * 25}%`, rotate: `${(k - 1) * 9}deg`, zIndex: k === 1 ? 2 : 1 }}>
+                <JarPhoto product={p} sizes="32px" placeholder={false} />
+              </div>
+            ))}
           </div>
         )}
       </div>

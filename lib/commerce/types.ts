@@ -26,7 +26,7 @@ export interface CartLine {
   lineTotal: Money;
   purchase: Purchase;
   /** Used to draw the mini jar in the cart. */
-  jar: (JarLook & { number: string; name: string; descriptor: string }) | null;
+  jar: (JarLook & { slug: string; number: string; name: string; descriptor: string }) | null;
   placeholderPrice: boolean;
 }
 

@@ -5,7 +5,7 @@ import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { useState } from "react";
 import { BATCHES, PRODUCTS, getProduct } from "@/lib/catalog";
 import { useCalmTransition } from "@/components/motion/MotionPreference";
-import { Jar } from "@/components/jar/Jar";
+import { JarPhoto } from "@/components/jar/JarPhoto";
 import { BatchCode, BatchDl } from "./BatchDetails";
 
 const current = BATCHES.filter((b) => b.status === "on-shelves");
@@ -55,8 +55,8 @@ export function BatchShelf() {
               >
                 {/* stub in the jar's colour */}
                 <div className="relative flex w-[30%] shrink-0 flex-col items-center justify-end gap-2 border-r-2 border-dashed border-nero px-3 pb-4 pt-5" style={{ background: p.jar.labelColor }}>
-                  <div className="w-[62%] transition-transform duration-500 ease-[var(--ease-pop)] group-hover:-translate-y-2 group-hover:-rotate-6">
-                    <Jar {...p.jar} number={p.number} name={p.name} descriptor={p.descriptor} decorative alive={false} />
+                  <div className="w-[78%] transition-transform duration-500 ease-[var(--ease-pop)] group-hover:-translate-y-2 group-hover:-rotate-6">
+                    <JarPhoto product={p} sizes="(min-width: 1024px) 8vw, 22vw" />
                   </div>
                   <span className="chip text-[11px]">No. {p.number}</span>
                 </div>

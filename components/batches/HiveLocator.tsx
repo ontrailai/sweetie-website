@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { BATCHES, getProduct } from "@/lib/catalog";
-import { Jar } from "@/components/jar/Jar";
+import { JarPhoto } from "@/components/jar/JarPhoto";
 import { useCalmTransition } from "@/components/motion/MotionPreference";
 import { CountyMap } from "./CountyMap";
 import { BatchCode, BatchDl } from "./BatchDetails";
@@ -65,7 +65,7 @@ export function HiveLocator() {
           >
             <div className="flex items-start gap-5">
               <div className="w-16 shrink-0">
-                <Jar {...p.jar} number={p.number} name={p.name} descriptor={p.descriptor} decorative alive={false} />
+                <JarPhoto product={p} sizes="64px" placeholder={false} />
               </div>
               <div className="flex flex-col gap-2">
                 <p className="t-eyebrow">

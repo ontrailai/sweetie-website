@@ -3,9 +3,7 @@
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { PRODUCTS } from "@/lib/catalog";
-import { Jar } from "@/components/jar/Jar";
-import { HoneyJar3D } from "@/components/jar3d/HoneyJar3D";
+import { HeroJar } from "./HeroJar";
 import { SplitText } from "@/components/motion/SplitText";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { useMotionPref } from "@/components/motion/MotionPreference";
@@ -15,89 +13,12 @@ import { TiltButton } from "@/components/fx/TiltButton";
 import { RoundSticker } from "@/components/fx/Sticker";
 import { HoneyDrip } from "@/components/fx/HoneyDrip";
 
-const HERO = PRODUCTS[0]!;
-
-/**
- * The static jar (reduced motion, low power, before WebGL): the same scene as
- * the 3D one, frozen mid-pour. Lid off and flung up to the side, a ribbon of
- * honey falling from above the fold into the open mouth and folding onto the
- * surface, one run down the glass. Everything is drawn in the jar's own
- * viewBox units (100 wide, 318 tall) so the pour always lands in the mouth.
- */
-function StaticHeroJar() {
-  const { honey, honeyDark } = HERO.jar;
-  return (
-    <div className="relative mx-auto h-full w-full">
-      <div className="absolute bottom-[8%] left-1/2 h-[60%] -translate-x-1/2" style={{ aspectRatio: "100 / 318" }}>
-        <div className="relative size-full origin-[50%_4%] -rotate-[5deg]">
-          <Jar {...HERO.jar} number={HERO.number} name={HERO.name} descriptor={HERO.descriptor} decorative open />
-          <svg aria-hidden="true" viewBox="0 0 100 318" className="absolute inset-0 size-full overflow-visible">
-            <defs>
-              <linearGradient id="hero-pour" x1="0" x2="1">
-                <stop offset="0" stopColor={honeyDark} />
-                <stop offset="0.3" stopColor={honey} />
-                <stop offset="0.48" stopColor="#fff4c8" />
-                <stop offset="0.68" stopColor={honey} />
-                <stop offset="1" stopColor={honeyDark} />
-              </linearGradient>
-              <radialGradient id="hero-fold" cx="0.45" cy="0.35" r="0.7">
-                <stop offset="0" stopColor="#fff4c8" />
-                <stop offset="0.45" stopColor={honey} />
-                <stop offset="1" stopColor={honeyDark} />
-              </radialGradient>
-            </defs>
-            {/* the ribbon: thin and fast at the top, swelling as it slows.
-                Counter-rotated so it falls straight down while the jar leans. */}
-            <path
-              transform="rotate(5 49.6 40)"
-              d="M47.2 -760 C 47 -440, 45.6 -220, 45.8 -70 C 45.9 -4, 44.2 20, 44.6 40 L 54.6 40 C 55 20, 53.4 -4, 53.4 -70 C 53.4 -220, 51.4 -440, 51.2 -760 Z"
-              fill="url(#hero-pour)"
-            />
-            {/* honey folding onto itself where the ribbon lands */}
-            <ellipse cx="50" cy="41.4" rx="17" ry="3.2" fill={honeyDark} opacity="0.55" />
-            <ellipse cx="49.6" cy="40" rx="12.5" ry="2.8" fill="url(#hero-fold)" />
-            <ellipse cx="49.8" cy="38.3" rx="8" ry="2.1" fill="url(#hero-fold)" />
-            <ellipse cx="49.6" cy="36.9" rx="4.6" ry="1.5" fill="url(#hero-fold)" />
-            {/* a run down the outside of the glass */}
-            <path d="M8 12.5 C 6 13, 5.4 16, 5.6 22 L 5.8 58 C 5.8 63, 10 63, 10 58 L 10.2 24 C 10.4 18, 11 14, 13 12.6 Z" fill="url(#hero-pour)" opacity="0.95" />
-            <ellipse cx="7.9" cy="63.5" rx="3.1" ry="3.9" fill={honey} />
-            <ellipse cx="7" cy="62.4" rx="0.9" ry="1.2" fill="#fff4c8" opacity="0.8" />
-            {/* flung drops */}
-            <ellipse cx="66" cy="-42" rx="2.2" ry="2.8" fill={honey} transform="rotate(-24 66 -42)" />
-            <ellipse cx="74" cy="-64" rx="1.4" ry="1.8" fill={honey} transform="rotate(-30 74 -64)" />
-          </svg>
-          {/* the lid, mid-flip up and to the right */}
-          <svg aria-hidden="true" viewBox="0 0 120 70" className="absolute left-[80%] top-[-28%] w-[100%] rotate-[24deg] overflow-visible">
-            <defs>
-              <linearGradient id="hero-lid" x1="0" x2="1">
-                <stop offset="0" stopColor="#0e0e0e" />
-                <stop offset="0.2" stopColor="#4a4a4a" />
-                <stop offset="0.45" stopColor="#262626" />
-                <stop offset="0.85" stopColor="#3e3e3e" />
-                <stop offset="1" stopColor="#0e0e0e" />
-              </linearGradient>
-              <pattern id="hero-ridges" width="3.2" height="40" patternUnits="userSpaceOnUse">
-                <rect width="0.8" height="40" fill="rgba(255,255,255,0.1)" />
-              </pattern>
-            </defs>
-            <path d="M6 22 L6 46 A54 14 0 0 0 114 46 L114 22 Z" fill="url(#hero-lid)" />
-            <path d="M6 22 L6 46 A54 14 0 0 0 114 46 L114 22 Z" fill="url(#hero-ridges)" />
-            <ellipse cx="60" cy="22" rx="54" ry="14" fill="#2f2f2f" />
-            <ellipse cx="60" cy="22" rx="54" ry="14" fill="none" stroke="#fff" strokeOpacity="0.18" strokeWidth="1.2" />
-            <ellipse cx="60" cy="21" rx="38" ry="8.5" fill="none" stroke="#fff" strokeOpacity="0.08" strokeWidth="1" />
-          </svg>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const jarBody = useRef<HTMLDivElement>(null);
   const { enabled } = useMotionPref();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  // Scroll-linked: the jar spins 1¼ turns as the hero leaves; the headline splits apart.
-  const spin = useTransform(scrollYProgress, [0, 1], [0, Math.PI * 2.5]);
+  // Scroll-linked: the jar sinks and grows (its lid lifts off, see HeroJar); the headline splits apart.
   const feelX = useTransform(scrollYProgress, [0, 1], ["0%", "-28%"]);
   const humX = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
   const jarY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
@@ -117,8 +38,9 @@ export function Hero() {
         Feel the hum. Sweet Bee raw honey from San Diego County.
       </h1>
 
-      {/* Headline (decorative copy of the h1; letters ride in on load). */}
-      <div aria-hidden="true" className="pt-header px-gutter relative z-10 flex flex-1 flex-col justify-center lg:z-auto">
+      {/* Headline (decorative copy of the h1; letters ride in on load). Below
+          lg it stacks above the jar, and over it, so it always reads. */}
+      <div aria-hidden="true" className="pt-header px-gutter relative z-20 flex flex-col justify-center max-lg:flex-none lg:z-auto lg:flex-1">
         <div className="container-x relative">
           <motion.p key={`feel-${enabled}`} style={enabled ? { x: feelX } : undefined} className="display relative z-0 text-[clamp(118px,25vw,400px)] leading-[0.78]">
             <SplitText text="Feel" mode="load" />
@@ -144,16 +66,18 @@ export function Hero() {
         </div>
       </div>
 
-      {/* The jar: 3D when allowed, SVG otherwise. Sits between the words. */}
+      {/* The jar: the open-pour packshot, lid floating free. Desktop: between
+          the words, the pour falling from above the fold. Below lg: under the
+          headline, the pour's broad top fading in just beneath "hum." */}
       <motion.div
         key={`jar-${enabled}`}
         style={enabled ? { y: jarY, scale: jarScale } : undefined}
-        className="pointer-events-none relative z-10 mx-auto -mt-[22vw] h-[62svh] w-full max-w-[560px] lg:absolute lg:inset-y-0 lg:left-[30vw] lg:mt-0 lg:h-full lg:w-[52vw] lg:max-w-none"
+        className="h-hero-jar pointer-events-none relative z-10 mx-auto mt-3 w-full max-w-[560px] [--art-h:86%] [--pour-reach:0.155] [--pour-solid:45%] lg:absolute lg:inset-y-0 lg:left-[38vw] lg:mt-0 lg:h-full lg:w-[40vw] lg:max-w-none lg:[--art-h:94%] lg:[--pour-reach:1.2] lg:[--pour-solid:55%]"
       >
-        <HoneyJar3D product={HERO} mode="hero" spin={spin} fallback={<StaticHeroJar />} className="size-full" />
+        <HeroJar progress={scrollYProgress} bodyRef={jarBody} className="size-full" />
       </motion.div>
 
-      <HumBee perch={{ x: 0.56, y: 0.26 }} />
+      <HumBee perch={{ x: 0.6, y: 0.3 }} around={jarBody} />
 
       {/* Stickers */}
       <RoundSticker

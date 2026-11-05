@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PRODUCTS } from "@/lib/catalog";
-import { Jar } from "@/components/jar/Jar";
+import { JarPhoto } from "@/components/jar/JarPhoto";
 import { Bee } from "@/components/brand/Illustrations";
 import { SplitText } from "@/components/motion/SplitText";
 import { VelocityMarquee } from "@/components/motion/VelocityMarquee";
@@ -82,7 +82,7 @@ export default function AboutPage() {
                     No. {p.number} {p.name}
                   </span>
                   <span className="block transition-transform duration-500 ease-[var(--ease-pop)] group-hover:-translate-y-6 group-hover:-rotate-6 group-focus-visible:-translate-y-6">
-                    <Jar {...p.jar} number={p.number} name={p.name} descriptor={p.descriptor} decorative alive={false} />
+                    <JarPhoto product={p} sizes="(min-width: 640px) 13vw, 14vw" />
                   </span>
                 </Link>
               </li>

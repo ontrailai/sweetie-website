@@ -143,6 +143,12 @@
 @utility pt-header {
   padding-top: calc(var(--header-h) + clamp(20px, 3vw, 40px));
 }
+/* Below lg the hero jar sits under the headline (never across it) and fills
+   the rest of the first screen. The headline is fixed px on phones (its
+   clamps bottom out below ~470px wide) and ≈45vw tall above that. */
+@utility h-hero-jar {
+  height: clamp(400px, calc(100svh - var(--header-h) - clamp(20px, 3vw, 40px) - max(221px, 45vw) - 24px), 640px);
+}
 @utility text-stroke {
   /* fill-color, not color: the stroke uses currentColor */
   -webkit-text-stroke: 2px currentColor;
@@ -487,6 +493,68 @@ html[data-motion="on"] .rise.is-in {
 @keyframes flutter {
   to {
     transform: scaleY(0.7) skewX(6deg);
+  }
+}
+/* Flying bee: each wing flaps from its root, a half-beat apart. */
+.bee-wing {
+  transform-box: view-box;
+  animation: flap 0.075s ease-in-out infinite alternate;
+}
+.bee-wing-back {
+  transform-origin: 56px 44px;
+}
+.bee-wing-front {
+  transform-origin: 64px 44px;
+  animation-delay: -0.0375s;
+}
+@keyframes flap {
+  from {
+    transform: rotate(-16deg) scaleY(1.04);
+  }
+  to {
+    transform: rotate(14deg) scaleY(0.42);
+  }
+}
+/* Photo jars at rest: a slow sway, as if just set down. */
+.jar-sway {
+  transform-origin: 50% 100%;
+  animation: jar-sway 5.5s ease-in-out infinite;
+}
+@keyframes jar-sway {
+  0%,
+  100% {
+    rotate: -1.2deg;
+  }
+  50% {
+    rotate: 1.2deg;
+    translate: 0 -1.5%;
+  }
+}
+/* Hero jar: a slow breath; the lid bobs and tumbles on its own beat. */
+.hero-breathe {
+  animation: hero-breathe 6.5s ease-in-out infinite;
+}
+@keyframes hero-breathe {
+  50% {
+    translate: 0 -1.2%;
+  }
+}
+.hero-lid-float {
+  animation: hero-lid 4.8s ease-in-out infinite;
+}
+@keyframes hero-lid {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  35% {
+    translate: 3% -9%;
+    rotate: 5deg;
+  }
+  70% {
+    translate: -2% -4%;
+    rotate: -3deg;
   }
 }
 .hum-ring {

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { BATCHES, findBatch, getProduct, type Batch } from "@/lib/catalog";
-import { Jar } from "@/components/jar/Jar";
+import { JarPhoto } from "@/components/jar/JarPhoto";
 import { makeQrPath } from "@/components/jar/jar-art";
 import { BatchCode, BatchDl } from "./BatchDetails";
 
@@ -194,7 +194,7 @@ export function BatchScanner() {
                 className="mt-2 flex gap-5 border-t-2 border-dashed border-nero/40 pt-5"
               >
                 <div className="w-14 shrink-0">
-                  <Jar {...product.jar} number={product.number} name={product.name} descriptor={product.descriptor} decorative alive={false} />
+                  <JarPhoto product={product} sizes="56px" placeholder={false} />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-2">
                   <p className="t-eyebrow">

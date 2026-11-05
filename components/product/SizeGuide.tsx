@@ -1,5 +1,6 @@
 import { PRODUCTS, SIZES } from "@/lib/catalog";
-import { Jar } from "@/components/jar/Jar";
+import { JarPhoto } from "@/components/jar/JarPhoto";
+import { JAR_PHOTO_ASPECT } from "@/lib/jarAssets";
 
 const HEIGHTS: Record<string, number> = { "6oz": 46, "16oz": 74, "32oz": 100 };
 
@@ -20,8 +21,8 @@ export function SizeGuide() {
           {SIZES.map((s, i) => (
             <li key={s.id} className="rise flex w-[24%] flex-col items-center gap-3" style={{ ["--d" as string]: `${i * 140}ms` }}>
               <div className="relative flex w-full items-end justify-center" style={{ height: "clamp(220px,32vw,460px)" }}>
-                <div className="transition-transform duration-500 ease-[var(--ease-pop)] hover:-translate-y-3" style={{ height: `${HEIGHTS[s.id]}%`, aspectRatio: "100 / 318" }}>
-                  <Jar {...p.jar} number={p.number} name={p.name} descriptor={p.descriptor} decorative alive={false} />
+                <div className="transition-transform duration-500 ease-[var(--ease-pop)] hover:-translate-y-3" style={{ height: `${HEIGHTS[s.id]}%`, aspectRatio: `${JAR_PHOTO_ASPECT}` }}>
+                  <JarPhoto product={p} sizes="(min-width: 1024px) 16vw, 30vw" className="size-full" />
                 </div>
               </div>
               <span className="font-serif text-[clamp(32px,3.4vw,52px)] font-semibold leading-none">{s.label}</span>

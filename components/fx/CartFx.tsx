@@ -26,19 +26,70 @@ function cancelAll() {
   for (const a of [...live]) a.cancel();
 }
 
-function jarGhost(look: FlyDetail["look"]) {
+/** Ghost size (the photo canvas is 0.46 wide : 1 tall). */
+const GHOST_W = 40;
+const GHOST_H = 87;
+/** Drawn jar (a photo that hadn't loaded yet). */
+const DRAWN_W = 34;
+const DRAWN_H = 74;
+/** A bundle: the cart line's fan of three (each jar half the fan's width). */
+const FAN_W = 64;
+const FAN_H = 78;
+
+function flyer(w: number, h: number) {
   const el = document.createElement("div");
   el.setAttribute("aria-hidden", "true");
+  el.style.cssText = `position:fixed;left:0;top:0;width:${w}px;height:${h}px;z-index:99;pointer-events:none;`;
+  return el;
+}
+
+/** The packshot itself, with a soft shadow, filling its box. */
+function photoJar(src: string) {
+  const el = document.createElement("img");
+  el.src = src;
+  el.alt = "";
+  el.decoding = "sync";
+  el.style.cssText = "display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 6px rgba(38,38,38,.35));";
+  return el;
+}
+
+/** Drawn fallback jar, filling its box. */
+function drawnJar(look: FlyDetail["look"]) {
+  const el = document.createElement("div");
   el.style.cssText =
-    "position:fixed;left:0;top:0;width:34px;height:74px;z-index:99;pointer-events:none;border-radius:6px 6px 9px 9px;" +
+    "position:relative;width:100%;height:100%;border-radius:6px 6px 9px 9px;" +
     `background:linear-gradient(90deg,rgba(0,0,0,.25),transparent 30%,rgba(255,255,255,.35) 42%,transparent 60%,rgba(0,0,0,.25)),${look.honey};` +
     "box-shadow:0 0 0 2px #262626;";
   const lid = document.createElement("div");
-  lid.style.cssText = "position:absolute;left:-1px;right:-1px;top:-2px;height:14px;background:#262626;border-radius:4px;";
+  lid.style.cssText = "position:absolute;left:-1px;right:-1px;top:-2px;height:19%;background:#262626;border-radius:4px;";
   const label = document.createElement("div");
   label.style.cssText = `position:absolute;left:0;right:0;top:30%;height:40%;background:${look.labelColor};box-shadow:inset 0 0 0 1px rgba(38,38,38,.25)`;
   el.append(lid, label);
   return el;
+}
+
+/** One jar (photo, else drawn), or a bundle's fan of jars. Returns the ghost and its size. */
+function ghostFor({ jars, bundle }: Pick<FlyDetail, "jars" | "bundle">): { el: HTMLElement; w: number; h: number } {
+  if (bundle) {
+    const el = flyer(FAN_W, FAN_H);
+    const n = jars.length;
+    const mid = (n - 1) / 2;
+    jars.forEach((j, k) => {
+      const slot = document.createElement("div");
+      const step = n > 1 ? 50 / (n - 1) : 0;
+      slot.style.cssText =
+        `position:absolute;bottom:0;left:${k * step}%;width:50%;aspect-ratio:${GHOST_W}/${GHOST_H};` +
+        `rotate:${(k - mid) * 9}deg;transform-origin:50% 100%;z-index:${k === Math.round(mid) ? 2 : 1};`;
+      slot.append(j.photo ? photoJar(j.photo) : drawnJar(j.look));
+      el.append(slot);
+    });
+    return { el, w: FAN_W, h: FAN_H };
+  }
+  const j = jars[0];
+  const [w, h] = j?.photo ? [GHOST_W, GHOST_H] : [DRAWN_W, DRAWN_H];
+  const el = flyer(w, h);
+  el.append(j?.photo ? photoJar(j.photo) : drawnJar(j?.look ?? { labelColor: "#ff007c", honey: "#e6a52a" }));
+  return { el, w, h };
 }
 
 function burst(x: number, y: number, honey: string) {
@@ -82,7 +133,7 @@ export function CartFx() {
 
   useEffect(() => {
     const onFly = (e: Event) => {
-      const { rect, look, label } = (e as CustomEvent<FlyDetail>).detail;
+      const { rect, jars, bundle, look, label } = (e as CustomEvent<FlyDetail>).detail;
       clearTimeout(timer.current);
       setToast({ id: Date.now(), label });
       timer.current = setTimeout(() => setToast(null), 4200);
@@ -96,7 +147,8 @@ export function CartFx() {
       const sy = rect.y + rect.h / 2;
       const ex = t.left + t.width / 2;
       const ey = t.top + t.height / 2;
-      const ghost = jarGhost(look);
+      const { el: ghost, w: gw, h: gh } = ghostFor({ jars, bundle });
+      const photo = !bundle && !!jars[0]?.photo;
       document.body.appendChild(ghost);
       const steps = 14;
       const lift = Math.min(260, Math.abs(sy - ey) * 0.5 + 140);
@@ -104,8 +156,11 @@ export function CartFx() {
         const k = i / steps;
         const x = sx + (ex - sx) * k;
         const y = sy + (ey - sy) * k - Math.sin(Math.PI * k) * lift;
-        const s = 1.25 - 0.85 * k;
-        return { transform: `translate(${x - 17}px, ${y - 37}px) rotate(${k * 540}deg) scale(${s})` };
+        // A bundle sways as one set (a box of jars doesn't tumble); a photo
+        // tumbles one turn (a jar, not a coin); the drawn ghost keeps its spin.
+        const s = bundle ? 1.35 - 0.95 * k : (photo ? 1.6 : 1.25) - (photo ? 1.25 : 0.85) * k;
+        const turn = bundle ? Math.sin(Math.PI * 2 * k) * 12 : photo ? -10 + k * 370 : k * 540;
+        return { transform: `translate(${x - gw / 2}px, ${y - gh / 2}px) rotate(${turn}deg) scale(${s})` };
       });
       const a = track(ghost.animate(frames, { duration: 820, easing: "cubic-bezier(.45,0,.3,1)" }), ghost);
       // Landed or cancelled by Pause: the count still updates either way,

@@ -35,7 +35,7 @@ function resolveMerchandise(id: string): Merchandise | null {
         subtitle: `No. ${p.number} · ${size?.label ?? v.size}`,
         href: `/shop/${p.slug}`,
         price: v.price,
-        jar: { ...p.jar, number: p.number, name: p.name, descriptor: p.descriptor },
+        jar: { ...p.jar, slug: p.slug, number: p.number, name: p.name, descriptor: p.descriptor },
       };
     }
   }

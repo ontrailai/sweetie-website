@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getProduct } from "@/lib/catalog";
-import { Jar } from "@/components/jar/Jar";
+import { JarPhoto } from "@/components/jar/JarPhoto";
 import { SplitText } from "@/components/motion/SplitText";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { HumBee } from "@/components/fx/HumBee";
@@ -68,7 +68,7 @@ export default function NotFound() {
             </svg>
             <div className="absolute bottom-[12%] right-[6%] w-[clamp(70px,9vw,120px)] origin-bottom-right -rotate-[80deg]">
               <div className="wiggle origin-bottom" style={{ animationDuration: "4s" }}>
-                <Jar {...p.jar} number={p.number} name={p.name} descriptor={p.descriptor} decorative alive={false} />
+                <JarPhoto product={p} sizes="(min-width: 1024px) 9vw, 70px" />
               </div>
             </div>
           </div>

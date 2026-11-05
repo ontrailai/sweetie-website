@@ -1,146 +1,135 @@
 "use client";
 
-import { animate, useMotionValue, useMotionValueEvent, useTransform } from "motion/react";
-import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { animate, motion, useMotionValue, useSpring, useTransform } from "motion/react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import type { Product } from "@/lib/catalog";
-import { Jar, TURN } from "@/components/jar/Jar";
-import { HoneyJar3D } from "@/components/jar3d/HoneyJar3D";
+import { JAR_PHOTO_ASPECT, jarPhoto } from "@/lib/jarAssets";
+import { JarPhoto } from "@/components/jar/JarPhoto";
 import { isMotionOff, useMotionPref } from "@/components/motion/MotionPreference";
 
-const STEP = (Math.PI * 2) / 3;
-const SIDES = ["front label", "“Feel the hum.” side", "small-batch side"];
+const MAX_YAW = 38;
 
 /**
- * The product-page jar: drag (mouse/touch) or use arrow keys to turn it.
- * One angle drives both the WebGL jar and the SVG fallback. Exposed to
- * assistive tech as a slider over the three label panels.
+ * The product-page jar: the packshot, standing in its own colour. Drag it
+ * (mouse or touch) and it swings on its base in 3D, then springs back with a
+ * wobble; a mouse just hovering makes it lean toward the cursor. A glass
+ * sheen, clipped to the jar's silhouette, slides across as it turns.
+ * Motion off: a still photo.
  */
 export function ProductJar({ product }: { product: Product }) {
   const { enabled } = useMotionPref();
-  const angle = useMotionValue(enabled ? -Math.PI * 2 : 0);
-  const shake = useMotionValue(0);
-  const svgSpin = useTransform(angle, (a) => (-a / (Math.PI * 2)) * TURN);
-  const [side, setSide] = useState(0);
+  const yaw = useMotionValue(0);
+  const pitch = useMotionValue(0);
+  const yawS = useSpring(yaw, { stiffness: 140, damping: 11, mass: 0.9 });
+  const pitchS = useSpring(pitch, { stiffness: 120, damping: 14 });
+  const sheenX = useTransform(yawS, [-MAX_YAW, MAX_YAW], ["-60%", "60%"]);
+  const shadowX = useTransform(yawS, (v) => `${(v * -0.25).toFixed(2)}%`);
   const [hinted, setHinted] = useState(false);
-  const drag = useRef<{ x: number; t: number; v: number; w: number } | null>(null);
+  const drag = useRef<{ x: number; y: number; w: number } | null>(null);
+  const photo = jarPhoto(product.slug);
+  const live = enabled;
 
-  useMotionValueEvent(angle, "change", (a) => {
-    const s = (((Math.round(-a / STEP) % 3) + 3) % 3) as 0 | 1 | 2;
-    setSide((prev) => (prev === s ? prev : s));
-  });
-
-  // Intro: one full turn into place (or snap when motion is off).
+  // Arrive with a little swing (skipped when motion is off).
   useEffect(() => {
-    if (isMotionOff()) {
-      angle.set(0);
-      return;
-    }
-    const c = animate(angle, 0, { type: "spring", stiffness: 22, damping: 10, mass: 1.2, delay: 0.3 });
+    if (isMotionOff()) return;
+    yaw.jump(-24);
+    const c = animate(yaw, 0, { type: "spring", stiffness: 60, damping: 7, delay: 0.25 });
     return () => c.stop();
-  }, [angle]);
+  }, [yaw]);
 
-  // Pause motion mid-turn: stop the intro / inertia / spring where it is and
-  // snap to the nearest label panel.
   useEffect(() => {
     if (enabled) return;
-    angle.stop();
-    shake.stop();
-    angle.set(Math.round(angle.get() / STEP) * STEP);
-    shake.set(0);
-  }, [enabled, angle, shake]);
+    yaw.jump(0);
+    pitch.jump(0);
+    yawS.jump(0);
+    pitchS.jump(0);
+  }, [enabled, yaw, pitch, yawS, pitchS]);
 
-  const settle = (velocity: number) => {
-    if (!enabled || isMotionOff()) {
-      angle.set(Math.round(angle.get() / STEP) * STEP);
-      return;
-    }
-    shake.set(velocity * 0.6);
-    animate(angle, angle.get(), {
-      type: "inertia",
-      velocity,
-      power: 0.35,
-      timeConstant: 300,
-      modifyTarget: (t) => Math.round(t / STEP) * STEP,
-    });
-  };
+  const rubber = (v: number) => MAX_YAW * Math.tanh(v / MAX_YAW);
 
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
-    if (e.button !== 0) return;
+    if (!live || e.button !== 0) return;
     e.currentTarget.setPointerCapture(e.pointerId);
-    angle.stop();
-    drag.current = { x: e.clientX, t: performance.now(), v: 0, w: e.currentTarget.getBoundingClientRect().width };
+    drag.current = { x: e.clientX, y: e.clientY, w: e.currentTarget.getBoundingClientRect().width };
     setHinted(true);
   };
   const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (!live) return;
     const d = drag.current;
-    if (!d) return;
-    const now = performance.now();
-    const dx = e.clientX - d.x;
-    const da = (dx / Math.max(d.w, 1)) * Math.PI * 1.6;
-    angle.set(angle.get() + da);
-    d.v = (da / Math.max(now - d.t, 1)) * 1000;
-    d.x = e.clientX;
-    d.t = now;
+    if (d) {
+      yaw.set(rubber(((e.clientX - d.x) / Math.max(d.w, 1)) * 110));
+      pitch.set(Math.max(-8, Math.min(8, ((e.clientY - d.y) / Math.max(d.w, 1)) * -30)));
+      return;
+    }
+    if (e.pointerType !== "mouse") return;
+    const r = e.currentTarget.getBoundingClientRect();
+    yaw.set(((e.clientX - r.left) / r.width - 0.5) * 22);
+    pitch.set(((e.clientY - r.top) / r.height - 0.5) * -8);
   };
-  const onPointerUp = () => {
-    const d = drag.current;
+  const release = () => {
     drag.current = null;
-    if (d) settle(d.v);
+    yaw.set(0);
+    pitch.set(0);
   };
 
-  const step = (dir: number) => {
-    const target = Math.round(angle.get() / STEP) * STEP - dir * STEP;
-    if (enabled && !isMotionOff()) {
-      shake.set(dir * 2);
-      animate(angle, target, { type: "spring", stiffness: 110, damping: 16 });
-    } else angle.set(target);
-  };
-  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "ArrowRight" || e.key === "ArrowUp") step(1);
-    else if (e.key === "ArrowLeft" || e.key === "ArrowDown") step(-1);
-    else if (e.key === "Home") step(-side);
-    else return;
-    e.preventDefault();
-    setHinted(true);
-  };
+  const sheenMask = photo ? `url("${photo.webp1x}") center / contain no-repeat` : undefined;
 
   return (
     <div className="flex size-full flex-col items-center gap-3">
       <div
         id="product-jar"
-        role="slider"
-        tabIndex={0}
-        aria-label={`Turn the No. ${product.number} ${product.name} jar`}
-        aria-valuemin={0}
-        aria-valuemax={2}
-        aria-valuenow={side}
-        aria-valuetext={`Showing the ${SIDES[side]}`}
-        data-cursor="drag"
+        data-cursor={live ? "drag" : undefined}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
-        onKeyDown={onKeyDown}
-        className="relative w-full flex-1 cursor-grab touch-pan-y select-none rounded-[32px] active:cursor-grabbing"
+        onPointerUp={release}
+        onPointerCancel={release}
+        onPointerLeave={() => {
+          if (!drag.current) release();
+        }}
+        className={`relative grid min-h-0 w-full flex-1 touch-pan-y select-none place-items-center [container-type:size] [perspective:1100px] ${live ? "cursor-grab active:cursor-grabbing" : ""}`}
       >
-        <HoneyJar3D
-          product={product}
-          mode="product"
-          spin={angle}
-          shake={shake}
-          className="absolute inset-0"
-          fallback={
-            <div className="grid size-full place-items-center">
-              <div className="h-[82%]" style={{ aspectRatio: "100 / 318" }}>
-                <Jar {...product.jar} number={product.number} name={product.name} descriptor={product.descriptor} spin={svgSpin} decorative />
+        {/* The jar box keeps the packshot's aspect whichever side is tighter:
+            88% of the stage height, or the full stage width if that's narrower.
+            The photo and the sheen mask both fill it exactly. */}
+        <div className="relative" style={{ aspectRatio: `${JAR_PHOTO_ASPECT}`, width: `min(100cqw, 88cqh * ${JAR_PHOTO_ASPECT})` }}>
+          {/* contact shadow, sliding opposite the swing */}
+          <motion.div
+            aria-hidden="true"
+            className="absolute inset-x-[10%] bottom-[0.5%] h-[4%] rounded-[50%] bg-nero/50 blur-[10px]"
+            style={live ? { x: shadowX } : undefined}
+          />
+          <motion.div
+            key={`jar-${live}`}
+            className="relative size-full origin-[50%_96%] [transform-style:preserve-3d]"
+            style={live ? { rotateY: yawS, rotateX: pitchS } : undefined}
+          >
+            <JarPhoto
+              product={product}
+              alt={`No. ${product.number} ${product.name} jar`}
+              sizes="(min-width: 1024px) 22vw, 50vw"
+              priority
+              className="size-full"
+            />
+            {live && sheenMask ? (
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 overflow-hidden mix-blend-soft-light"
+                style={{ mask: sheenMask, WebkitMask: sheenMask }}
+              >
+                <motion.div
+                  className="absolute inset-y-0 left-[20%] w-[60%]"
+                  style={{ x: sheenX, background: "linear-gradient(100deg, transparent 20%, rgba(255,240,210,0.75) 48%, transparent 76%)" }}
+                />
               </div>
-            </div>
-          }
-        />
+            ) : null}
+          </motion.div>
+        </div>
       </div>
-      <p className={`chip transition-opacity duration-500 ${hinted ? "opacity-60" : ""}`} aria-hidden="true">
-        <span className="float inline-block">↔</span> Drag or use arrow keys to turn
-      </p>
+      {live ? (
+        <p className={`chip transition-opacity duration-500 ${hinted ? "opacity-60" : ""}`} aria-hidden="true">
+          <span className="float inline-block">↔</span> Drag to swing the jar
+        </p>
+      ) : null}
     </div>
   );
 }

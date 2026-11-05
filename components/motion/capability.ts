@@ -1,6 +1,6 @@
 /**
- * Device capability checks used to decide whether the WebGL jar runs or the
- * static SVG jar stays. Client-only (call from effects).
+ * Device capability checks (pointer type, low-power hints, idle scheduling).
+ * Client-only (call from effects).
  */
 type NavigatorExtras = Navigator & {
   deviceMemory?: number;
@@ -48,24 +48,4 @@ export function afterFirstPaint(cb: () => void, timeout = 1500): () => void {
     if (idle !== undefined) w.cancelIdleCallback?.(idle);
     if (timer) clearTimeout(timer);
   };
-}
-
-/**
- * Probes for WebGL on a throwaway canvas, so three.js never has to fail
- * (and log) in front of the user. Cached for the page's lifetime.
- */
-let webgl: boolean | undefined;
-export function hasWebGL(): boolean {
-  if (webgl !== undefined) return webgl;
-  try {
-    const c = document.createElement("canvas");
-    const gl = (c.getContext("webgl2") ?? c.getContext("webgl")) as WebGLRenderingContext | null;
-    // Some blocklisted / software GPUs return a context that can't report
-    // shader precision; three.js would throw on it, so treat it as no WebGL.
-    webgl = !!gl && !gl.isContextLost() && !!gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT);
-    gl?.getExtension("WEBGL_lose_context")?.loseContext();
-  } catch {
-    webgl = false;
-  }
-  return webgl;
 }

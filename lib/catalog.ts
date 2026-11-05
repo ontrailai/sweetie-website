@@ -305,6 +305,12 @@ export function subscriberPrice(price: Price): Price {
 /* Discovery Set                                                       */
 /* ------------------------------------------------------------------ */
 
+/**
+ * The three jars that stand for the Discovery Set wherever the whole box
+ * can't be shown (the cart line, the fly-to-cart flight), fanned.
+ */
+export const DISCOVERY_FAN: readonly Product[] = [PRODUCTS[0]!, PRODUCTS[2]!, PRODUCTS[5]!];
+
 export const DISCOVERY_SET = {
   id: "discovery-set",
   name: "Discovery Set",

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useId, useState } from "react";
 import { PRODUCTS, SUBSCRIPTION, fromPrice, subscriberPrice } from "@/lib/catalog";
-import { MiniJar } from "@/components/jar/MiniJar";
+import { JarPhoto } from "@/components/jar/JarPhoto";
 import { SplitText } from "@/components/motion/SplitText";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { RoundSticker } from "@/components/fx/Sticker";
@@ -112,8 +112,8 @@ export function SubscriptionDial() {
             {Array.from({ length: perYear }, (_, i) => {
               const p = PRODUCTS[i % PRODUCTS.length]!;
               return (
-                <span key={`${perYear}-${i}`} className="rise is-in w-[clamp(12px,1.6vw,20px)]" style={{ ["--d" as string]: `${i * 30}ms` }}>
-                  <MiniJar look={p.jar} className="w-full" />
+                <span key={`${perYear}-${i}`} className="rise is-in w-[clamp(14px,1.8vw,24px)]" style={{ ["--d" as string]: `${i * 30}ms` }}>
+                  <JarPhoto product={p} sizes="24px" placeholder={false} />
                 </span>
               );
             })}

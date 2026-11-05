@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef, useState, type PointerEvent } from "react";
 import { DEFAULT_SIZE, SIZES, getVariant, type Product, type SizeId } from "@/lib/catalog";
-import { Jar } from "@/components/jar/Jar";
+import { JarPhoto } from "@/components/jar/JarPhoto";
 import { useMotionPref } from "@/components/motion/MotionPreference";
 import { useQuickAdd } from "@/components/fx/useQuickAdd";
 import { Price } from "@/components/ui/Price";
@@ -58,9 +58,10 @@ export function JarCard({ product: p, sizes = true, tilt = 0, headingLevel = 3 }
           </Link>
         </H>
         <p className="font-serif text-[24px] italic leading-tight">{p.tagline}</p>
-        <div className="relative mx-auto mt-auto w-[38%] pt-4">
+        <div className="relative mx-auto mt-auto w-[46%] pt-4">
+          <div aria-hidden="true" className="absolute inset-x-[12%] bottom-[0.5%] h-[4%] rounded-[50%] bg-nero/40 blur-[6px]" />
           <div ref={jarRef} className="transition-transform duration-500 ease-[var(--ease-out-soft)] will-change-transform">
-            <Jar {...p.jar} number={p.number} name={p.name} descriptor={p.descriptor} decorative alive={false} />
+            <JarPhoto product={p} sizes="(min-width: 1024px) 13vw, (min-width: 640px) 22vw, 42vw" />
           </div>
         </div>
       </div>
