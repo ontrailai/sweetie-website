@@ -7,14 +7,13 @@ import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { MotionToggle } from "@/components/motion/MotionToggle";
-import { useMotionPref } from "@/components/motion/MotionPreference";
+import { INSTANT, useMotionPref } from "@/components/motion/MotionPreference";
 import { HumToggle } from "@/components/fx/HumToggle";
 import { NAV, SITE } from "@/lib/site";
 import { useFocusTrap } from "@/lib/hooks/useFocusTrap";
 import { useScrollLock } from "@/lib/hooks/useScrollLock";
 
 const noopSubscribe = () => () => {};
-const INSTANT = { duration: 0 } as const;
 
 /** Each link is a full-bleed colour band; text colours keep AA at ≥24px. */
 const BANDS = [
@@ -32,7 +31,8 @@ export function MobileMenu() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const close = useCallback(() => setOpen(false), []);
-  const { enabled: motionOn } = useMotionPref();
+  const { calm } = useMotionPref();
+  const motionOn = !calm;
 
   useFocusTrap(panelRef, open, close, undefined, toggleRef);
   useScrollLock(open);

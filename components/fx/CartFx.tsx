@@ -2,9 +2,29 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/cart/CartProvider";
+import { isMotionOff, useMotionPref } from "@/components/motion/MotionPreference";
 import { FLY_EVENT, LANDED_EVENT, type FlyDetail } from "./fly";
 
 const CONFETTI = ["#ff007c", "#308f32", "#004832", "#ff0000", "#f6eddd", "#262626"];
+
+/**
+ * Every live flight / particle animation, so Pause motion can cancel them
+ * mid-air (CSS `animation: none` does not reach WAAPI animations).
+ */
+const live = new Set<Animation>();
+function track(a: Animation, el: HTMLElement) {
+  live.add(a);
+  const done = () => {
+    live.delete(a);
+    el.remove();
+  };
+  a.addEventListener("finish", done);
+  a.addEventListener("cancel", done);
+  return a;
+}
+function cancelAll() {
+  for (const a of [...live]) a.cancel();
+}
 
 function jarGhost(look: FlyDetail["look"]) {
   const el = document.createElement("div");
@@ -22,6 +42,7 @@ function jarGhost(look: FlyDetail["look"]) {
 }
 
 function burst(x: number, y: number, honey: string) {
+  if (isMotionOff()) return;
   const n = 22;
   for (let i = 0; i < n; i++) {
     const p = document.createElement("div");
@@ -38,15 +59,14 @@ function burst(x: number, y: number, honey: string) {
     const dx = Math.cos(angle) * dist;
     const dy = Math.sin(angle) * dist * 0.8 - 30;
     const spin = (Math.random() - 0.5) * 720;
-    const anim = p.animate(
+    track(p.animate(
       [
         { transform: "translate(-50%,-50%) scale(.3) rotate(0deg)", opacity: 1 },
         { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${spin / 2}deg)`, opacity: 1, offset: 0.45 },
         { transform: `translate(calc(-50% + ${dx * 1.2}px), calc(-50% + ${dy + 140}px)) scale(.8) rotate(${spin}deg)`, opacity: 0 },
       ],
       { duration: 900 + Math.random() * 500, easing: "cubic-bezier(.2,.7,.3,1)" },
-    );
-    anim.onfinish = () => p.remove();
+    ), p);
   }
 }
 
@@ -56,6 +76,7 @@ function burst(x: number, y: number, honey: string) {
  */
 export function CartFx() {
   const { open } = useCart();
+  const { calm } = useMotionPref();
   const [toast, setToast] = useState<{ id: number; label: string } | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
@@ -68,8 +89,7 @@ export function CartFx() {
 
       const target = document.querySelector<HTMLElement>("[data-cart-button]");
       const land = () => window.dispatchEvent(new Event(LANDED_EVENT));
-      const motionOn = document.documentElement.dataset.motion !== "off";
-      if (!motionOn || !rect || !target) return land();
+      if (isMotionOff() || !rect || !target) return land();
 
       const t = target.getBoundingClientRect();
       const sx = rect.x + rect.w / 2;
@@ -87,19 +107,27 @@ export function CartFx() {
         const s = 1.25 - 0.85 * k;
         return { transform: `translate(${x - 17}px, ${y - 37}px) rotate(${k * 540}deg) scale(${s})` };
       });
-      const a = ghost.animate(frames, { duration: 820, easing: "cubic-bezier(.45,0,.3,1)" });
-      a.onfinish = () => {
-        ghost.remove();
+      const a = track(ghost.animate(frames, { duration: 820, easing: "cubic-bezier(.45,0,.3,1)" }), ghost);
+      // Landed or cancelled by Pause: the count still updates either way,
+      // but the splash only plays if motion is still on.
+      a.addEventListener("finish", () => {
         burst(ex, ey, look.honey);
         land();
-      };
+      });
+      a.addEventListener("cancel", land);
     };
     window.addEventListener(FLY_EVENT, onFly);
     return () => {
       window.removeEventListener(FLY_EVENT, onFly);
       clearTimeout(timer.current);
+      cancelAll();
     };
   }, []);
+
+  // Pause motion: stop anything already in the air.
+  useEffect(() => {
+    if (calm) cancelAll();
+  }, [calm]);
 
   return (
     <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-4 z-[60] flex justify-center px-4 max-md:bottom-[calc(var(--quick-add-h,0px)+16px)]">
@@ -109,7 +137,7 @@ export function CartFx() {
           className="pointer-events-auto flex items-center gap-3 rounded-full border-2 border-nero bg-nero py-1.5 pl-5 pr-1.5 text-canvas shadow-[0_5px_0_0_#ff007c] [animation:rise_.5s_var(--ease-pop)_backwards]"
         >
           <span className="font-mono text-[14px] font-bold tracking-[0.06em]">
-            <span aria-hidden="true" className="mr-1.5 text-honey">✶</span>
+            <span aria-hidden="true" className="mr-1.5 text-peacock">✶</span>
             {toast.label} added
           </span>
           <button type="button" onClick={open} className="rounded-full bg-canvas px-4 py-2 font-mono text-[13px] font-bold uppercase tracking-[0.12em] text-nero underline-offset-4 hover:underline">

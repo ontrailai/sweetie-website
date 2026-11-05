@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { BATCHES, getProduct } from "@/lib/catalog";
 import { Jar } from "@/components/jar/Jar";
+import { useCalmTransition } from "@/components/motion/MotionPreference";
 import { CountyMap } from "./CountyMap";
 import { BatchCode, BatchDl } from "./BatchDetails";
 import { SELECT_BATCH_EVENT } from "./BatchScanner";
@@ -14,6 +15,7 @@ const onShelves = BATCHES.filter((b) => b.status === "on-shelves");
 /** Interactive hive map: tap a pin (or a jar below) to read its batch ticket. */
 export function HiveLocator() {
   const [selected, setSelected] = useState<string>(onShelves[0]!.code);
+  const t = useCalmTransition();
   const batch = onShelves.find((b) => b.code === selected) ?? onShelves[0]!;
   const p = getProduct(batch.productSlug)!;
 
@@ -58,7 +60,7 @@ export function HiveLocator() {
             initial={{ opacity: 0, x: 30, rotate: 3 }}
             animate={{ opacity: 1, x: 0, rotate: 0 }}
             exit={{ opacity: 0, x: -30, rotate: -3 }}
-            transition={{ type: "spring", stiffness: 300, damping: 28 }}
+            transition={t({ type: "spring", stiffness: 300, damping: 28 })}
             className="ticket flex flex-col gap-4 p-6 [--notch-y:110px]"
           >
             <div className="flex items-start gap-5">

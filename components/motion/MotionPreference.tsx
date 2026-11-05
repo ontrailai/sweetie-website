@@ -1,7 +1,7 @@
 "use client";
 
-import { MotionConfig } from "motion/react";
-import { createContext, useCallback, useContext, useEffect, useMemo, useSyncExternalStore, type ReactNode } from "react";
+import { MotionConfig, type Transition } from "motion/react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 
 /**
  * Motion preference = explicit user choice (persisted) ?? OS prefers-reduced-motion.
@@ -42,10 +42,18 @@ function subscribeReduced(cb: () => void) {
 interface MotionPrefValue {
   /** true when motion should run. */
   enabled: boolean;
+  /**
+   * true when JS (Motion) transitions must be instant. Unlike `enabled` this
+   * is already correct during hydration (it reads the boot script's
+   * html[data-motion]), so it never lets a first animation slip through.
+   */
+  calm: boolean;
   toggle: () => void;
 }
 
-const MotionPrefContext = createContext<MotionPrefValue>({ enabled: true, toggle: () => {} });
+const MotionPrefContext = createContext<MotionPrefValue>({ enabled: true, calm: false, toggle: () => {} });
+
+const noopSubscribe = () => () => {};
 
 export function MotionPreferenceProvider({ children }: { children: ReactNode }) {
   const choice = useSyncExternalStore(subscribeChoice, readChoice, () => null);
@@ -55,10 +63,18 @@ export function MotionPreferenceProvider({ children }: { children: ReactNode }) 
     () => false,
   );
   const enabled = choice ? choice === "on" : !osReduced;
+  // During hydration the stores above return their server snapshots (motion
+  // on). The boot script has already written the real answer to <html>, so
+  // read it once for anything that is not rendered markup.
+  const hydrated = useSyncExternalStore(noopSubscribe, () => true, () => false);
+  const [bootCalm] = useState(() => typeof document !== "undefined" && document.documentElement.dataset.motion === "off");
+  const calm = hydrated ? !enabled : bootCalm;
 
   useEffect(() => {
+    // Skip the hydration pass so <html> never flickers to "on".
+    if (!hydrated) return;
     document.documentElement.dataset.motion = enabled ? "on" : "off";
-  }, [enabled]);
+  }, [enabled, hydrated]);
 
   const toggle = useCallback(() => {
     try {
@@ -69,17 +85,41 @@ export function MotionPreferenceProvider({ children }: { children: ReactNode }) 
     window.dispatchEvent(new Event(EVENT));
   }, [enabled]);
 
-  const value = useMemo(() => ({ enabled, toggle }), [enabled, toggle]);
+  const value = useMemo(() => ({ enabled, calm, toggle }), [enabled, calm, toggle]);
 
   return (
     <MotionPrefContext.Provider value={value}>
-      <MotionConfig reducedMotion={enabled ? "never" : "always"}>{children}</MotionConfig>
+      <MotionConfig reducedMotion={calm ? "always" : "never"} transition={calm ? INSTANT : undefined}>
+        {children}
+      </MotionConfig>
     </MotionPrefContext.Provider>
   );
 }
 
 export function useMotionPref() {
   return useContext(MotionPrefContext);
+}
+
+/** An instant transition: what every Motion animation becomes when calm. */
+export const INSTANT: Transition = { type: false };
+
+/**
+ * Motion only reads MotionConfig.reducedMotion when an element mounts, so
+ * existing elements keep animating after Pause. Pass every explicit
+ * `transition` through this instead; transitions are read per animation,
+ * so the switch takes effect immediately.
+ *
+ *   const t = useCalmTransition();
+ *   <motion.div transition={t({ type: "spring", stiffness: 300 })} />
+ */
+export function useCalmTransition() {
+  const { calm } = useMotionPref();
+  return useCallback((full: Transition = {}): Transition => (calm ? INSTANT : full), [calm]);
+}
+
+/** Non-React code (WAAPI, timers): is motion off right now? */
+export function isMotionOff() {
+  return typeof document !== "undefined" && document.documentElement.dataset.motion === "off";
 }
 
 /** Runs before paint (inlined in <head>) to set html[data-motion]. */

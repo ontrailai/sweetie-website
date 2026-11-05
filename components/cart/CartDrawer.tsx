@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useCart } from "./CartProvider";
+import { useCalmTransition } from "@/components/motion/MotionPreference";
 import { Jar } from "@/components/jar/Jar";
 import { QuantityStepper } from "@/components/ui/QuantityStepper";
 import { TbdTag } from "@/components/ui/Tbd";
@@ -19,6 +20,7 @@ export function CartDrawer() {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const [checkoutMsg, setCheckoutMsg] = useState<string | null>(null);
+  const t = useCalmTransition();
 
   const handleClose = useCallback(() => {
     close();
@@ -59,7 +61,7 @@ export function CartDrawer() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={t({ duration: 0.25 })}
             onClick={handleClose}
             aria-hidden="true"
           />
@@ -74,7 +76,7 @@ export function CartDrawer() {
             initial={{ x: "110%", rotate: 4 }}
             animate={{ x: 0, rotate: 0 }}
             exit={{ x: "110%", rotate: 4 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            transition={t({ type: "spring", stiffness: 300, damping: 30 })}
           >
             <div className="relative flex items-end justify-between gap-4 bg-nero px-6 pb-5 pt-6 text-canvas">
               <h2 id="cart-title" className="display text-[clamp(56px,14vw,76px)]">
@@ -162,7 +164,7 @@ export function CartDrawer() {
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3 }}
+                          transition={t({ duration: 0.3 })}
                           className="overflow-hidden border-b border-nero/25"
                         >
                           <LineItem line={line} onQty={(q) => update(line.id, q)} onRemove={() => remove(line.id)} />

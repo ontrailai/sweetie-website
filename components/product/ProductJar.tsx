@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } fr
 import type { Product } from "@/lib/catalog";
 import { Jar, TURN } from "@/components/jar/Jar";
 import { HoneyJar3D } from "@/components/jar3d/HoneyJar3D";
-import { useMotionPref } from "@/components/motion/MotionPreference";
+import { isMotionOff, useMotionPref } from "@/components/motion/MotionPreference";
 
 const STEP = (Math.PI * 2) / 3;
 const SIDES = ["front label", "“Feel the hum.” side", "small-batch side"];
@@ -31,7 +31,7 @@ export function ProductJar({ product }: { product: Product }) {
 
   // Intro: one full turn into place (or snap when motion is off).
   useEffect(() => {
-    if (document.documentElement.dataset.motion === "off") {
+    if (isMotionOff()) {
       angle.set(0);
       return;
     }
@@ -39,8 +39,18 @@ export function ProductJar({ product }: { product: Product }) {
     return () => c.stop();
   }, [angle]);
 
+  // Pause motion mid-turn: stop the intro / inertia / spring where it is and
+  // snap to the nearest label panel.
+  useEffect(() => {
+    if (enabled) return;
+    angle.stop();
+    shake.stop();
+    angle.set(Math.round(angle.get() / STEP) * STEP);
+    shake.set(0);
+  }, [enabled, angle, shake]);
+
   const settle = (velocity: number) => {
-    if (!enabled) {
+    if (!enabled || isMotionOff()) {
       angle.set(Math.round(angle.get() / STEP) * STEP);
       return;
     }
@@ -80,7 +90,7 @@ export function ProductJar({ product }: { product: Product }) {
 
   const step = (dir: number) => {
     const target = Math.round(angle.get() / STEP) * STEP - dir * STEP;
-    if (enabled) {
+    if (enabled && !isMotionOff()) {
       shake.set(dir * 2);
       animate(angle, target, { type: "spring", stiffness: 110, damping: 16 });
     } else angle.set(target);

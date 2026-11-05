@@ -2,6 +2,7 @@
 
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { useState } from "react";
+import { useCalmTransition } from "@/components/motion/MotionPreference";
 import { CATEGORIES, PRODUCTS, type Category } from "@/lib/catalog";
 import { JarCard } from "./JarCard";
 
@@ -10,6 +11,7 @@ const TILTS = [-1.5, 1, -0.5, 1.5, -1, 0.5];
 
 export function ShopFilter() {
   const [filter, setFilter] = useState<Filter>("All");
+  const t = useCalmTransition();
   const shown = filter === "All" ? PRODUCTS : PRODUCTS.filter((p) => p.category === filter);
   const filters: Filter[] = ["All", ...CATEGORIES];
 
@@ -31,7 +33,7 @@ export function ShopFilter() {
                 }`}
                 style={{ rotate: `${(i % 2 ? 1 : -1) * 1.5}deg` }}
               >
-                {active ? <motion.span layoutId="shop-pill" className="absolute inset-0 rounded-full bg-nero shadow-[0_4px_0_0_#ff007c]" transition={{ type: "spring", stiffness: 420, damping: 32 }} /> : null}
+                {active ? <motion.span layoutId="shop-pill" className="absolute inset-0 rounded-full bg-nero shadow-[0_4px_0_0_#ff007c]" transition={t({ type: "spring", stiffness: 420, damping: 32 })} /> : null}
                 <span className="relative">{f}</span>
                 <span className="relative grid size-6 place-items-center rounded-full border-2 border-current text-[11px]">{count}</span>
               </button>
@@ -43,7 +45,7 @@ export function ShopFilter() {
         Showing {shown.length} {shown.length === 1 ? "jar" : "jars"}
         {filter === "All" ? "" : ` in ${filter}`}
       </p>
-      <motion.ul layout className="grid gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
+      <motion.ul layout transition={t()} className="grid gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
         <AnimatePresence mode="popLayout" initial={false}>
           {shown.map((p, i) => (
             <motion.li
@@ -52,7 +54,7 @@ export function ShopFilter() {
               initial={{ opacity: 0, scale: 0.85, rotate: -6 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               exit={{ opacity: 0, scale: 0.85, rotate: 6 }}
-              transition={{ type: "spring", stiffness: 260, damping: 24 }}
+              transition={t({ type: "spring", stiffness: 260, damping: 24 })}
             >
               <JarCard product={p} tilt={TILTS[i % TILTS.length]} />
             </motion.li>

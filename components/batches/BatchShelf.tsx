@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { useState } from "react";
 import { BATCHES, PRODUCTS, getProduct } from "@/lib/catalog";
+import { useCalmTransition } from "@/components/motion/MotionPreference";
 import { Jar } from "@/components/jar/Jar";
 import { BatchCode, BatchDl } from "./BatchDetails";
 
@@ -12,6 +13,7 @@ const current = BATCHES.filter((b) => b.status === "on-shelves");
 /** Batches on shelves now, as tear-off tickets in each jar's colour. */
 export function BatchShelf() {
   const [filter, setFilter] = useState<string>("all");
+  const t = useCalmTransition();
   const shown = filter === "all" ? current : current.filter((b) => b.productSlug === filter);
 
   return (
@@ -28,14 +30,14 @@ export function BatchShelf() {
                 onClick={() => setFilter(f.slug)}
                 className={`relative min-h-11 rounded-full border-2 border-nero px-4 font-mono text-[13px] font-bold uppercase tracking-[0.08em] ${active ? "text-canvas" : "bg-canvas text-nero hover:bg-nero/10"}`}
               >
-                {active ? <motion.span layoutId="batch-pill" className="absolute inset-0 rounded-full bg-nero" transition={{ type: "spring", stiffness: 420, damping: 34 }} /> : null}
+                {active ? <motion.span layoutId="batch-pill" className="absolute inset-0 rounded-full bg-nero" transition={t({ type: "spring", stiffness: 420, damping: 34 })} /> : null}
                 <span className="relative">{f.label}</span>
               </button>
             );
           })}
         </div>
       </LayoutGroup>
-      <motion.ul layout className="grid grid-cols-[repeat(auto-fill,minmax(min(380px,100%),1fr))] gap-6">
+      <motion.ul layout transition={t()} className="grid grid-cols-[repeat(auto-fill,minmax(min(380px,100%),1fr))] gap-6">
         <AnimatePresence mode="popLayout" initial={false}>
           {shown.map((b, i) => {
             const p = getProduct(b.productSlug)!;
@@ -47,7 +49,7 @@ export function BatchShelf() {
                 initial={{ opacity: 0, scale: 0.92 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.92 }}
-                transition={{ type: "spring", stiffness: 260, damping: 26 }}
+                transition={t({ type: "spring", stiffness: 260, damping: 26 })}
                 className="batch-card group flex scroll-mt-28 overflow-hidden rounded-[24px] border-2 border-nero bg-canvas shadow-[6px_6px_0_0_#262626]"
                 style={{ rotate: `${[-1, 0.8, -0.5][i % 3]}deg` }}
               >

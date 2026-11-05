@@ -9,6 +9,7 @@ import { Price } from "@/components/ui/Price";
 import { QuantityStepper } from "@/components/ui/QuantityStepper";
 import { TbdTag } from "@/components/ui/Tbd";
 import { formatMoney } from "@/lib/format";
+import { useCalmTransition } from "@/components/motion/MotionPreference";
 import { SizeChips } from "./SizeChips";
 
 type Mode = "subscribe" | "one-time";
@@ -21,6 +22,7 @@ export function BuyBox({ product }: { product: Product }) {
   const [frequency, setFrequency] = useState<string>(SUBSCRIPTION.defaultFrequency);
   const [qty, setQty] = useState(1);
   const [ctaVisible, setCtaVisible] = useState(true);
+  const t = useCalmTransition();
   const ctaRef = useRef<HTMLButtonElement>(null);
   const quickAdd = useQuickAdd();
   // The quick-add bar is portalled to <body>: any transformed/animated ancestor
@@ -169,7 +171,7 @@ export function BuyBox({ product }: { product: Product }) {
                   initial={{ y: "110%" }}
                   animate={{ y: 0 }}
                   exit={{ y: "110%" }}
-                  transition={{ type: "spring", stiffness: 380, damping: 36 }}
+                  transition={t({ type: "spring", stiffness: 380, damping: 36 })}
                   className="fixed inset-x-2 bottom-2 z-40 flex items-center justify-between gap-3 rounded-[24px] border-2 border-nero bg-canvas py-2.5 pl-5 pr-2.5 shadow-[0_5px_0_0_#262626] mb-[env(safe-area-inset-bottom)] md:hidden"
                 >
                   <span className="flex min-w-0 flex-col">
