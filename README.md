@@ -83,16 +83,21 @@ lib/                       catalog.ts, site.ts, commerce/ (unchanged data/commer
 **Pause motion** toggle (header, footer, mobile menu) overrides it and is
 saved in `localStorage` (`sweetbee.motion`). An inline script sets
 `<html data-motion="on|off">` before first paint; `useMotionPref()` exposes
-the same value to React. Everything keys off it:
+the same value to React. Everything keys off it. Pausing also stops
+JavaScript motion that is already running: Motion transitions go through
+`useCalmTransition()` (instant when calm, because `MotionConfig.reducedMotion`
+is only read when an element mounts), fly-to-cart WAAPI animations are
+tracked and cancelled, and the product jar's spring/inertia stops and snaps
+to a label panel.
 
 | Feature | Motion on | Motion off / reduced |
 |---|---|---|
 | Smooth scroll | Lenis (fine pointers only; touch stays native) | Native scroll, Lenis destroyed |
-| Six-jar sequence | Pinned (CSS sticky, only ≥1024px) with iris reveals; hidden panels `inert`; rail buttons/arrows drive it | Calm vertical stack (desktop) or swipe/snap track (phones) — no pinning, nothing inert |
+| Six-jar sequence | Pinned (CSS sticky `.seq-pin`, only ≥1024px) with iris reveals; hidden panels `inert`; the rail lives inside the pinned wrapper so it stays on screen for the whole sequence | Calm vertical stack (desktop) or swipe/snap track (phones) — no pinning, nothing inert |
 | Sunrise sky | Pinned, gradient interpolated from scroll | Three static panels, each with its own sky |
-| 3D jar | WebGL (see below) | Static SVG jar (WebGL never requested; unmounts if toggled off) |
+| 3D jar | WebGL (see below) | Static SVG scene: open jar mid-pour with the lid flipping off (WebGL never requested; unmounts if toggled off) |
 | Marquees, drips, specks, bee, letter reveals, buzz | Animated | `animation: none` globally; marquees static; bee perches |
-| Cursor, magnetic buttons, tilt | On (fine pointer / phones) | Off |
+| Cursor, magnetic buttons, tilt | On (fine pointer / phones); the cursor hides on any keypress | Off (cursor elements hidden, not frozen) |
 | Fly-to-cart | Jar arcs to the cart, badge squishes, honey + confetti burst | No animation; the same live "added" toast is announced |
 
 **3D jar loading.** `HoneyJar3D` always server-renders the SVG `Jar` (so
@@ -113,7 +118,10 @@ a labelled button press (`aria-pressed`), and fades out when turned off.
 pointer); iOS shows a "Tilt your phone" button because
 `DeviceOrientationEvent.requestPermission()` must come from a tap.
 
-**Accessibility.** Skip link; visible colour-aware focus rings; dialogs
+**Accessibility.** Skip link; focus rings scoped to the surface they sit
+on (`--focus` is reset by `.on-dark`, `.ticket`, `.chip`), plus a two-tone
+`.ring-duo` (Canvas band + Nero outline) for controls that float over
+changing colours: the header, map pins and dial options. Dialogs
 (cart, menu) trap focus, close on Esc, lock scroll (and stop Lenis) and
 return focus. Kinetic headings keep a real sr-only sentence (letters are
 `aria-hidden`); decorative motion is `aria-hidden`. The jar sequence is a
@@ -121,8 +129,11 @@ labelled carousel with a button rail and a live "Showing No. 04…" message;
 the product jar is a `role="slider"` (arrow keys turn it); map pins are real
 buttons with a parallel button list. Contrast rule used throughout: small
 text only on Canvas/Nero/Forest (or on a Canvas `.chip` / `.ticket` when it
-sits on Peacock, Jade or Ladybug); bright panels carry ≥24px type only. The
-custom cursor never covers focus outlines and hides over text fields.
+sits on Peacock, Jade or Ladybug); bright panels carry ≥24px type only; jar
+numbers on map pins and the jar rail sit on a Canvas/Nero badge inside the
+jar-colour ring. Honey ambers appear only as honey; landscapes, suns and
+interface use the six brand colours. The custom cursor hides on keyboard
+use and over text fields, so it never covers a focus ring.
 
 ## Placeholder content (read before launch)
 
