@@ -26,6 +26,8 @@ export interface JarProps {
   alive?: boolean;
   /** Hide from assistive tech when a visible caption already names the jar. */
   decorative?: boolean;
+  /** Lid off: shows the threaded glass neck and the open mouth. */
+  open?: boolean;
   className?: string;
 }
 
@@ -204,6 +206,7 @@ function JarImpl({
   spin,
   alive = true,
   decorative = false,
+  open = false,
   className = "",
 }: JarProps) {
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
@@ -341,10 +344,23 @@ function JarImpl({
       {/* shadow */}
       <ellipse className="jar-shadow" cx="50" cy="311" rx="46" ry="5.4" fill={`url(#${id("shadow")})`} />
 
-      {/* lid */}
-      <path d={roundedPath(3, 0, 94, LID_H, [3, 3], [1.6, 1.6])} fill={`url(#${id("lid")})`} />
-      <path d={roundedPath(3, 0, 94, LID_H, [3, 3], [1.6, 1.6])} fill={`url(#${id("ridges")})`} />
-      <rect x="4.5" y="1.2" width="91" height="1.4" rx="0.7" fill="#fff" opacity="0.12" />
+      {open ? (
+        <>
+          {/* threaded glass neck + open mouth */}
+          <rect x="6" y="12" width="88" height={NECK.y - 12} rx="1.5" fill={`url(#${id("neck")})`} />
+          {[14.6, 17.6, 20.6].map((y) => (
+            <path key={y} d={`M6.5 ${y} Q50 ${y + 1.8} 93.5 ${y}`} fill="none" stroke="#fff" strokeOpacity="0.5" strokeWidth="0.7" />
+          ))}
+          <ellipse cx="50" cy="12" rx="44" ry="3.4" fill="rgba(38,38,38,0.28)" stroke="#fff" strokeOpacity="0.7" strokeWidth="0.8" />
+        </>
+      ) : (
+        <>
+          {/* lid */}
+          <path d={roundedPath(3, 0, 94, LID_H, [3, 3], [1.6, 1.6])} fill={`url(#${id("lid")})`} />
+          <path d={roundedPath(3, 0, 94, LID_H, [3, 3], [1.6, 1.6])} fill={`url(#${id("ridges")})`} />
+          <rect x="4.5" y="1.2" width="91" height="1.4" rx="0.7" fill="#fff" opacity="0.12" />
+        </>
+      )}
 
       {/* neck */}
       <rect x="6" y={NECK.y} width="88" height={NECK.h} fill={`url(#${id("neck")})`} />

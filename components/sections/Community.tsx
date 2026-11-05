@@ -1,18 +1,18 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { FOUNDERS_NOTE, QUOTES, SITE } from "@/lib/site";
-import { Bee, Dipper, Flower, Honeycomb, Sun, Wave } from "@/components/brand/Illustrations";
+import { SpotHum, SpotPin, SpotPour, SpotSpoon, SpotSunrise, SpotSurf } from "@/components/brand/Spots";
 import { SplitText } from "@/components/motion/SplitText";
 import { OrTbd, Tbd } from "@/components/ui/Tbd";
 import { MarketList } from "./Markets";
 
 const TILES: { bg: string; art: ReactNode; rot: number }[] = [
-  { bg: "bg-peacock", art: <Bee className="w-[52%]" />, rot: -4 },
-  { bg: "bg-forest", art: <Sun className="w-[50%]" color="#ffd36b" />, rot: 3 },
-  { bg: "bg-canvas", art: <Flower className="spin-slow w-[48%]" />, rot: -2 },
-  { bg: "bg-nero", art: <Wave className="w-[60%]" />, rot: 5 },
-  { bg: "bg-ladybug", art: <Dipper className="float w-[24%]" />, rot: -5 },
-  { bg: "bg-canvas", art: <Honeycomb className="w-[50%]" />, rot: 2 },
+  { bg: "bg-peacock", art: <SpotSpoon className="w-[78%]" />, rot: -4 },
+  { bg: "bg-forest", art: <SpotSurf className="w-[82%]" />, rot: 3 },
+  { bg: "bg-nero", art: <SpotSunrise className="w-[80%]" />, rot: -2 },
+  { bg: "bg-ladybug", art: <SpotHum className="w-[86%]" />, rot: 5 },
+  { bg: "bg-jade", art: <SpotPour className="w-[78%]" />, rot: -5 },
+  { bg: "bg-canvas", art: <SpotPin className="w-[78%]" />, rot: 2 },
 ];
 
 export function InstagramHandle() {
